@@ -1,23 +1,42 @@
 # EMC Contract Intake & Risk Review
 
-An interactive, single-file browser app for **Earth Moving Creations (EMC)** — civil / earthmoving, **NSW · ACT · VIC** — that checks every incoming contract, subcontract or purchase order against EMC's standard Terms & Conditions (the fixed benchmark) and runs the full 4-step review in one pass.
+A browser-based contract risk desk for **Earth Moving Creations (EMC)** — civil / earthmoving, **NSW · ACT · VIC** — that checks every incoming contract, subcontract or purchase order against EMC's standard Terms & Conditions (the fixed benchmark) and runs the full 4-step review in one pass.
 
-Two ways to review a contract:
+## Site layout
 
-- **AI review (recommended)** — reads the *whole* contract with Claude and reasons over it clause-by-clause. Paste your [Anthropic API key](https://console.anthropic.com/settings/keys) (stored in your browser only), pick a model (Opus 5 / Sonnet 5 / Haiku 4.5), and press **Run AI review**. The contract text + EMC's T&Cs go to the Anthropic API under your key (~10–30¢ per review). Works when you open `index.html` locally or host it yourself — **not** in the published web artifact, whose sandbox blocks external API calls.
-- **Offline scan** — an instant, fully-local heuristic pass (~21 rules). Free, private, nothing leaves the browser. This is the only mode in the hosted artifact.
+| File | What it is |
+|------|-----------|
+| **`index.html`** | Landing page — brand hero, the 4 steps, jurisdictions, and iPhone install instructions. Links to the app. |
+| **`app.html`** | The review tool itself (paste/drop a contract → 4-step review). |
+| `manifest.webmanifest`, `sw.js`, `icons/` | PWA: makes the site installable on an iPhone home screen as a standalone app that works offline. |
+| `app.yaml` | Google App Engine config for hosting the whole site over HTTPS. |
+| `vendor/` | Vendored [pdf.js](https://mozilla.github.io/pdf.js/) for local PDF text extraction. |
+| `assets/` | Brand hero image + video. |
 
-## Use it
+Open `app.html` in any browser (double-click, or host it) — no build step; everything runs client-side.
 
-Open **`index.html`** in any browser (double-click, or host it anywhere). No install, no server, no build step. Everything runs locally in the browser — nothing is uploaded or sent anywhere.
+## Two ways to review
+
+- **AI review (recommended)** — reads the *whole* contract with Claude and reasons over it clause-by-clause. Paste your [Anthropic API key](https://console.anthropic.com/settings/keys) (stored in your browser only), pick a model (Opus 5 / Sonnet 5 / Haiku 4.5), and press **Run AI review** (~10–30¢ per review). Works when `app.html` is opened locally **or served from a real host** (App Engine / GitHub Pages / any HTTPS site). It does **not** work in the published claude.ai artifact, whose sandbox blocks external API calls.
+- **Offline scan** — an instant, fully-local heuristic pass (~21 rules). Free, private, nothing leaves the browser. Always available, and the only mode in the hosted artifact.
+
+## Run a review
 
 1. Enter the counterparty (name, ABN/ACN), jurisdiction (NSW / ACT / VIC) and contract type.
-2. Add the contract — **drop a PDF (or `.txt`) onto the contract box**, choose one with the file picker, or paste the text directly. PDF text is extracted locally in the browser (image-only/scanned PDFs won't extract — paste those).
-3. Press **Run full review**.
+2. Add the contract — **drop a PDF (or `.txt`)**, pick a file, or paste text. PDF text is extracted locally (scanned/image-only PDFs won't extract — paste those).
+3. Press **Run AI review** or **Offline scan**. Use **Load worked example** to try it on a sample subcontract.
 
-> PDF extraction uses a vendored copy of [pdf.js](https://mozilla.github.io/pdf.js/) in `vendor/` — keep that folder alongside `index.html`. Everything still runs offline; nothing is fetched at runtime.
+## Install on iPhone
 
-Use **Load worked example** to see it in action against a sample subcontract.
+Open the site in **Safari** → tap **Share** → **Add to Home Screen** → **Add**. It launches full-screen like a native app, keeps the EMC icon, and the offline scan works with no connection.
+
+## Host it (shared, with AI review working)
+
+Because a real HTTPS origin can call the Anthropic API directly from the browser, hosting makes the AI review work for everyone with a key:
+
+- **Google App Engine** (this repo is App-Engine-ready): `gcloud app deploy` — serves `index.html` + `app.html` over HTTPS.
+- **GitHub Pages**: in the repo, **Settings → Pages**, set the source branch and root, and open the published URL.
+- Any static host (Netlify, Cloudflare Pages, S3+CloudFront, etc.) — just upload the folder.
 
 ## What it does — the 4 steps
 
