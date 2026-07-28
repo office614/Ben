@@ -212,6 +212,15 @@
     text-transform:uppercase;letter-spacing:.08em}
   table.profile td b{color:var(--ink)}
 
+  .cp-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;padding:4px 10px;border-radius:7px;margin-bottom:12px}
+  .cp-badge.clear{background:rgba(52,199,123,.13);color:#69d89f;border:1px solid rgba(52,199,123,.3)}
+  .cp-badge.flag{background:rgba(255,77,84,.14);color:#ff8a8f;border:1px solid rgba(255,77,84,.32)}
+  .cp-adverse{list-style:none;margin:10px 0 0;padding:0}
+  .cp-adverse li{padding:10px 12px;border:1px solid var(--line);border-left:3px solid var(--crit);border-radius:9px;
+    background:var(--panel-3);margin:8px 0;font-size:13px;color:var(--ink-2)}
+  .cp-adverse li a{font-family:var(--mono);font-size:11.5px}
+  .cp-src{margin-top:12px;font-size:11px;color:var(--dim)}
   .lookup-links{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0}
   .email-box{white-space:pre-wrap;font-family:var(--mono);font-size:12.5px;background:var(--field);
     border:1px solid var(--line-2);border-radius:12px;padding:18px;line-height:1.65;color:var(--ink-2)}
@@ -357,7 +366,7 @@
           </select>
         </div>
       </div>
-      <div class="filehint">The AI review sends the contract text + EMC's T&amp;Cs to the Anthropic API under <b>your</b> key (get one at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>). Roughly 10–30¢ per review. The offline scan below stays fully local.</div>
+      <div class="filehint">The AI review reads the whole contract <b>and web-searches the counterparty</b> (ABN Lookup / ASIC / news) under <b>your</b> Anthropic key (get one at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>). Roughly 10–40¢ per review incl. searches. The offline scan below stays fully local.</div>
     </div>
     <!--AI-UI-END-->
 
@@ -385,15 +394,18 @@
 
     <div class="card">
       <h2><span class="num">2</span> Counterparty look-up</h2>
-      <p class="sub">Public-record and news checking only — ABN Lookup register + ASIC. This is not a commercial credit report. Open the registers below, then record what you find.</p>
+      <p class="sub" id="s2sub">Public-record and news checking only — ABN Lookup + ASIC. Not a commercial credit report. The AI review runs the searches for you; the offline scan gives you the registers to check by hand.</p>
+      <div id="cpResult"></div>
       <div class="lookup-links" id="lookupLinks"></div>
       <p class="note" id="lookupNote"></p>
-      <table class="profile">
-        <tr><td class="k">Entity status</td><td>Confirm via ABN Lookup / ASIC: <b>registered</b>, deregistered, or under external administration. Record here.</td></tr>
-        <tr><td class="k">Incorporation date</td><td>From ASIC organisation extract.</td></tr>
-        <tr><td class="k">Registered address</td><td>From ABN Lookup / ASIC.</td></tr>
-        <tr><td class="k">Adverse findings</td><td>Web-search the entity + each director for: court judgments, liquidation / insolvency notices, adjudication determinations, payment-dispute coverage. <b>State plainly if nothing adverse turns up.</b></td></tr>
-      </table>
+      <div id="cpManual">
+        <table class="profile">
+          <tr><td class="k">Entity status</td><td>Confirm via ABN Lookup / ASIC: <b>registered</b>, deregistered, or under external administration. Record here.</td></tr>
+          <tr><td class="k">Incorporation date</td><td>From ASIC organisation extract.</td></tr>
+          <tr><td class="k">Registered address</td><td>From ABN Lookup / ASIC.</td></tr>
+          <tr><td class="k">Adverse findings</td><td>Web-search the entity + each director for: court judgments, liquidation / insolvency notices, adjudication determinations, payment-dispute coverage. <b>State plainly if nothing adverse turns up.</b></td></tr>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -640,28 +652,42 @@ function ctxFromForm(){
 
 function aiSystemPrompt(ctx,DUE){
   const tc=EMC.map(c=>`${c[0]}. ${c[1]}. ${c[2]}`).join('\n');
-  return `You are the contract-risk reviewer for Earth Moving Creations (EMC), a civil/earthmoving business in ${ctx.juris}, Australia. Review the incoming ${ctx.ctype.toLowerCase()} clause-by-clause against EMC's OWN standard Terms & Conditions below — these are the fixed benchmark. Apply Australian construction law, the Security of Payment Act for ${ctx.juris} (NSW: BCISPA 1999; ACT: BCI(SoP)A 2009; VIC: BCISPA 2002), the Australian Consumer Law (Competition and Consumer Act 2010 (Cth) Sch 2 — misleading conduct s.18, unconscionable ss.20–22, unfair terms ss.23–24), and general contract-law principles.
+  const today=(new Date()).toISOString().slice(0,10);
+  return `You are the contract-risk reviewer for Earth Moving Creations (EMC), a civil/earthmoving business in ${ctx.juris}, Australia. Today is ${today}. Review the incoming ${ctx.ctype.toLowerCase()} clause-by-clause against EMC's OWN standard Terms & Conditions below — these are the fixed benchmark. Apply Australian construction law, the Security of Payment Act for ${ctx.juris} (NSW: BCISPA 1999; ACT: BCI(SoP)A 2009; VIC: BCISPA 2002), the Australian Consumer Law (Competition and Consumer Act 2010 (Cth) Sch 2 — misleading conduct s.18, unconscionable ss.20–22, unfair terms ss.23–24), and general contract-law principles.
 
 EMC STANDARD TERMS & CONDITIONS (benchmark):
 ${tc}
 
 Payment benchmark for ${ctx.juris}: ${DUE} of a valid payment claim; pay-when-paid void; no contracting out of the SoP Act.
 
-Produce a rigorous, commercial review. For every clause in the incoming contract that is WEAKER than, or CONFLICTS with, EMC's position, output a finding mapped to the specific EMC clause number (1–15) with exactly what to strike or amend. Separately list EMC protections that are MISSING and should be added. Then give an overall risk rating (High/Medium/Low) with reasoning, suggested profile fields to track next time, and a direct, commercial draft email to the counterparty citing the specific applicable legislation. Be specific and practical; do not invent facts about the counterparty (their entity/insolvency checks are done separately). Return ONLY the JSON object matching the provided schema.`;
+DO ALL OF THIS in one pass:
+1. Clause-by-clause: for every clause in the incoming contract that is WEAKER than, or CONFLICTS with, EMC's position, produce a finding mapped to the specific EMC clause number (1–15) with exactly what to strike or amend. Separately list EMC protections that are MISSING and should be added.
+2. Counterparty look-up — USE THE web_search TOOL. Search ABN Lookup (abr.business.gov.au) and ASIC for the counterparty to establish: entity status (registered / deregistered / under external administration), ABN/ACN status, incorporation/registration date, and registered address. Then search for adverse findings — court judgments, liquidation / insolvency / administration notices, adjudication determinations, and payment-dispute coverage — for the entity and its directors. If a field can't be verified, use "Not found — verify manually". If nothing adverse turns up, return an empty adverse[] array and say so plainly. NEVER fabricate a finding, an ABN, or a source URL — only include a url you actually retrieved from search.
+3. Overall risk rating (High/Medium/Low) with reasoning that accounts for both the clause flags and the counterparty search.
+4. A direct, commercial draft email to the counterparty raising the flagged issues and citing the specific applicable legislation.
+
+Return ONLY a single JSON object — no markdown, no prose, no code fences — with EXACTLY this shape:
+{
+ "findings":[{"title":str,"emcClause":int(1-15),"type":"conflict"|"weaker","severity":"high"|"med"|"low","body":str,"action":str}],
+ "missing":[{"title":str,"emcClause":int,"action":str}],
+ "counterparty":{"entityStatus":str,"abnStatus":str,"incorporation":str,"registeredAddress":str,"adverse":[{"summary":str,"url":str}],"summary":str},
+ "rating":{"level":"High"|"Medium"|"Low","reason":str},
+ "suggestedFields":[str],
+ "email":{"subject":str,"body":str}
+}`;
 }
 
-function aiSchema(){
-  const s=(o)=>Object.assign({type:'object',additionalProperties:false},o);
-  const str={type:'string'};
-  const finding=s({properties:{title:str,emcClause:{type:'integer'},type:{type:'string',enum:['conflict','weaker']},severity:{type:'string',enum:['high','med','low']},body:str,action:str},required:['title','emcClause','type','severity','body','action']});
-  const missing=s({properties:{title:str,emcClause:{type:'integer'},action:str},required:['title','emcClause','action']});
-  return s({properties:{
-    findings:{type:'array',items:finding},
-    missing:{type:'array',items:missing},
-    rating:s({properties:{level:{type:'string',enum:['High','Medium','Low']},reason:str},required:['level','reason']}),
-    suggestedFields:{type:'array',items:str},
-    email:s({properties:{subject:str,body:str},required:['subject','body']})
-  },required:['findings','missing','rating','suggestedFields','email']});
+function webSearchTool(model){
+  const t=(model==='claude-haiku-4-5')?'web_search_20250305':'web_search_20260209';
+  return {type:t,name:'web_search',max_uses:8};
+}
+// pull the last JSON object out of the response text (tolerant of stray prose / fences)
+function parseAIJson(text){
+  let t=String(text||'').trim().replace(/^```(?:json)?/i,'').replace(/```$/,'').trim();
+  try{return JSON.parse(t);}catch(_){}
+  const i=t.indexOf('{'), j=t.lastIndexOf('}');
+  if(i>=0&&j>i){return JSON.parse(t.slice(i,j+1));}
+  throw new Error('Could not parse the model response.');
 }
 
 function aiBusy(on){
@@ -681,32 +707,38 @@ async function runAIReview(){
   const model=document.getElementById('model').value;
   try{localStorage.setItem('emc_key',key);localStorage.setItem('emc_model',model);}catch(e){}
   aiBusy(true);
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model, max_tokens:14000,
-        system:aiSystemPrompt(ctx,DUE),
-        messages:[{role:'user',content:`Counterparty: ${ctx.name}${ctx.abn?' (ABN/ACN '+ctx.abn+')':''}. Contract reference: ${ctx.cref||'—'}. Jurisdiction: ${ctx.juris}.\n\nINCOMING CONTRACT TEXT:\n"""\n${text}\n"""`}],
-        output_config:{format:{type:'json_schema',schema:aiSchema()}}
-      })
-    });
-    if(!resp.ok){
-      let msg='HTTP '+resp.status;
-      try{const e=await resp.json();if(e&&e.error&&e.error.message)msg=e.error.message;}catch(_){}
-      if(resp.status===401)msg='Invalid API key — check it and try again.';
+  const HDRS={'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
+  const messages=[{role:'user',content:`Counterparty: ${ctx.name}${ctx.abn?' (ABN/ACN '+ctx.abn+')':''}. Contract reference: ${ctx.cref||'—'}. Jurisdiction: ${ctx.juris}.\n\nRun the counterparty web search, then the clause review. INCOMING CONTRACT TEXT:\n"""\n${text}\n"""`}];
+  async function call(){
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:HDRS,body:JSON.stringify({
+      model, max_tokens:16000, system:aiSystemPrompt(ctx,DUE),
+      tools:[webSearchTool(model)], messages
+    })});
+    if(!r.ok){
+      let msg='HTTP '+r.status;
+      try{const e=await r.json();if(e&&e.error&&e.error.message)msg=e.error.message;}catch(_){}
+      if(r.status===401)msg='Invalid API key — check it and try again.';
       throw new Error(msg);
     }
-    const data=await resp.json();
+    return r.json();
+  }
+  try{
+    let data=await call();
+    // resume if the server-tool loop paused
+    for(let guard=0; data.stop_reason==='pause_turn' && guard<3; guard++){
+      messages.push({role:'assistant',content:data.content});
+      data=await call();
+    }
     if(data.stop_reason==='refusal')throw new Error('The model declined this request.');
-    if(data.stop_reason==='max_tokens')throw new Error('Response hit the length limit — try Haiku/Sonnet or a shorter contract.');
-    const blk=(data.content||[]).find(b=>b.type==='text');
-    if(!blk)throw new Error('No content returned.');
-    applyAI(ctx,DUE,JSON.parse(blk.text));
+    const texts=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text);
+    if(!texts.length){
+      if(data.stop_reason==='max_tokens')throw new Error('Ran out of room before finishing — try Haiku/Sonnet or a shorter contract.');
+      throw new Error('No text returned.');
+    }
+    applyAI(ctx,DUE,parseAIJson(texts[texts.length-1]));
     toast('AI review complete — '+model.replace('claude-','').replace('-',' '));
   }catch(err){
-    const m=/Failed to fetch|NetworkError/.test(err.message)?'Network/CORS blocked the request — open index.html locally or host it (the published web app can\'t call the API).':err.message;
+    const m=/Failed to fetch|NetworkError/.test(err.message)?'Network/CORS blocked the request — open app.html locally or host it (the published claude.ai page can\'t call the API).':err.message;
     toast('AI review failed: '+m);
   }finally{aiBusy(false);}
 }
@@ -726,7 +758,12 @@ function applyAI(ctx,DUE,out){
   const rating={key:lvl==='High'?'high':lvl==='Low'?'low':'med',label:lvl,reason:esc((out.rating&&out.rating.reason)||'')};
   let email='';
   if(out.email){email=(out.email.subject?('Subject: '+out.email.subject+'\n\n'):'')+(out.email.body||'');}
-  showResults(ctx,found,miss,DUE,{rating,email,suggested:(out.suggestedFields||[])});
+  const cp=out.counterparty&&typeof out.counterparty==='object'?{
+    entityStatus:out.counterparty.entityStatus,abnStatus:out.counterparty.abnStatus,
+    incorporation:out.counterparty.incorporation,registeredAddress:out.counterparty.registeredAddress,
+    adverse:Array.isArray(out.counterparty.adverse)?out.counterparty.adverse:[],summary:out.counterparty.summary
+  }:null;
+  showResults(ctx,found,miss,DUE,{rating,email,suggested:(out.suggestedFields||[]),counterparty:cp});
 }
 /* ================= end AI review ================= */
 
@@ -824,6 +861,28 @@ function render(ctx,found,miss,DUE,opts){
       ACT:`<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+adjudication+ACRS+OR+%22security+of+payment%22+ACT">↗ ACT adjudication</a>`}[ctx.juris]||'');
   document.getElementById('lookupNote').textContent=
     `Searching for: ${ctx.name}${abnDigits?' · ABN/ACN '+ctx.abn:''}. Confirm the entity you are contracting with is the one on the register (watch for trading names vs the actual legal entity, and $2 or recently-registered shelf companies).`;
+
+  // Step 2 — AI-generated counterparty findings (web search), if present
+  const cp=opts.counterparty; const cpr=document.getElementById('cpResult'); const cpm=document.getElementById('cpManual');
+  if(cp){
+    const rows=[
+      ['Entity status',cp.entityStatus],['ABN / ACN status',cp.abnStatus],
+      ['Incorporation date',cp.incorporation],['Registered address',cp.registeredAddress]
+    ].filter(r=>r[1]);
+    const adv=cp.adverse||[];
+    const badge=adv.length
+      ? `<span class="cp-badge flag">⚠ ${adv.length} adverse item${adv.length===1?'':'s'} found</span>`
+      : `<span class="cp-badge clear">✓ nothing adverse found in public records / news</span>`;
+    cpr.innerHTML=badge+
+      (rows.length?`<table class="profile">${rows.map(r=>`<tr><td class="k">${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</table>`:'')+
+      (adv.length?`<ul class="cp-adverse">${adv.map(a=>`<li>${esc(a.summary||a)}${a.url?` — <a href="${esc(a.url)}" target="_blank" rel="noopener">source</a>`:''}</li>`).join('')}</ul>`:'')+
+      (cp.summary?`<p class="note" style="margin-top:12px">${esc(cp.summary)}</p>`:'')+
+      `<p class="cp-src">Generated by web search — verify against the official registers below before relying on it. Public-record / news only, not a credit report.</p>`;
+    cpm.style.display='none';
+    document.getElementById('s2sub').textContent='Searched by the AI review (ABN Lookup / ASIC / news). Verify against the official registers below before relying on it.';
+  }else{
+    cpr.innerHTML=''; cpm.style.display='';
+  }
 
   // Step 3 profile + rating
   const rating=opts.rating||computeRating(found,miss);
