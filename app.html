@@ -443,6 +443,82 @@
 
   </div>
 
+  <!-- ============ DISPUTES ============ -->
+  <div class="card no-print" id="disputes">
+    <h2><span class="num">⚖</span> Disputes &amp; Payment Recovery</h2>
+    <p class="sub">Short-paid, hit with a back-charge, or had a variation knocked back? Capture the facts and get a firm, ready-to-send response grounded in the security of payment regime for your state. Uses the same AI key as the review above.</p>
+
+    <div class="row3">
+      <div>
+        <label>Dispute type</label>
+        <select id="dType">
+          <option>Non-payment / short payment</option>
+          <option>Variation rejected</option>
+          <option>Back-charge / set-off</option>
+          <option>Defect claim against EMC</option>
+          <option>EOT / delay / liquidated damages</option>
+          <option>Retention not released</option>
+          <option>Termination</option>
+        </select>
+      </div>
+      <div>
+        <label>Jurisdiction</label>
+        <select id="dJuris">
+          <option value="NSW">New South Wales (NSW)</option>
+          <option value="ACT">Australian Capital Territory (ACT)</option>
+          <option value="VIC">Victoria (VIC)</option>
+        </select>
+      </div>
+      <div>
+        <label>Amount in dispute</label>
+        <input type="text" id="dAmount" placeholder="e.g. $42,750">
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Counterparty</label>
+        <input type="text" id="dCp" placeholder="e.g. Sample Head Contractor Pty Ltd">
+      </div>
+      <div>
+        <label>Contract / project reference</label>
+        <input type="text" id="dRef" placeholder="e.g. SC-2077 / Gungahlin bulk earthworks">
+      </div>
+    </div>
+    <label>What&#39;s happened</label>
+    <textarea id="dFacts" placeholder="Briefly: the claim, what was paid or refused, the dates, and any reasons the other side gave. e.g. 'Progress claim #7 for $42,750 served 3 Feb. No payment schedule received; only $12,000 paid on 20 Feb with no reasons.'" style="min-height:120px"></textarea>
+    <p class="note" id="dDue"></p>
+
+    <div class="actions">
+      <button class="btn primary" id="dAiBtn" onclick="dpDraftAI()">▶ Draft with AI</button>
+      <button class="btn" onclick="dpOffline()">⚡ Offline template</button>
+      <button class="btn ghost" onclick="dpClear()">Clear</button>
+    </div>
+
+    <div id="dResult" style="display:none;margin-top:18px">
+      <h3 class="sec">Draft response &amp; next steps</h3>
+      <div class="actions no-print" style="margin-top:0;margin-bottom:12px">
+        <button class="btn sm primary" onclick="copyText('dOut','Dispute draft copied')">⧉ Copy</button>
+        <button class="btn sm" onclick="dpExport()">⬇ Export (.txt)</button>
+      </div>
+      <div class="email-box" id="dOut"></div>
+      <p class="note">Draft only — heuristic, not legal advice. Check the amounts, dates and statutory deadlines, and have a solicitor review anything contentious before serving.</p>
+    </div>
+  </div>
+
+  <!-- ============ TERMS BUILDER ============ -->
+  <div class="card no-print" id="termsbuilder">
+    <h2><span class="num">✎</span> Terms &amp; Conditions Builder</h2>
+    <p class="sub">Need a term that isn&#39;t in the standard 15? Type it in plain English and get a formal clause drafted to sit alongside EMC&#39;s terms for your jurisdiction. Add as many as you like, then export the set.</p>
+    <label>Describe the term you want</label>
+    <textarea id="tcInput" placeholder="e.g. '48 hours notice required before site access', 'progress claims submitted monthly on the 25th', 'retention released within 90 days of practical completion'" style="min-height:90px"></textarea>
+    <div class="actions">
+      <button class="btn primary" id="tcAiBtn" onclick="tcDraftAI()">▶ Draft with AI</button>
+      <button class="btn" onclick="tcOffline()">⚡ Offline draft</button>
+      <button class="btn sm" onclick="tcExport()">⬇ Export terms (.txt)</button>
+    </div>
+    <div id="tcList" style="margin-top:6px"></div>
+  </div>
+
   <!-- ============ BENCHMARK ============ -->
   <div class="card no-print">
     <h2><span class="num">§</span> EMC Terms &amp; Conditions — the fixed benchmark</h2>
@@ -1322,6 +1398,112 @@ function loadSample(kind){
   if(!document.getElementById('cref').value) document.getElementById('cref').value=(kind==='clean')?'SC-3100 / Gungahlin bulk earthworks':'SC-2077 / Example bulk earthworks';
   toast((kind==='clean'?'Clean example':'Risky example')+' loaded — press Run');
 }
+
+/* ================= Disputes & Terms builder (added) ================= */
+(function(){
+  function dpEsc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+  function sharedKey(){return (document.getElementById('apiKey')&&document.getElementById('apiKey').value||'').trim();}
+  function sharedModel(){return (document.getElementById('model')&&document.getElementById('model').value)||'claude-sonnet-5';}
+  async function emcCall(system,user,maxTokens,btn,busyLabel,idleLabel){
+    const key=sharedKey();
+    if(!key){toast('Add your Anthropic API key in the intake panel above');const k=document.getElementById('apiKey');if(k){k.scrollIntoView({behavior:'smooth',block:'center'});k.focus();}return null;}
+    if(btn){btn.classList.add('busy');btn.textContent=busyLabel;}
+    try{
+      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:sharedModel(),max_tokens:maxTokens||1500,system,messages:[{role:'user',content:user}]})});
+      if(!r.ok){let m='HTTP '+r.status;try{const e=await r.json();if(e&&e.error&&e.error.message)m=e.error.message;}catch(_){}if(r.status===401)m='Invalid API key — check it and try again.';throw new Error(m);}
+      const data=await r.json();
+      const txt=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
+      if(!txt)throw new Error('No text returned.');
+      return txt;
+    }catch(err){
+      const m=/Failed to fetch|NetworkError/.test(err.message)?'Network/CORS blocked the request — this works on the hosted site, not the published claude.ai preview.':err.message;
+      toast('AI draft failed: '+m);return null;
+    }finally{if(btn){btn.classList.remove('busy');btn.textContent=idleLabel;}}
+  }
+
+  /* ---- Disputes ---- */
+  const dJ=document.getElementById('dJuris');
+  function dpUpdateDue(){
+    if(!dJ)return;const j=dJ.value;const el=document.getElementById('dDue');
+    if(el)el.innerHTML='In <b>'+j+'</b>, after a payment claim the respondent generally must serve a payment schedule within <b>'+dueText(j)+'</b> (indicative — verify). Miss it and the claimed amount may become payable.';
+  }
+  if(dJ){dJ.addEventListener('change',dpUpdateDue);dpUpdateDue();}
+  function prefillDisputes(){
+    const cp=document.getElementById('cpName'),cr=document.getElementById('cref'),jr=document.getElementById('juris');
+    const dCp=document.getElementById('dCp'),dRef=document.getElementById('dRef');
+    if(dCp&&!dCp.value&&cp&&cp.value)dCp.value=cp.value;
+    if(dRef&&!dRef.value&&cr&&cr.value)dRef.value=cr.value;
+    if(dJ&&jr&&jr.value){dJ.value=jr.value;dpUpdateDue();}
+  }
+  ['dType','dFacts'].forEach(id=>{const e=document.getElementById(id);if(e)e.addEventListener('focus',prefillDisputes,{once:true});});
+  function dpInputs(){return{
+    type:document.getElementById('dType').value,juris:dJ.value,
+    amount:document.getElementById('dAmount').value.trim(),
+    cp:document.getElementById('dCp').value.trim()||'the counterparty',
+    ref:document.getElementById('dRef').value.trim(),facts:document.getElementById('dFacts').value.trim()};}
+  function dpShow(text){const o=document.getElementById('dOut');o.textContent=text;const r=document.getElementById('dResult');r.style.display='block';r.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  window.dpDraftAI=async function(){
+    const d=dpInputs();if(d.facts.length<15){toast('Add a sentence or two on what happened first');return;}
+    const system='You are a contracts assistant for Earth Moving Creations (EMC), an Australian civil and earthmoving subcontractor. Draft a firm but professional dispute response from EMC to the counterparty. Use Australian English and plain, practical language. Be mindful of the building and construction security of payment regime in the stated jurisdiction, but DO NOT invent section numbers, case law or specific dates. Output: (1) a ready-to-send letter/notice with a "Subject:" line, then (2) a short "INTERNAL — next steps & deadlines" list. Decision-support, not legal advice.';
+    const user='Jurisdiction: '+d.juris+' (payment schedule indicatively due within '+dueText(d.juris)+').\nDispute type: '+d.type+'\nCounterparty: '+d.cp+'\nContract/project ref: '+(d.ref||'—')+'\nAmount in dispute: '+(d.amount||'—')+'\n\nWhat happened:\n'+d.facts;
+    const out=await emcCall(system,user,2000,document.getElementById('dAiBtn'),'Drafting…','▶ Draft with AI');
+    if(out){dpShow(out);toast('Dispute draft ready — review before sending');}
+  };
+  window.dpOffline=function(){
+    const d=dpInputs();if(d.facts.length<15){toast('Add a sentence or two on what happened first');return;}
+    const body='Subject: '+d.type+(d.ref?' — '+d.ref:'')+(d.amount?' ('+d.amount+')':'')+'\n\nDear '+d.cp+',\n\n'+
+      'We write regarding '+(d.ref?d.ref+' ':'')+'in respect of the above '+d.type.toLowerCase()+'.\n\n'+d.facts+'\n\n'+
+      'EMC maintains its entitlement in full. Under the security of payment regime applying in '+d.juris+', a valid payment claim calls for a payment schedule within '+dueText(d.juris)+'; absent a compliant schedule the claimed amount of '+(d.amount||'the claim')+' may become payable. We ask that payment be made, or a compliant payment schedule provided, within 5 business days of this notice, failing which EMC reserves all rights including suspension and adjudication.\n\n'+
+      'Yours faithfully,\nEarth Moving Creations\n\n'+
+      '— INTERNAL — next steps & deadlines —\n'+
+      '• Confirm the date the payment claim was served and diarise the '+dueText(d.juris)+' schedule deadline.\n'+
+      '• Keep all correspondence and delivery/read receipts.\n'+
+      '• If no compliant schedule is received, prepare an adjudication application.\n'+
+      '• Have a solicitor review before serving anything contentious.';
+    dpShow(body);toast('Offline template ready — edit the details');
+  };
+  window.dpClear=function(){['dAmount','dCp','dRef','dFacts'].forEach(id=>document.getElementById(id).value='');document.getElementById('dResult').style.display='none';};
+  window.dpExport=function(){
+    const d=dpInputs();const t=document.getElementById('dOut').textContent||'';
+    const o='EMC — DISPUTE DRAFT\n'+'='.repeat(40)+'\nType: '+d.type+'\nJurisdiction: '+d.juris+'\nCounterparty: '+d.cp+'\nRef: '+(d.ref||'—')+'\nAmount: '+(d.amount||'—')+'\nGenerated: '+new Date().toLocaleString()+'\n\n'+t+'\n\n(Not legal advice — review with a solicitor.)';
+    const b=new Blob([o],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='EMC-dispute-'+((d.ref||d.cp||'draft').replace(/[^a-z0-9]+/gi,'-').toLowerCase())+'.txt';a.click();
+  };
+
+  /* ---- Terms & Conditions builder ---- */
+  let TERMS=[];
+  function tcRender(){
+    const el=document.getElementById('tcList');if(!el)return;
+    if(!TERMS.length){el.innerHTML='<p class="note">No added terms yet.</p>';return;}
+    el.innerHTML='<h3 class="sec">Added terms ('+TERMS.length+')</h3>'+TERMS.map((t,i)=>
+      '<div class="flag low"><div class="fh"><div class="ttl">'+(i+1)+'. '+dpEsc(t.title)+(t.ai?' <span class="tag low">AI</span>':'')+'</div>'+
+      '<button class="btn sm ghost no-print" onclick="tcRemove('+i+')">Remove</button></div>'+
+      '<div class="body" style="white-space:pre-wrap">'+dpEsc(t.body)+'</div></div>').join('');
+  }
+  window.tcRemove=function(i){TERMS.splice(i,1);tcRender();};
+  function tcTitleFrom(s){const w=s.trim().replace(/\s+/g,' ').split(' ').slice(0,6).join(' ').replace(/[.,:;]+$/,'');return (w.charAt(0).toUpperCase()+w.slice(1))||'Additional term';}
+  window.tcDraftAI=async function(){
+    const inp=document.getElementById('tcInput');const v=(inp.value||'').trim();
+    if(v.length<4){toast('Type the term you want first');return;}
+    const j=(document.getElementById('juris')&&document.getElementById('juris').value)||'NSW';
+    const system='You draft single contract clauses for Earth Moving Creations (EMC), an Australian civil/earthmoving subcontractor. Given a plain-English requirement, write ONE formal, enforceable clause in Australian English, consistent with standard construction subcontract terms and the security of payment regime in the stated jurisdiction. Do NOT invent section numbers or case law. Output exactly: a short heading line, then the clause text. Nothing else.';
+    const out=await emcCall(system,'Jurisdiction: '+j+'.\nRequirement: '+v,700,document.getElementById('tcAiBtn'),'Drafting…','▶ Draft with AI');
+    if(out){const lines=out.split('\n').filter(x=>x.trim());const title=lines.length>1?lines[0].replace(/[:.]\s*$/,''):tcTitleFrom(v);const body=lines.length>1?lines.slice(1).join('\n').trim():out;TERMS.push({title:title,body:body,ai:true});inp.value='';tcRender();toast('Clause drafted — review before use');}
+  };
+  window.tcOffline=function(){
+    const inp=document.getElementById('tcInput');const v=(inp.value||'').trim();
+    if(v.length<4){toast('Type the term you want first');return;}
+    const j=(document.getElementById('juris')&&document.getElementById('juris').value)||'NSW';
+    const body='The parties agree as follows: '+v+(/[.!?]$/.test(v)?'':'.')+' This term applies to the works under this subcontract and is to be read consistently with the security of payment regime applying in '+j+'. Nothing in this term operates to exclude, modify or restrict any entitlement EMC has under that regime.';
+    TERMS.push({title:tcTitleFrom(v),body:body,ai:false});inp.value='';tcRender();toast('Draft added — review before use');
+  };
+  window.tcExport=function(){
+    if(!TERMS.length){toast('Add a term first');return;}
+    const j=(document.getElementById('juris')&&document.getElementById('juris').value)||'NSW';
+    const o='EMC — ADDITIONAL TERMS & CONDITIONS\nJurisdiction: '+j+'\nGenerated: '+new Date().toLocaleString()+'\n\n'+TERMS.map((t,i)=>(i+1)+'. '+t.title+'\n'+t.body).join('\n\n')+'\n\n(Draft — not legal advice. Review with a solicitor.)';
+    const b=new Blob([o],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='EMC-terms-'+j.toLowerCase()+'.txt';a.click();
+  };
+  tcRender();
+})();
 
 /* PWA service worker — hosted build only (skipped in the published artifact, which strips the manifest link) */
 if('serviceWorker' in navigator && document.querySelector('link[rel=manifest]') && /^https?:$/.test(location.protocol)){
