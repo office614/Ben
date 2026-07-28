@@ -1,0 +1,18 @@
+{
+  "name": "EMC Contract Intake & Risk Review",
+  "short_name": "EMC Review",
+  "description": "Check incoming contracts against EMC's standard terms — clause risk, counterparty look-up, risk profile and a draft response. NSW, ACT & VIC.",
+  "id": "/app.html",
+  "start_url": "./app.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

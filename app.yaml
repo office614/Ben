@@ -1,0 +1,25 @@
+# Google App Engine — static hosting for the EMC Contract Intake & Risk Review site.
+# Deploy with:  gcloud app deploy
+# Serves the landing page (index.html) and the app (app.html) over HTTPS, so the
+# in-app AI review can call the Anthropic API directly from the browser.
+runtime: python312
+
+handlers:
+  # Root -> landing page
+  - url: /
+    static_files: index.html
+    upload: index.html
+    secure: always
+
+  # Web app manifest needs the right MIME type
+  - url: /manifest.webmanifest
+    static_files: manifest.webmanifest
+    upload: manifest.webmanifest
+    mime_type: application/manifest+json
+    secure: always
+
+  # Everything else by path (app.html, sw.js, vendor/, assets/, icons/)
+  - url: /(.*)
+    static_files: \1
+    upload: (.*)
+    secure: always
