@@ -299,6 +299,27 @@
     .flag .body,.flag .action,.verdict .vreason,table.profile td{color:#111}
     .card>h2,.hero h1{color:#000}
   }
+
+  /* ===== Base-platform calm layer (Sonos-inspired) — deeper black, softer chrome, muted glow.
+     Layered last so it tunes the whole feel centrally; accent tokens stay tenant-driven. ===== */
+  :root{
+    --ground:#08090b; --ground-2:#0b0d10;
+    --panel:#0f1013; --panel-2:#131519; --panel-3:#181b21;
+    --field:#0f1116; --field-2:#151820;
+    --line:#1d2129; --line-2:#272c35;
+    --ink:#f3f5f8; --ink-2:#b7bfca; --steel:#98a0ac; --steel-dim:#6d7682;
+  }
+  body{background:var(--ground)}
+  #ember{display:none}                                   /* calm hero — no particle noise */
+  .hero{min-height:min(62vh,500px);margin-bottom:26px}
+  .hero .scrim{background:linear-gradient(90deg,rgba(8,9,11,.95),rgba(8,9,11,.6) 52%,rgba(8,9,11,.24))}
+  .topbar{background:linear-gradient(180deg,rgba(8,9,11,.92),rgba(8,9,11,.66))}
+  .card{background:var(--panel);border-color:var(--line);border-radius:20px;padding:30px;box-shadow:none;margin-bottom:20px}
+  .btn{border-radius:13px}
+  .btn.primary{box-shadow:0 6px 20px rgba(0,0,0,.38)}
+  .num{box-shadow:none}
+  .chip{background:rgba(255,255,255,.035);border-color:var(--line)}
+  @media(max-width:640px){.card{padding:22px}}
 </style>
 
 </head>
