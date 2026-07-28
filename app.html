@@ -349,15 +349,16 @@
 
 <div class="hero">
   <video class="media" id="heromedia" autoplay muted loop playsinline poster="assets/hero.jpg"><source src="assets/hero.mp4" type="video/mp4"></video>
+  <img class="media" id="heroBackdrop" alt="" hidden>
   <canvas id="ember"></canvas>
   <div class="scrim"></div>
   <div class="hero-inner">
     <div class="eyebrow"><span class="spark"></span>Contract Intake &amp; Risk Review</div>
     <h1>Every contract,<br>checked against <span class="amp">our terms</span>.</h1>
-    <p class="lede">Paste or drop any incoming contract, subcontract or purchase order. It is checked clause-by-clause against EMC&#39;s standard Terms &amp; Conditions — then profiled for risk with a ready-to-send response.</p>
+    <p class="lede" id="heroLede">Paste or drop any incoming contract, subcontract or purchase order. It is checked clause-by-clause against EMC&#39;s standard Terms &amp; Conditions — then profiled for risk with a ready-to-send response.</p>
     <div class="hero-chips">
       <span class="chip hot">4-step automated review</span>
-      <span class="chip"><b>15</b>-clause EMC benchmark</span>
+      <span class="chip" id="benchChip"><b>15</b>-clause EMC benchmark</span>
       <span class="chip">Security of Payment · <b>NSW &amp; ACT</b></span>
       <span class="chip">Runs <b>in your browser</b></span>
     </div>
@@ -535,6 +536,7 @@ function loadBrand(){
   try{ const s=JSON.parse(localStorage.getItem('tsBrand')||'null'); return s?Object.assign({},BRAND_DEFAULT,s):Object.assign({},BRAND_DEFAULT); }
   catch(_){ return Object.assign({},BRAND_DEFAULT); }
 }
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function applyBrand(){
   const b=BRAND;
   document.getElementById('logo').src = b.logo || DEFAULT_LOGO;
@@ -543,6 +545,80 @@ function applyBrand(){
   nm.firstChild.nodeValue = b.name;
   document.getElementById('brandTag').textContent = b.tag;
   document.getElementById('brandLoc').textContent = b.loc;
+  const lede=document.getElementById('heroLede');
+  if(lede) lede.innerHTML = `Paste or drop any incoming contract, subcontract or purchase order. It is checked clause-by-clause against ${esc(b.name)}&#39;s standard Terms &amp; Conditions — then profiled for risk with a ready-to-send response.`;
+  const chip=document.getElementById('benchChip');
+  if(chip) chip.innerHTML = `<b>15</b>-clause ${esc(b.short)} benchmark`;
+  applyBackdrop();
+}
+
+/* A tenant's logo auto-generates the large page backdrop (like the EMC hero).
+   Default (EMC demo, no custom logo) keeps the brand video untouched. */
+function applyBackdrop(){
+  const back=document.getElementById('heroBackdrop'), vid=document.getElementById('heromedia');
+  if(!back) return;
+  if(BRAND.logo){
+    makeBackdrop(BRAND.logo).then(o=>{
+      back.src=o.url; back.hidden=false;
+      if(vid){ try{vid.pause();}catch(_){} vid.style.display='none'; }
+      applyAccent(o.accent);
+    }).catch(()=>{});
+  } else {
+    back.hidden=true; back.removeAttribute('src');
+    if(vid){ vid.style.display=''; try{vid.play();}catch(_){} }
+    applyAccent(null);
+  }
+}
+function loadImg(src){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src;});}
+function sampleAccent(img){
+  // dominant vivid colour of the logo (skip transparent + near-greyscale)
+  let r=120,g=125,b=135;
+  try{
+    const s=document.createElement('canvas');s.width=40;s.height=40;const sx=s.getContext('2d');
+    sx.drawImage(img,0,0,40,40);
+    const d=sx.getImageData(0,0,40,40).data;let R=0,G=0,B=0,n=0;
+    for(let i=0;i<d.length;i+=4){const a=d[i+3];if(a<40)continue;const rr=d[i],gg=d[i+1],bb=d[i+2];if(Math.max(rr,gg,bb)-Math.min(rr,gg,bb)<22)continue;R+=rr;G+=gg;B+=bb;n++;}
+    if(n){r=R/n;g=G/n;b=B/n;}
+  }catch(_){}
+  return [r,g,b];
+}
+/* Drive the page accent from the tenant's logo colour (null = restore EMC crimson). */
+function applyAccent(rgbArr){
+  const root=document.documentElement.style;
+  const vars=['--crimson','--crimson-hi','--crimson-deep','--ember','--ember-hot','--ember-glow','--line-hot'];
+  if(!rgbArr){ vars.forEach(v=>root.removeProperty(v)); return; }
+  let [r,g,b]=rgbArr;
+  const mx=Math.max(r,g,b); if(mx<95){const s=95/(mx||1);r*=s;g*=s;b*=s;} // lift very dark
+  const sh=(f)=> f>=1 ? [r+(255-r)*(f-1),g+(255-g)*(f-1),b+(255-b)*(f-1)] : [r*f,g*f,b*f];
+  const rgb=a=>`rgb(${a.map(v=>Math.min(255,v)|0).join(',')})`;
+  root.setProperty('--crimson-hi',rgb(sh(1.18)));
+  root.setProperty('--crimson',rgb([r,g,b]));
+  root.setProperty('--crimson-deep',rgb(sh(0.68)));
+  root.setProperty('--ember',rgb(sh(1.14)));
+  root.setProperty('--ember-hot',rgb(sh(1.3)));
+  root.setProperty('--ember-glow',`rgba(${r|0},${g|0},${b|0},0.6)`);
+  root.setProperty('--line-hot',`rgba(${r|0},${g|0},${b|0},0.4)`);
+}
+async function makeBackdrop(logoURL){
+  const img=await loadImg(logoURL);
+  const [r,g,b]=sampleAccent(img);
+  const W=1600,H=1000,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  x.fillStyle='#0a0b0d';x.fillRect(0,0,W,H);
+  const g1=x.createRadialGradient(W*0.72,H*0.40,0,W*0.72,H*0.40,W*0.72);
+  g1.addColorStop(0,`rgba(${r|0},${g|0},${b|0},0.60)`);
+  g1.addColorStop(0.5,`rgba(${(r*0.45)|0},${(g*0.45)|0},${(b*0.45)|0},0.24)`);
+  g1.addColorStop(1,'rgba(10,11,13,0)');
+  x.fillStyle=g1;x.fillRect(0,0,W,H);
+  const lh=H*0.92,lw=lh*(img.width/img.height);
+  x.save();x.globalAlpha=0.20;if('filter' in x)x.filter='blur(1.5px)';
+  x.drawImage(img,W*0.60,(H-lh)/2,lw,lh);x.restore();
+  const g2=x.createLinearGradient(0,0,W,0);
+  g2.addColorStop(0,'rgba(8,9,11,0.97)');g2.addColorStop(0.5,'rgba(8,9,11,0.62)');g2.addColorStop(1,'rgba(8,9,11,0.18)');
+  x.fillStyle=g2;x.fillRect(0,0,W,H);
+  const g3=x.createLinearGradient(0,0,0,H);
+  g3.addColorStop(0,'rgba(8,9,11,0.50)');g3.addColorStop(0.4,'rgba(8,9,11,0)');g3.addColorStop(1,'rgba(8,9,11,0.55)');
+  x.fillStyle=g3;x.fillRect(0,0,W,H);
+  return {url:c.toDataURL('image/jpeg',0.85), accent:[r,g,b]};
 }
 applyBrand();
 
