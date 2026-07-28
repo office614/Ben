@@ -221,6 +221,15 @@
     background:var(--panel-3);margin:8px 0;font-size:13px;color:var(--ink-2)}
   .cp-adverse li a{font-family:var(--mono);font-size:11.5px}
   .cp-src{margin-top:12px;font-size:11px;color:var(--dim)}
+  .cp-row{border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin:10px 0;background:var(--panel-3)}
+  .cp-row .cp-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+  .cp-row .cp-label{font-family:var(--disp);font-weight:600;text-transform:uppercase;letter-spacing:.03em;font-size:14px;color:var(--ink)}
+  .cp-row .cp-acts{display:flex;gap:7px;flex-wrap:wrap}
+  .cp-row textarea{min-height:44px;font-family:var(--sans);font-size:13.5px}
+  .cp-row textarea.big{min-height:72px}
+  .cp-file{position:relative;overflow:hidden}
+  .cp-file input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .btn.busy{opacity:.65;pointer-events:none}
   .lookup-links{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0}
   .email-box{white-space:pre-wrap;font-family:var(--mono);font-size:12.5px;background:var(--field);
     border:1px solid var(--line-2);border-radius:12px;padding:18px;line-height:1.65;color:var(--ink-2)}
@@ -395,18 +404,10 @@
 
     <div class="card">
       <h2><span class="num">2</span> Counterparty look-up</h2>
-      <p class="sub" id="s2sub">Public-record and news checking only — ABN Lookup + ASIC. Not a commercial credit report. The AI review runs the searches for you; the offline scan gives you the registers to check by hand.</p>
-      <div id="cpResult"></div>
-      <div class="lookup-links" id="lookupLinks"></div>
+      <p class="sub" id="s2sub">For each item: <b>Search</b> to find it live, <b>open the register</b> to check by hand, or <b>drop a document</b> you already have. Public-record &amp; news only — not a credit report.</p>
+      <div id="cpBadge"></div>
+      <div id="cpGrid"></div>
       <p class="note" id="lookupNote"></p>
-      <div id="cpManual">
-        <table class="profile">
-          <tr><td class="k">Entity status</td><td>Confirm via ABN Lookup / ASIC: <b>registered</b>, deregistered, or under external administration. Record here.</td></tr>
-          <tr><td class="k">Incorporation date</td><td>From ASIC organisation extract.</td></tr>
-          <tr><td class="k">Registered address</td><td>From ABN Lookup / ASIC.</td></tr>
-          <tr><td class="k">Adverse findings</td><td>Web-search the entity + each director for: court judgments, liquidation / insolvency notices, adjudication determinations, payment-dispute coverage. <b>State plainly if nothing adverse turns up.</b></td></tr>
-        </table>
-      </div>
     </div>
 
     <div class="card">
@@ -860,42 +861,8 @@ function render(ctx,found,miss,DUE,opts){
       <div class="action"><b>Add:</b> ${m.action}</div>
     </div>`;}).join('');}
 
-  // Step 2 links
-  const abnDigits=(ctx.abn||'').replace(/\s/g,'');
-  const nameQ=encodeURIComponent(ctx.name);
-  const abnUrl=abnDigits?`https://abr.business.gov.au/ABN/View?abn=${encodeURIComponent(abnDigits)}`:`https://abr.business.gov.au/Search/ResultsActive?SearchText=${nameQ}`;
-  document.getElementById('lookupLinks').innerHTML=
-    `<a class="btn sm" target="_blank" rel="noopener" href="${abnUrl}">↗ ABN Lookup${abnDigits?' (by ABN)':' (by name)'}</a>`+
-    `<a class="btn sm" target="_blank" rel="noopener" href="https://connectonline.asic.gov.au/RegistrySearch/faces/landing/SearchRegisters.jspx?searchText=${nameQ}">↗ ASIC registers</a>`+
-    `<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+(liquidation+OR+insolvency+OR+administration+OR+judgment+OR+%22payment+dispute%22)">↗ Adverse-news search</a>`+
-    `<a class="btn sm" target="_blank" rel="noopener" href="https://publishednotices.asic.gov.au/browsesearch-notices/">↗ ASIC published (insolvency) notices</a>`+
-    ({NSW:`<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+site:caselaw.nsw.gov.au">↗ NSW Caselaw</a>`,
-      VIC:`<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+site:austlii.edu.au+(VSC+OR+VCAT+OR+%22security+of+payment%22)">↗ VIC Caselaw / VCAT</a>`,
-      ACT:`<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+adjudication+ACRS+OR+%22security+of+payment%22+ACT">↗ ACT adjudication</a>`}[ctx.juris]||'');
-  document.getElementById('lookupNote').textContent=
-    `Searching for: ${ctx.name}${abnDigits?' · ABN/ACN '+ctx.abn:''}. Confirm the entity you are contracting with is the one on the register (watch for trading names vs the actual legal entity, and $2 or recently-registered shelf companies).`;
-
-  // Step 2 — AI-generated counterparty findings (web search), if present
-  const cp=opts.counterparty; const cpr=document.getElementById('cpResult'); const cpm=document.getElementById('cpManual');
-  if(cp){
-    const rows=[
-      ['Entity status',cp.entityStatus],['ABN / ACN status',cp.abnStatus],
-      ['Incorporation date',cp.incorporation],['Registered address',cp.registeredAddress]
-    ].filter(r=>r[1]);
-    const adv=cp.adverse||[];
-    const badge=adv.length
-      ? `<span class="cp-badge flag">⚠ ${adv.length} adverse item${adv.length===1?'':'s'} found</span>`
-      : `<span class="cp-badge clear">✓ nothing adverse found in public records / news</span>`;
-    cpr.innerHTML=badge+
-      (rows.length?`<table class="profile">${rows.map(r=>`<tr><td class="k">${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</table>`:'')+
-      (adv.length?`<ul class="cp-adverse">${adv.map(a=>`<li>${esc(a.summary||a)}${a.url?` — <a href="${esc(a.url)}" target="_blank" rel="noopener">source</a>`:''}</li>`).join('')}</ul>`:'')+
-      (cp.summary?`<p class="note" style="margin-top:12px">${esc(cp.summary)}</p>`:'')+
-      `<p class="cp-src">Generated by web search — verify against the official registers below before relying on it. Public-record / news only, not a credit report.</p>`;
-    cpm.style.display='none';
-    document.getElementById('s2sub').textContent='Searched by the AI review (ABN Lookup / ASIC / news). Verify against the official registers below before relying on it.';
-  }else{
-    cpr.innerHTML=''; cpm.style.display='';
-  }
+  // Step 2 — per-field look-up grid (search / open register / drop a file)
+  renderCpGrid(ctx, opts.counterparty);
 
   // Step 3 profile + rating
   const rating=opts.rating||computeRating(found,miss);
@@ -955,6 +922,104 @@ function showResults(ctx,found,miss,DUE,opts){
   revealCards();
   document.getElementById('verdict').scrollIntoView({behavior:'smooth',block:'start'});
 }
+
+/* ============ Step 2 — per-field counterparty look-up grid ============ */
+function abnDigits(ctx){return (ctx.abn||'').replace(/\D/g,'');}
+const CP_FIELDS=[
+  {key:'entityStatus',label:'Entity status',ph:'registered / deregistered / under external administration',
+    linkLabel:'ASIC',link:c=>`https://connectonline.asic.gov.au/RegistrySearch/faces/landing/SearchRegisters.jspx?searchText=${encodeURIComponent(c.name)}`,
+    ask:c=>`current ASIC company/organisation status (registered, deregistered, strike-off in progress, or under external administration / liquidation)`},
+  {key:'abnStatus',label:'ABN / ACN status',ph:'active or cancelled · entity type · GST registration',
+    linkLabel:'ABN Lookup',link:c=>abnDigits(c)?`https://abr.business.gov.au/ABN/View?abn=${encodeURIComponent(abnDigits(c))}`:`https://abr.business.gov.au/Search/ResultsActive?SearchText=${encodeURIComponent(c.name)}`,
+    ask:c=>`ABN/ACN status (active or cancelled), entity type and GST registration from the ABN Lookup register`},
+  {key:'incorporation',label:'Incorporation / registration date',ph:'date first registered with ASIC',
+    linkLabel:'ASIC',link:c=>`https://connectonline.asic.gov.au/RegistrySearch/faces/landing/SearchRegisters.jspx?searchText=${encodeURIComponent(c.name)}`,
+    ask:c=>`the date the company was first registered/incorporated with ASIC (and ACN)`},
+  {key:'registeredAddress',label:'Registered address',ph:'registered office / principal place of business',
+    linkLabel:'ABN Lookup',link:c=>abnDigits(c)?`https://abr.business.gov.au/ABN/View?abn=${encodeURIComponent(abnDigits(c))}`:`https://abr.business.gov.au/Search/ResultsActive?SearchText=${encodeURIComponent(c.name)}`,
+    ask:c=>`the registered office address / principal place of business and the state/locality`},
+  {key:'adverse',label:'Adverse findings',big:true,ph:'court judgments, liquidation / insolvency / administration notices, adjudications, payment disputes — or "nothing adverse found"',
+    linkLabel:'Adverse-news',link:c=>`https://www.google.com/search?q=${encodeURIComponent(c.name)}+(liquidation+OR+insolvency+OR+administration+OR+judgment+OR+%22payment+dispute%22)`,
+    extra:c=>[{l:'ASIC notices',u:'https://publishednotices.asic.gov.au/browsesearch-notices/'},
+      {NSW:{l:'NSW Caselaw',u:`https://www.google.com/search?q=${encodeURIComponent(c.name)}+site:caselaw.nsw.gov.au`},
+       VIC:{l:'VIC/VCAT',u:`https://www.google.com/search?q=${encodeURIComponent(c.name)}+site:austlii.edu.au+(VSC+OR+VCAT)`},
+       ACT:{l:'ACT adjud.',u:`https://www.google.com/search?q=${encodeURIComponent(c.name)}+adjudication+%22security+of+payment%22+ACT`}}[c.juris]||{l:'Caselaw',u:`https://www.google.com/search?q=${encodeURIComponent(c.name)}+court+judgment`}],
+    ask:c=>`any adverse public records or news about this entity or its directors: court judgments, liquidation / insolvency / voluntary administration / wind-up notices, adjudication determinations, or payment-dispute coverage. If nothing adverse is found, say "Nothing adverse found in public records or news."`}
+];
+
+function renderCpGrid(ctx, cp){
+  cp=cp||{};
+  const badge=document.getElementById('cpBadge');
+  const adv=Array.isArray(cp.adverse)?cp.adverse:[];
+  if(cp.entityStatus||adv.length||cp.summary){
+    badge.innerHTML=adv.length
+      ? `<span class="cp-badge flag">⚠ ${adv.length} adverse item${adv.length===1?'':'s'} found — review below</span>`
+      : `<span class="cp-badge clear">✓ nothing adverse found in the AI search — verify below</span>`;
+  } else { badge.innerHTML=''; }
+  const preAdverse = adv.length ? adv.map(a=>'• '+(a.summary||a)+(a.url?'  ['+a.url+']':'')).join('\n') : (cp.summary||'');
+  const pre={entityStatus:cp.entityStatus||'',abnStatus:cp.abnStatus||'',incorporation:cp.incorporation||'',registeredAddress:cp.registeredAddress||'',adverse:preAdverse};
+  const hasAI=!!document.getElementById('apiKey');
+  document.getElementById('cpGrid').innerHTML=CP_FIELDS.map(f=>{
+    const extra=(f.extra?f.extra(ctx):[]).map(x=>`<a class="btn sm" target="_blank" rel="noopener" href="${x.u}">↗ ${esc(x.l)}</a>`).join('');
+    const searchBtn=hasAI?`<button class="btn sm primary" id="cpbtn-${f.key}" onclick="fieldSearch('${f.key}')">🔍 Search</button>`:'';
+    return `<div class="cp-row">
+      <div class="cp-top">
+        <span class="cp-label">${esc(f.label)}</span>
+        <span class="cp-acts no-print">
+          ${searchBtn}<a class="btn sm" target="_blank" rel="noopener" href="${f.link(ctx)}">↗ ${esc(f.linkLabel)}</a>${extra}
+          <label class="btn sm cp-file">⬇ Drop file<input type="file" accept=".pdf,.txt,.md,.text" onchange="fieldFile('${f.key}',this)"></label>
+        </span>
+      </div>
+      <textarea id="cpf-${f.key}" class="${f.big?'big':''}" placeholder="${esc(f.ph)}">${esc(pre[f.key]||'')}</textarea>
+    </div>`;
+  }).join('');
+  document.getElementById('lookupNote').textContent=
+    `Confirm the entity you are contracting with is the one on the register — watch for trading names vs the legal entity, and $2 or recently-registered shelf companies. Search uses your Anthropic API key; the register links and file drop work without it.`;
+}
+
+async function fieldFile(key, input){
+  const file=input.files&&input.files[0]; if(!file)return; input.value='';
+  const ta=document.getElementById('cpf-'+key);
+  try{
+    let txt;
+    if(/\.pdf$/i.test(file.name)||file.type==='application/pdf'){ toast('Reading '+file.name+' …'); txt=await extractPdf(file); }
+    else { txt=await file.text(); }
+    if(!txt||txt.length<10){toast('No selectable text in '+file.name+' — paste manually.');return;}
+    ta.value=(ta.value.trim()?ta.value.trim()+'\n\n':'')+`[${file.name}]\n`+txt.slice(0,4000);
+    toast('Dropped '+file.name+' into '+key);
+  }catch(err){toast('Could not read '+file.name+': '+err.message);}
+}
+
+async function fieldSearch(key){
+  const f=CP_FIELDS.find(x=>x.key===key); if(!f)return;
+  const ctx=(LAST&&LAST.ctx)||ctxFromForm();
+  const keyv=(document.getElementById('apiKey')&&document.getElementById('apiKey').value||'').trim();
+  if(!keyv){toast('Add your Anthropic API key (in the intake panel) to search');return;}
+  const model=(document.getElementById('model')&&document.getElementById('model').value)||'claude-sonnet-5';
+  const btn=document.getElementById('cpbtn-'+key); const ta=document.getElementById('cpf-'+key);
+  if(btn){btn.classList.add('busy');btn.textContent='Searching…';}
+  try{
+    const prompt=`Using web search, find ${f.ask(ctx)} for this Australian entity: "${ctx.name}"${ctx.abn?' (ABN/ACN '+ctx.abn+')':''}. Give a concise factual answer in 1–4 short lines and include the source URL(s) you used. If you cannot verify it, reply exactly "Not found — verify manually". Do not guess or fabricate.`;
+    const messages=[{role:'user',content:prompt}];
+    async function call(){
+      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+        headers:{'content-type':'application/json','x-api-key':keyv,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model,max_tokens:1200,tools:[webSearchTool(model)],messages})});
+      if(!r.ok){let m='HTTP '+r.status;try{const e=await r.json();if(e&&e.error&&e.error.message)m=e.error.message;}catch(_){}if(r.status===401)m='Invalid API key';throw new Error(m);}
+      return r.json();
+    }
+    let data=await call();
+    for(let g=0; data.stop_reason==='pause_turn' && g<3; g++){messages.push({role:'assistant',content:data.content});data=await call();}
+    const out=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
+    if(!out)throw new Error('No result returned.');
+    ta.value=out;
+    toast('Found — '+f.label.toLowerCase());
+  }catch(err){
+    const m=/Failed to fetch|NetworkError/.test(err.message)?'Blocked here — open app.html on a host to search':err.message;
+    toast('Search failed: '+m);
+  }finally{ if(btn){btn.classList.remove('busy');btn.textContent='🔍 Search';} }
+}
+/* ============ end Step 2 grid ============ */
 
 function computeRating(found,miss){
   const nHigh=found.filter(f=>f.sev==='high').length;
@@ -1133,8 +1198,8 @@ function openGmail(){
 function exportTxt(){
   if(!LAST){return;}
   const {ctx,found,miss}=LAST;
-  const D=id=>(document.getElementById(id).textContent||'').trim();
-  const cp=D('cpResult');
+  const D=id=>{const e=document.getElementById(id);return e?(e.textContent||'').trim():'';};
+  const cp=CP_FIELDS.map(f=>{const ta=document.getElementById('cpf-'+f.key);const v=ta?ta.value.trim():'';return f.label+': '+(v||'—');}).join('\n');
   let o=`EMC CONTRACT INTAKE & RISK REVIEW\n${'='.repeat(54)}\nCounterparty: ${ctx.name}${ctx.abn?'  '+ctx.abn:''}\nContract: ${ctx.ctype}${ctx.cref?' · '+ctx.cref:''} · ${ctx.juris}\nGenerated: ${new Date().toLocaleString()}\n\n`;
   o+=`STEP 1 — CLAUSE-BY-CLAUSE RISK\n${'-'.repeat(54)}\n`;
   found.forEach(f=>{o+=`[${f.sev.toUpperCase()} · ${f.type}] ${strip(f.title)}\n  vs EMC cl.${f.clause}\n  ${strip(f.body)}\n  ACTION: ${strip(f.action)}\n\n`;});
