@@ -300,8 +300,17 @@
   <!-- ============ INPUT ============ -->
   <div class="card no-print" id="intake">
     <h2><span class="num">◧</span> Contract Intake</h2>
-    <p class="sub">Paste the incoming contract text (or upload a .txt / .md file), enter the counterparty details, then run the full review.</p>
+    <p class="sub">Drop or paste the contract first — the app pulls the counterparty, ABN, jurisdiction and type out of the text and fills the boxes for you. Check them, then run the review.</p>
 
+    <label>Contract <span style="text-transform:none;color:var(--dim);font-weight:400">— drop a PDF or paste, and the details below auto-fill</span></label>
+    <div id="drop">
+      <input type="file" id="file" accept=".pdf,.txt,.md,.text" class="no-print" style="display:none">
+      <textarea id="contract" placeholder="Drop a PDF or .txt file here, or paste the full contract text. It's extracted locally and the counterparty details below fill in automatically."></textarea>
+      <div id="drophint">Drop a PDF or text file here</div>
+    </div>
+    <div class="filehint"><button type="button" class="btn sm no-print" onclick="document.getElementById('file').click()" style="font-size:11.5px;padding:6px 12px">⬆ Choose a file</button> &nbsp;Everything runs in your browser — nothing is uploaded. PDF text is extracted locally (scanned/image-only PDFs won't extract — paste those).</div>
+
+    <h3 class="sec" style="margin-top:22px">Counterparty &amp; contract details <span style="text-transform:none;letter-spacing:.02em;font-weight:400;color:var(--dim);font-size:12px">— auto-filled from the contract; edit if needed</span></h3>
     <div class="row3">
       <div>
         <label>Counterparty entity name</label>
@@ -338,16 +347,8 @@
       </div>
     </div>
 
-    <label>Counterparty email <span style="text-transform:none;color:var(--dim);font-weight:400">(optional — used for the "Open in Gmail" draft)</span></label>
-    <input type="text" id="cpEmail" placeholder="e.g. accounts@headcontractor.com.au">
-
-    <label>Contract text</label>
-    <div id="drop">
-      <textarea id="contract" placeholder="Paste the full contract, subcontract or PO text here — or drop a PDF / .txt file anywhere on this box. The more clauses you include, the more the review can detect."></textarea>
-      <div id="drophint">Drop a PDF or text file here</div>
-    </div>
-    <input type="file" id="file" accept=".pdf,.txt,.md,.text" class="no-print" style="margin-top:8px;font-size:12px;color:var(--mut)">
-    <div class="filehint">Runs entirely in your browser — nothing is uploaded or sent anywhere. Drop or choose a <b>PDF</b> and the text is extracted locally; or paste text directly. Scanned/image-only PDFs won't extract — paste those.</div>
+    <label>Contract administrator / counterparty email <span style="text-transform:none;color:var(--dim);font-weight:400">(optional — used for the "Open in Gmail" draft)</span></label>
+    <input type="text" id="cpEmail" placeholder="e.g. contracts@headcontractor.com.au">
 
     <!--AI-UI-START-->
     <div class="ai-panel">
@@ -418,13 +419,21 @@
     </div>
 
     <div class="card">
-      <h2><span class="num">4</span> Draft response to counterparty</h2>
-      <p class="sub">Direct and commercial — raises the flagged issues and cites the legislation behind EMC's position. Review before sending.</p>
-      <div class="actions no-print" style="margin-top:0;margin-bottom:14px">
-        <button class="btn sm primary" onclick="openGmail()">✉ Open in Gmail</button>
-        <button class="btn sm" onclick="copyEmail()">⧉ Copy email</button>
+      <h2><span class="num">4</span> Recommendations &amp; response</h2>
+      <p class="sub">Two ready-to-use documents: an internal recommendations memo for the Builder (each requested amendment with its legal reason), and a direct response to the contract administrator. Review before sending.</p>
+
+      <h3 class="sec">A · Contract review recommendations — to the Builder</h3>
+      <div class="actions no-print" style="margin-top:0;margin-bottom:12px">
+        <button class="btn sm primary" onclick="copyText('recos','Recommendations copied')">⧉ Copy recommendations</button>
         <button class="btn sm" onclick="window.print()">⎙ Print / Save PDF</button>
         <button class="btn sm" onclick="exportTxt()">⬇ Export review (.txt)</button>
+      </div>
+      <div class="email-box" id="recos"></div>
+
+      <h3 class="sec">B · Draft response — to the contract administrator</h3>
+      <div class="actions no-print" style="margin-top:0;margin-bottom:12px">
+        <button class="btn sm primary" onclick="openGmail()">✉ Open in Gmail</button>
+        <button class="btn sm" onclick="copyEmail()">⧉ Copy email</button>
       </div>
       <div class="email-box" id="email"></div>
       <p class="note" id="legalNote"></p>
@@ -664,7 +673,9 @@ DO ALL OF THIS in one pass:
 1. Clause-by-clause: for every clause in the incoming contract that is WEAKER than, or CONFLICTS with, EMC's position, produce a finding mapped to the specific EMC clause number (1–15) with exactly what to strike or amend. Separately list EMC protections that are MISSING and should be added.
 2. Counterparty look-up — USE THE web_search TOOL. Search ABN Lookup (abr.business.gov.au) and ASIC for the counterparty to establish: entity status (registered / deregistered / under external administration), ABN/ACN status, incorporation/registration date, and registered address. Then search for adverse findings — court judgments, liquidation / insolvency / administration notices, adjudication determinations, and payment-dispute coverage — for the entity and its directors. If a field can't be verified, use "Not found — verify manually". If nothing adverse turns up, return an empty adverse[] array and say so plainly. NEVER fabricate a finding, an ABN, or a source URL — only include a url you actually retrieved from search.
 3. Overall risk rating (High/Medium/Low) with reasoning that accounts for both the clause flags and the counterparty search.
-4. A direct, commercial draft email to the counterparty raising the flagged issues and citing the specific applicable legislation.
+4. TWO ready-to-use documents:
+   (a) builderMemo — a "Contract Review — Recommended Amendments" memo addressed to the Builder. For EACH requested amendment and missing term, state: the requested change, the EMC term it maps to (cl.N), and the LEGAL REASON (cite the relevant Security of Payment Act section, Australian Consumer Law section, or contract-law principle). End with an "Applicable law" summary and the overall risk. Plain text, clearly formatted with line breaks, signed "Earth Moving Creations".
+   (b) email — a direct, commercial email to the CONTRACT ADMINISTRATOR raising the flagged issues and citing the specific legislation.
 
 Return ONLY a single JSON object — no markdown, no prose, no code fences — with EXACTLY this shape:
 {
@@ -673,6 +684,7 @@ Return ONLY a single JSON object — no markdown, no prose, no code fences — w
  "counterparty":{"entityStatus":str,"abnStatus":str,"incorporation":str,"registeredAddress":str,"adverse":[{"summary":str,"url":str}],"summary":str},
  "rating":{"level":"High"|"Medium"|"Low","reason":str},
  "suggestedFields":[str],
+ "builderMemo":str,
  "email":{"subject":str,"body":str}
 }`;
 }
@@ -763,7 +775,8 @@ function applyAI(ctx,DUE,out){
     incorporation:out.counterparty.incorporation,registeredAddress:out.counterparty.registeredAddress,
     adverse:Array.isArray(out.counterparty.adverse)?out.counterparty.adverse:[],summary:out.counterparty.summary
   }:null;
-  showResults(ctx,found,miss,DUE,{rating,email,suggested:(out.suggestedFields||[]),counterparty:cp});
+  const recos=(typeof out.builderMemo==='string'&&out.builderMemo.trim())?out.builderMemo:'';
+  showResults(ctx,found,miss,DUE,{rating,email,recos,suggested:(out.suggestedFields||[]),counterparty:cp});
 }
 /* ================= end AI review ================= */
 
@@ -925,6 +938,7 @@ function render(ctx,found,miss,DUE,opts){
     '<ul style="margin:8px 0 0;padding-left:18px">'+sugFinal.map(s=>`<li style="margin:4px 0">${esc(s)}</li>`).join('')+'</ul>';
 
   // Step 4 email
+  document.getElementById('recos').textContent=opts.recos||buildRecommendations(ctx,found,miss,DUE,rating);
   document.getElementById('email').textContent=opts.email||buildEmail(ctx,found,miss,DUE,rating);
   document.getElementById('legalNote').innerHTML=legalRefs(ctx.juris);
 }
@@ -963,13 +977,73 @@ function legalRefs(j){
   return 'Legislation cited: <b>Building and Construction Industry (Security of Payment) Act 2009 (ACT)</b> — s.11 (due date; 10 business days default), s.14 (pay-when-paid provisions have no effect), s.15 (payment claims), s.24 &amp; s.40 (right to suspend on non-payment), s.9/s.42 (no contracting out). '+ACL;
 }
 
-function buildEmail(ctx,found,miss,DUE,rating){
+function actInfo(juris){
   const ACTS={
     NSW:['the Building and Construction Industry Security of Payment Act 1999 (NSW)','s.12','s.11','s.34'],
     ACT:['the Building and Construction Industry (Security of Payment) Act 2009 (ACT)','s.14','s.11','s.42'],
     VIC:['the Building and Construction Industry Security of Payment Act 2002 (Vic)','s.13','s.12','s.48']
   };
-  const [act,s_pwp,s_due,s_out]=ACTS[ctx.juris]||ACTS.NSW;
+  return ACTS[juris]||ACTS.NSW;
+}
+
+/* short legal reason for an EMC clause, for the Builder recommendations memo */
+function legalBasis(clause,ctx){
+  const [act,s_pwp,s_due,s_out]=actInfo(ctx.juris);
+  const c=+clause;
+  if(c===9||c===13) return `${act} — pay-when-paid has no effect (${s_pwp}), payment falls due within ${dueText(ctx.juris)} of a valid claim (${s_due}), and the Act cannot be contracted out of (${s_out}). Any term cutting across this is unenforceable.`;
+  if(c===12||c===14) return `${act} preserves EMC's statutory right to suspend for non-payment and to adjudicate/recover; a clause purporting to remove it is ineffective.`;
+  if(c===4||c===7||c===8) return `Variations must be priced with a time (EOT) assessment and agreed in writing before the work — unpriced, verbal or "no-cost" variation directions are unworkable and are the leading source of payment disputes.`;
+  if(c===5||c===6) return `Program changes, delay, acceleration and out-of-sequence work require cost and EOT assessment. A notice/time-bar that forfeits an entitlement is resisted — and cannot defeat a valid payment claim under ${act}.`;
+  if(c===11) return `Procedural fairness: EMC must be able to inspect an alleged defect and have disputes independently determined, with any deduction itemised in writing first — otherwise set-off is exposed to challenge.`;
+  if(c===1||c===2||c===3) return `Certainty of scope: the signed Addendum Ledger and attached documents define the works. Latent / differing site conditions and drawing ambiguities outside that scope are variations (with cost and EOT), not EMC's risk.`;
+  if(c===10) return `Quality is measured against the applicable Australian Standards; EMC's liability should be limited to non-complying work and to its proportionate responsibility (consequential loss excluded).`;
+  if(c===15) return `Certainty of contract — authority to bind, and resistance to personal/director guarantees that shift corporate risk onto individuals.`;
+  return `Supports EMC's standard position and a fair, workable allocation of risk.`;
+}
+
+/* Document A — recommendations memo to the Builder, with legal reasons */
+function buildRecommendations(ctx,found,miss,DUE,rating){
+  const today=(new Date()).toISOString().slice(0,10);
+  const [act]=actInfo(ctx.juris);
+  const L=[];
+  L.push('CONTRACT REVIEW — RECOMMENDED AMENDMENTS');
+  L.push(`${ctx.ctype}${ctx.cref?' · '+ctx.cref:''} · ${ctx.juris}`);
+  L.push(`Counterparty: ${ctx.name}`);
+  L.push(`Prepared by Earth Moving Creations · ${today}`);
+  L.push('');
+  L.push(`We recommend the following amendments before EMC executes this ${ctx.ctype.toLowerCase()}. Each is tied to EMC's standard terms, with the legal reason for the request noted. Payment benchmark for ${ctx.juris}: ${DUE} of a valid payment claim under ${act}.`);
+  L.push('');
+  L.push('RECOMMENDED AMENDMENTS');
+  if(found.length){
+    found.forEach((f,i)=>{
+      L.push(`${i+1}. ${strip(f.title)}  [${f.sev.toUpperCase()}]`);
+      L.push(`   Requested change: ${plainAction(f)}`);
+      L.push(`   EMC term: cl.${f.clause} — ${EMC[f.clause-1][1]}`);
+      L.push(`   Legal reason: ${legalBasis(f.clause,ctx)}`);
+      L.push('');
+    });
+  } else { L.push('   None auto-detected — review manually.'); L.push(''); }
+  if(miss.length){
+    L.push('MISSING TERMS TO ADD');
+    miss.forEach((m,i)=>{
+      L.push(`${String.fromCharCode(97+i)}. ${strip(m.title)} — add EMC cl.${m.clause}.`);
+      L.push(`   Legal reason: ${legalBasis(m.clause,ctx)}`);
+      L.push('');
+    });
+  }
+  L.push('APPLICABLE LAW');
+  L.push(`• ${act} — pay-when-paid void; payment due ${DUE}; no contracting out.`);
+  L.push('• Australian Consumer Law (Competition and Consumer Act 2010 (Cth) Sch 2) — s.18 (misleading conduct), ss.20–22 (unconscionable conduct), ss.23–24 (unfair terms in standard-form small-business contracts).');
+  L.push('• General contract-law principles (certainty of terms, entire-agreement / parol-evidence).');
+  L.push('');
+  L.push(`OVERALL RISK: ${rating.label}. ${strip(rating.reason)}`);
+  L.push('');
+  L.push('— Earth Moving Creations · Civil & Earthmoving');
+  return L.join('\n');
+}
+
+function buildEmail(ctx,found,miss,DUE,rating){
+  const [act,s_pwp,s_due,s_out]=actInfo(ctx.juris);
   const ref=ctx.cref?` (${ctx.cref})`:'';
   const items=[];
 
@@ -1028,14 +1102,16 @@ function plainAction(f){
     insurance:'Please confirm the required insurance limits; note we do not carry professional indemnity for construct-only work.',
     guarantee:'Please remove the personal / director guarantee — we can offer retention or a capped bank guarantee instead.'
   };
-  return (map[f.id]||'Please amend to reflect our standard position.').split('{DUE}').join(dueText(document.getElementById('juris').value));
+  const base=map[f.id]||(f.action?strip(f.action):'Please amend to reflect our standard position.');
+  return base.split('{DUE}').join(dueText(document.getElementById('juris').value));
 }
 
 /* ---------------- utilities ---------------- */
-function copyEmail(){
-  const t=document.getElementById('email').textContent;
-  navigator.clipboard.writeText(t).then(()=>toast('Email copied to clipboard')).catch(()=>toast('Copy failed — select the text manually'));
+function copyText(id,msg){
+  const t=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(t).then(()=>toast(msg||'Copied')).catch(()=>toast('Copy failed — select the text manually'));
 }
+function copyEmail(){ copyText('email','Email copied to clipboard'); }
 function splitEmail(){
   const full=document.getElementById('email').textContent||'';
   const m=full.match(/^Subject:\s*(.*?)\r?\n\r?\n/);
@@ -1056,18 +1132,18 @@ function openGmail(){
 }
 function exportTxt(){
   if(!LAST){return;}
-  const {ctx,found,miss,DUE}=LAST;
-  const rating=computeRating(found,miss);
-  let o=`EMC CONTRACT INTAKE & RISK REVIEW\n${'='.repeat(50)}\nCounterparty: ${ctx.name}${ctx.abn?'  ABN/ACN '+ctx.abn:''}\nContract: ${ctx.ctype}${ctx.cref?' · '+ctx.cref:''} · ${ctx.juris}\nGenerated: ${new Date().toLocaleString()}\n\n`;
-  o+=`STEP 1 — CLAUSE-BY-CLAUSE RISK DETECTION\n${'-'.repeat(50)}\n`;
-  found.forEach(f=>{o+=`[${f.sev.toUpperCase()} · ${f.type}] ${f.title}\n  vs EMC cl.${f.clause}\n  ${strip(f.body)}\n  ACTION: ${strip(f.action)}\n\n`;});
-  if(!found.length)o+='No conflicts detected in pasted text.\n\n';
-  o+=`MISSING — ADD EMC POSITION\n${'-'.repeat(50)}\n`;
-  miss.forEach(m=>{o+=`- ${m.title} (add EMC cl.${m.clause})\n  ${strip(m.action)}\n\n`;});
-  if(!miss.length)o+='None.\n\n';
-  o+=`STEP 2 — COUNTERPARTY LOOK-UP\n${'-'.repeat(50)}\nEntity status: ____   Incorporation date: ____\nRegistered address: ____\nAdverse findings (judgments/insolvency/disputes): ____\n(Public-record + news only — not a credit report.)\n\n`;
-  o+=`STEP 3 — RISK PROFILE\n${'-'.repeat(50)}\nOverall rating: ${rating.label}\nReason: ${rating.reason}\n\n`;
-  o+=`STEP 4 — DRAFT EMAIL\n${'-'.repeat(50)}\n${document.getElementById('email').textContent}\n`;
+  const {ctx,found,miss}=LAST;
+  const D=id=>(document.getElementById(id).textContent||'').trim();
+  const cp=D('cpResult');
+  let o=`EMC CONTRACT INTAKE & RISK REVIEW\n${'='.repeat(54)}\nCounterparty: ${ctx.name}${ctx.abn?'  '+ctx.abn:''}\nContract: ${ctx.ctype}${ctx.cref?' · '+ctx.cref:''} · ${ctx.juris}\nGenerated: ${new Date().toLocaleString()}\n\n`;
+  o+=`STEP 1 — CLAUSE-BY-CLAUSE RISK\n${'-'.repeat(54)}\n`;
+  found.forEach(f=>{o+=`[${f.sev.toUpperCase()} · ${f.type}] ${strip(f.title)}\n  vs EMC cl.${f.clause}\n  ${strip(f.body)}\n  ACTION: ${strip(f.action)}\n\n`;});
+  if(!found.length)o+='No conflicts detected.\n\n';
+  if(miss.length){o+=`MISSING — ADD EMC POSITION\n${'-'.repeat(54)}\n`;miss.forEach(m=>{o+=`- ${strip(m.title)} (add EMC cl.${m.clause})\n  ${strip(m.action)}\n\n`;});}
+  o+=`STEP 2 — COUNTERPARTY LOOK-UP\n${'-'.repeat(54)}\n${cp||'Not auto-searched (offline) — verify via ABN Lookup / ASIC.'}\n\n`;
+  o+=`STEP 3 — RISK PROFILE\n${'-'.repeat(54)}\n${D('rate')}\n\n`;
+  o+=`STEP 4A — RECOMMENDATIONS TO THE BUILDER\n${'-'.repeat(54)}\n${D('recos')}\n\n`;
+  o+=`STEP 4B — RESPONSE TO THE CONTRACT ADMINISTRATOR\n${'-'.repeat(54)}\n${D('email')}\n`;
   const blob=new Blob([o],{type:'text/plain'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download=`EMC-review-${(ctx.name||'contract').replace(/[^a-z0-9]+/gi,'-').toLowerCase()}.txt`;a.click();
@@ -1116,10 +1192,10 @@ async function ingestFile(file){
       dropEl.classList.remove('busy');
       if(!txt||txt.length<20){toast('No selectable text found — this looks like a scanned PDF. Paste the text instead.');return;}
       document.getElementById('contract').value=txt;
-      toast('Extracted '+txt.length.toLocaleString()+' chars from '+file.name);
+      autofillToast(extractFields(txt),'Extracted '+txt.length.toLocaleString()+' chars from '+file.name);
     }else{
       const r=new FileReader();
-      r.onload=ev=>{document.getElementById('contract').value=ev.target.result;toast('Loaded '+file.name);};
+      r.onload=ev=>{const v=ev.target.result;document.getElementById('contract').value=v;autofillToast(extractFields(v),'Loaded '+file.name);};
       r.readAsText(file);
     }
   }catch(err){
@@ -1130,6 +1206,34 @@ async function ingestFile(file){
 }
 
 document.getElementById('file').addEventListener('change',e=>ingestFile(e.target.files[0]));
+
+/* ---- auto-fill the detail boxes from the contract text ---- */
+function extractFields(text){
+  if(!text) return 0;
+  const t=text; let filled=0;
+  const setIf=(id,val)=>{const el=document.getElementById(id);if(el&&!el.value.trim()&&val){el.value=val;filled++;}};
+  // ABN (11 digits) / ACN (9 digits)
+  let m=t.match(/\bABN[:\s]*((?:\d\s?){11})/i);
+  if(m){const d=m[1].replace(/\D/g,'');if(d.length===11)setIf('cpAbn','ABN '+d.replace(/(\d{2})(\d{3})(\d{3})(\d{3})/,'$1 $2 $3 $4'));}
+  else{m=t.match(/\bACN[:\s]*((?:\d\s?){9})/i);if(m){const d=m[1].replace(/\D/g,'');if(d.length===9)setIf('cpAbn','ACN '+d.replace(/(\d{3})(\d{3})(\d{3})/,'$1 $2 $3'));}}
+  // counterparty entity name — first "… Pty Ltd / Ltd / Limited" that isn't EMC
+  const names=t.match(/([A-Z][A-Za-z0-9&.'’\-]+(?:\s+(?:&|of|the|[A-Z][A-Za-z0-9&.'’\-]+)){0,5}\s+(?:Pty\.?\s*Ltd|Pty\.?\s*Limited|Ltd\.?|Limited))/g)||[];
+  const cand=names.map(s=>s.trim().replace(/\s+/g,' ')).find(s=>s.length<70&&!/earth\s*moving\s*creations|\bEMC\b/i.test(s));
+  if(cand) setIf('cpName',cand);
+  // jurisdiction (contract text is authoritative)
+  const jm=/\bvictoria\b|\(vic\)/i.test(t)?'VIC':(/\bnew south wales\b|\(nsw\)|\bNSW\b/.test(t)?'NSW':(/\baustralian capital territory\b|\(act\)|\bACT\b|\bcanberra\b/i.test(t)?'ACT':''));
+  if(jm){const el=document.getElementById('juris');if(el&&el.value!==jm){el.value=jm;filled++;}}
+  // contract type
+  const ty=/\bsub[-\s]?contract\b/i.test(t)?'Subcontract':(/\bpurchase order\b|\bPO[-\s#]/i.test(t)?'Purchase order':(/\bsupply agreement\b/i.test(t)?'Supply agreement':(/\bhead contract\b|\bprincipal contract\b/i.test(t)?'Head contract':'')));
+  if(ty){const el=document.getElementById('ctype');if(el){const cur=el.value;[...el.options].forEach(o=>{if(o.value===ty)el.value=o.value;});if(el.value!==cur)filled++;}}
+  // reference / project
+  m=t.match(/\b(?:contract|project|order|PO|SC|ref(?:erence)?)\s*(?:no\.?|number|#|:)?\s*([A-Z]{1,4}[-\/ ]?\d{2,6}[A-Z0-9\-\/]*)/i);
+  if(m) setIf('cref',m[1].trim());
+  return filled;
+}
+function autofillToast(n,base){ toast(n>0 ? base+' — auto-filled '+n+' field'+(n===1?'':'s') : base); }
+// debounced auto-fill while typing / pasting
+let _afT; document.getElementById('contract').addEventListener('input',()=>{clearTimeout(_afT);_afT=setTimeout(()=>{const n=extractFields(document.getElementById('contract').value);if(n>0)toast('Auto-filled '+n+' field'+(n===1?'':'s')+' from the contract');},700);});
 
 // drag & drop onto the contract box
 ;['dragenter','dragover'].forEach(ev=>dropEl.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();if(!dropEl.classList.contains('busy'))dropEl.classList.add('over');}));
