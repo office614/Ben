@@ -24,7 +24,7 @@ Open `app.html` in any browser (double-click, or host it) — no build step; eve
 
 1. Enter the counterparty (name, ABN/ACN), jurisdiction (NSW / ACT / VIC) and contract type.
 2. Add the contract — **drop a PDF (or `.txt`)**, pick a file, or paste text. PDF text is extracted locally (scanned/image-only PDFs won't extract — paste those).
-3. Press **Run AI review** or **Offline scan**. Use **Load worked example** to try it on a sample subcontract.
+3. Press **Run AI review** or **Offline scan**. Use **Load clean example** (mirrors EMC's terms → **Low** risk) or **Load risky example** (pay-when-paid, time-bars, latent conditions, etc. → **High** risk) to see both ends. The same two contracts are in **`samples/`** (`clean-subcontract.txt`, `risky-subcontract.txt`) if you'd rather drop the file in.
 
 ## Install on iPhone
 

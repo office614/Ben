@@ -383,7 +383,8 @@
     <div class="actions">
       <button class="btn primary" id="aiBtn" onclick="runAIReview()">▶ Run AI review</button>
       <button class="btn" onclick="runReview()">⚡ Offline scan</button>
-      <button class="btn" onclick="loadSample()">Load worked example</button>
+      <button class="btn" onclick="loadSample('clean')">Load clean example</button>
+      <button class="btn" onclick="loadSample('risky')">Load risky example</button>
       <button class="btn ghost" onclick="clearAll()">Clear</button>
     </div>
   </div>
@@ -549,7 +550,7 @@ const RULES = [
 
  {id:'retention', clause:12, type:'weaker', sev:'low',
   title:'Retention / security withheld',
-  test:function(t){this._m=(t.match(/(\d{1,2}(\.\d+)?)\s*%\s*(retention|of (the )?contract)/i)||[])[0]||(/(retention|bank guarantee|security)\b/i.test(t)?'retention/security':'');return !!this._m;},
+  test:function(t){this._m=(t.match(/(\d{1,2}(\.\d+)?)\s*%\s*(retention|of (the )?contract)/i)||[])[0]||(/\bretention\b|bank guarantee|security (?:bond|deposit)|performance (?:bond|security)/i.test(t)?'retention/security':'');return !!this._m;},
   body:'The contract withholds retention or requires security ({RET}).',
   action:'Confirm retention is reasonable, capped, and released on defined milestones. Preserve EMC cl.12 — EMC may withhold plant and suspend for non-payment. Ensure retention monies remain claimable under the SOP Act.'},
 
@@ -1311,14 +1312,15 @@ function clearAll(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function loadSample(){
-  document.getElementById('cpName').value='Sample Head Contractor Pty Ltd';
-  document.getElementById('cpAbn').value='11 222 333 444';
-  document.getElementById('juris').value='NSW';
-  document.getElementById('ctype').value='Subcontract';
-  document.getElementById('cref').value='SC-2077 / Example bulk earthworks';
-  document.getElementById('contract').value=SAMPLE;
-  toast('Worked example loaded — press Run full review');
+function loadSample(kind){
+  ['cpName','cpAbn','cref','cpEmail','contract'].forEach(id=>document.getElementById(id).value='');
+  const txt=(kind==='clean')?CLEAN_SAMPLE:RISKY_SAMPLE;
+  document.getElementById('contract').value=txt;
+  extractFields(txt);
+  if(!document.getElementById('cpName').value) document.getElementById('cpName').value=(kind==='clean')?'Reliable Builders Pty Ltd':'Sample Head Contractor Pty Ltd';
+  if(!document.getElementById('cpAbn').value) document.getElementById('cpAbn').value='ABN 11 222 333 444';
+  if(!document.getElementById('cref').value) document.getElementById('cref').value=(kind==='clean')?'SC-3100 / Gungahlin bulk earthworks':'SC-2077 / Example bulk earthworks';
+  toast((kind==='clean'?'Clean example':'Risky example')+' loaded — press Run');
 }
 
 /* PWA service worker — hosted build only (skipped in the published artifact, which strips the manifest link) */
@@ -1326,7 +1328,8 @@ if('serviceWorker' in navigator && document.querySelector('link[rel=manifest]') 
   addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 
-const SAMPLE=`SUBCONTRACT AGREEMENT — EARTHWORKS
+const RISKY_SAMPLE=`SUBCONTRACT AGREEMENT — BULK EARTHWORKS
+Between the Head Contractor and Sample Head Contractor Pty Ltd (ABN 11 222 333 444), for works in New South Wales.
 
 4.1  The Subcontractor shall carry out all work necessary to complete the earthworks as directed by the Superintendent.
 
@@ -1353,6 +1356,35 @@ const SAMPLE=`SUBCONTRACT AGREEMENT — EARTHWORKS
 19.1 The Head Contractor may terminate this subcontract for convenience at any time.
 
 20.1 Any dispute must be referred to expert determination which shall be final and binding, and the Subcontractor shall not commence any court proceeding.`;
+
+const CLEAN_SAMPLE=`SUBCONTRACT AGREEMENT — BULK EARTHWORKS
+Between the Head Contractor and Reliable Builders Pty Ltd (ABN 11 222 333 444), for works in New South Wales.
+
+1. Scope. The Subcontractor's scope is the work described in the signed Schedule 1 with the attached drawings and specifications. Any change to that scope is a variation under clause 4.
+
+2. Program. The agreed program in Schedule 2 is binding. Where the Principal causes delay, the Subcontractor is entitled to an extension of time, and the cost and time impact is assessed before the affected work proceeds. The completion date is set out in Schedule 2.
+
+3. Drawings. Where an ambiguity or discrepancy appears between the drawings, it is clarified in writing before the affected work commences.
+
+4. Variations. All variations are documented in writing and approved by the Principal's representative, stating the cost impact, the time impact and the revised completion date, before the varied work commences.
+
+5. Site conditions. The parties acknowledge the ground conditions described in the geotechnical report at Schedule 3. Conditions materially different from that report are treated as a variation under clause 4, with cost and an extension of time assessed.
+
+6. Payment. The Subcontractor submits monthly payment claims. Payment is due 20 business days after a valid payment claim in accordance with the Building and Construction Industry Security of Payment Act 1999 (NSW). Each payment claim includes completed work plus approved variations.
+
+7. Suspension and disputes. The Subcontractor may suspend the works if payment is overdue. Either party may seek adjudication under the Security of Payment Act or pursue the matter in a court of competent jurisdiction.
+
+8. Quality. All work is carried out in accordance with the relevant Australian Standards, and where no Standard applies, in accordance with good industry practice.
+
+9. Defects. The Subcontractor has the right to inspect any alleged defect. Where the parties disagree whether something is a defect, the question is determined by an independent assessor, and any defect is identified in writing and independently assessed before any adjustment to the progress claim.
+
+10. Insurance. The Subcontractor holds current public liability and plant and equipment insurance.
+
+11. Defects liability. The defects liability period is 12 months from practical completion.
+
+12. Assignment. Neither party may assign this subcontract without the other party's written consent.
+
+13. Execution. The Principal signs below to confirm they understand and accept these terms.`;
 
 /* ---------------- motion: reveal + ember hero ---------------- */
 function revealCards(){
