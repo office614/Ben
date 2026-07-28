@@ -125,6 +125,17 @@
     font-family:var(--disp);font-size:17px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;pointer-events:none}
   #drop.over #drophint{display:flex}
   #drop.busy #drophint{display:flex;background:rgba(8,9,11,.8);border-style:solid;color:var(--ember-hot)}
+  .ai-panel{margin-top:16px;padding:16px 16px 14px;border:1px solid var(--line-2);border-radius:12px;
+    background:linear-gradient(180deg,rgba(255,90,30,.05),transparent),var(--field)}
+  .ai-head{font-family:var(--disp);font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:14px;
+    display:flex;align-items:center;gap:9px;color:var(--ink)}
+  .ai-dot{width:8px;height:8px;border-radius:50%;background:var(--ember);box-shadow:0 0 10px 2px var(--ember-glow)}
+  .ai-panel .filehint a{color:var(--ember-hot)}
+  .btn.busy{opacity:.7;pointer-events:none;position:relative}
+  .btn.busy::after{content:"";position:absolute;right:12px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;
+    border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.btn.busy::after{animation:none}}
 
   /* ---------- verdict banner (summary-first) ---------- */
   #verdict{display:none;margin-bottom:22px;scroll-margin-top:72px}
@@ -287,6 +298,7 @@
         <select id="juris">
           <option value="NSW">New South Wales (NSW)</option>
           <option value="ACT">Australian Capital Territory (ACT)</option>
+          <option value="VIC">Victoria (VIC)</option>
         </select>
       </div>
     </div>
@@ -319,8 +331,30 @@
     <input type="file" id="file" accept=".pdf,.txt,.md,.text" class="no-print" style="margin-top:8px;font-size:12px;color:var(--mut)">
     <div class="filehint">Runs entirely in your browser — nothing is uploaded or sent anywhere. Drop or choose a <b>PDF</b> and the text is extracted locally; or paste text directly. Scanned/image-only PDFs won't extract — paste those.</div>
 
+    <!--AI-UI-START-->
+    <div class="ai-panel">
+      <div class="ai-head"><span class="ai-dot"></span> AI review — reads the whole contract with Claude</div>
+      <div class="row">
+        <div>
+          <label>Anthropic API key <span style="text-transform:none;color:var(--dim);font-weight:400">(stored in this browser only)</span></label>
+          <input type="password" id="apiKey" placeholder="sk-ant-…" autocomplete="off">
+        </div>
+        <div>
+          <label>Model</label>
+          <select id="model">
+            <option value="claude-opus-5">Opus 5 — most thorough</option>
+            <option value="claude-sonnet-5" selected>Sonnet 5 — balanced (recommended)</option>
+            <option value="claude-haiku-4-5">Haiku 4.5 — fastest / cheapest</option>
+          </select>
+        </div>
+      </div>
+      <div class="filehint">The AI review sends the contract text + EMC's T&amp;Cs to the Anthropic API under <b>your</b> key (get one at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>). Roughly 10–30¢ per review. The offline scan below stays fully local.</div>
+    </div>
+    <!--AI-UI-END-->
+
     <div class="actions">
-      <button class="btn primary" onclick="runReview()">▶ Run full review</button>
+      <button class="btn primary" id="aiBtn" onclick="runAIReview()">▶ Run AI review</button>
+      <button class="btn" onclick="runReview()">⚡ Offline scan</button>
       <button class="btn" onclick="loadSample()">Load worked example</button>
       <button class="btn ghost" onclick="clearAll()">Clear</button>
     </div>
@@ -430,7 +464,7 @@ const RULES = [
 
  {id:'longterm', clause:9, type:'weaker', sev:'high',
   title:'Payment term longer than the SOP Act default',
-  test:function(t,ctx){this._hits=[];const re=/(\d{1,3})\s*(business\s*)?days?\b/gi;let m;while((m=re.exec(t))){const n=+m[1];const biz=!!m[2];const lim=ctx.juris==='ACT'?10:20;const cmp=biz?n:n; if((biz&&n>lim)||(!biz&&n>(ctx.juris==='ACT'?15:28))){this._hits.push(m[0])}}return this._hits.length>0;},
+  test:function(t,ctx){this._hits=[];const re=/(\d{1,3})\s*(business\s*)?days?\b/gi;let m;while((m=re.exec(t))){const n=+m[1];const biz=!!m[2];const short=(ctx.juris==='ACT'||ctx.juris==='VIC');const lim=short?10:20; if((biz&&n>lim)||(!biz&&n>(short?15:28))){this._hits.push(m[0])}}return this._hits.length>0;},
   body:'Payment timing in the contract appears longer than the SOP Act entitlement for this jurisdiction (detected: {HITS}).',
   action:'<b>Amend the payment term.</b> Under the SOP Act the maximum default is <b>{DUE}</b>. A longer contractual term does not displace the statutory entitlement — align the clause to EMC cl.9/13 or note that the Act prevails.'},
 
@@ -577,7 +611,117 @@ const MISSING = [
 /* ---------------- Engine ---------------- */
 let LAST=null;
 
-function dueText(juris){return juris==='ACT'?'10 business days':'20 business days';}
+/* ================= AI review (Claude API — standalone build only) ================= */
+// Restore saved key/model
+try{
+  const k=localStorage.getItem('emc_key'); if(k&&document.getElementById('apiKey'))document.getElementById('apiKey').value=k;
+  const m=localStorage.getItem('emc_model'); if(m&&document.getElementById('model'))document.getElementById('model').querySelector(`option[value="${m}"]`)&&(document.getElementById('model').value=m);
+}catch(e){}
+
+function ctxFromForm(){
+  return {
+    name:document.getElementById('cpName').value.trim()||'the counterparty',
+    abn:document.getElementById('cpAbn').value.trim(),
+    juris:document.getElementById('juris').value,
+    ctype:document.getElementById('ctype').value,
+    cref:document.getElementById('cref').value.trim(),
+    cpEmail:document.getElementById('cpEmail').value.trim()
+  };
+}
+
+function aiSystemPrompt(ctx,DUE){
+  const tc=EMC.map(c=>`${c[0]}. ${c[1]}. ${c[2]}`).join('\n');
+  return `You are the contract-risk reviewer for Earth Moving Creations (EMC), a civil/earthmoving business in ${ctx.juris}, Australia. Review the incoming ${ctx.ctype.toLowerCase()} clause-by-clause against EMC's OWN standard Terms & Conditions below — these are the fixed benchmark. Apply Australian construction law, the Security of Payment Act for ${ctx.juris} (NSW: BCISPA 1999; ACT: BCI(SoP)A 2009; VIC: BCISPA 2002), the Australian Consumer Law (Competition and Consumer Act 2010 (Cth) Sch 2 — misleading conduct s.18, unconscionable ss.20–22, unfair terms ss.23–24), and general contract-law principles.
+
+EMC STANDARD TERMS & CONDITIONS (benchmark):
+${tc}
+
+Payment benchmark for ${ctx.juris}: ${DUE} of a valid payment claim; pay-when-paid void; no contracting out of the SoP Act.
+
+Produce a rigorous, commercial review. For every clause in the incoming contract that is WEAKER than, or CONFLICTS with, EMC's position, output a finding mapped to the specific EMC clause number (1–15) with exactly what to strike or amend. Separately list EMC protections that are MISSING and should be added. Then give an overall risk rating (High/Medium/Low) with reasoning, suggested profile fields to track next time, and a direct, commercial draft email to the counterparty citing the specific applicable legislation. Be specific and practical; do not invent facts about the counterparty (their entity/insolvency checks are done separately). Return ONLY the JSON object matching the provided schema.`;
+}
+
+function aiSchema(){
+  const s=(o)=>Object.assign({type:'object',additionalProperties:false},o);
+  const str={type:'string'};
+  const finding=s({properties:{title:str,emcClause:{type:'integer'},type:{type:'string',enum:['conflict','weaker']},severity:{type:'string',enum:['high','med','low']},body:str,action:str},required:['title','emcClause','type','severity','body','action']});
+  const missing=s({properties:{title:str,emcClause:{type:'integer'},action:str},required:['title','emcClause','action']});
+  return s({properties:{
+    findings:{type:'array',items:finding},
+    missing:{type:'array',items:missing},
+    rating:s({properties:{level:{type:'string',enum:['High','Medium','Low']},reason:str},required:['level','reason']}),
+    suggestedFields:{type:'array',items:str},
+    email:s({properties:{subject:str,body:str},required:['subject','body']})
+  },required:['findings','missing','rating','suggestedFields','email']});
+}
+
+function aiBusy(on){
+  const b=document.getElementById('aiBtn'); if(!b)return;
+  b.classList.toggle('busy',on);
+  b.textContent=on?'Reading contract…':'▶ Run AI review';
+}
+
+async function runAIReview(){
+  const keyEl=document.getElementById('apiKey');
+  const key=(keyEl&&keyEl.value||'').trim();
+  if(!key){toast('Add your Anthropic API key to run the AI review');keyEl&&keyEl.focus();return;}
+  const text=document.getElementById('contract').value||'';
+  if(text.trim().length<40){alert('Paste the contract text first (at least a few clauses).');return;}
+  const ctx=ctxFromForm();
+  const DUE=dueText(ctx.juris);
+  const model=document.getElementById('model').value;
+  try{localStorage.setItem('emc_key',key);localStorage.setItem('emc_model',model);}catch(e){}
+  aiBusy(true);
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model, max_tokens:14000,
+        system:aiSystemPrompt(ctx,DUE),
+        messages:[{role:'user',content:`Counterparty: ${ctx.name}${ctx.abn?' (ABN/ACN '+ctx.abn+')':''}. Contract reference: ${ctx.cref||'—'}. Jurisdiction: ${ctx.juris}.\n\nINCOMING CONTRACT TEXT:\n"""\n${text}\n"""`}],
+        output_config:{format:{type:'json_schema',schema:aiSchema()}}
+      })
+    });
+    if(!resp.ok){
+      let msg='HTTP '+resp.status;
+      try{const e=await resp.json();if(e&&e.error&&e.error.message)msg=e.error.message;}catch(_){}
+      if(resp.status===401)msg='Invalid API key — check it and try again.';
+      throw new Error(msg);
+    }
+    const data=await resp.json();
+    if(data.stop_reason==='refusal')throw new Error('The model declined this request.');
+    if(data.stop_reason==='max_tokens')throw new Error('Response hit the length limit — try Haiku/Sonnet or a shorter contract.');
+    const blk=(data.content||[]).find(b=>b.type==='text');
+    if(!blk)throw new Error('No content returned.');
+    applyAI(ctx,DUE,JSON.parse(blk.text));
+    toast('AI review complete — '+model.replace('claude-','').replace('-',' '));
+  }catch(err){
+    const m=/Failed to fetch|NetworkError/.test(err.message)?'Network/CORS blocked the request — open index.html locally or host it (the published web app can\'t call the API).':err.message;
+    toast('AI review failed: '+m);
+  }finally{aiBusy(false);}
+}
+
+function applyAI(ctx,DUE,out){
+  const sevMap={high:'high',med:'med',medium:'med',low:'low'};
+  const found=(out.findings||[]).map(f=>({
+    id:'ai', clause:Math.min(15,Math.max(1,f.emcClause||1)),
+    type:(f.type==='conflict'?'conflict':'weaker'),
+    sev:sevMap[(f.severity||'med').toLowerCase()]||'med',
+    title:esc(f.title), body:esc(f.body), action:esc(f.action)
+  }));
+  const rank={high:0,med:1,low:2};
+  found.sort((a,b)=>rank[a.sev]-rank[b.sev]||a.clause-b.clause);
+  const miss=(out.missing||[]).map(m=>({clause:Math.min(15,Math.max(1,m.emcClause||1)),title:esc(m.title),action:esc(m.action)}));
+  const lvl=(out.rating&&out.rating.level)||'Medium';
+  const rating={key:lvl==='High'?'high':lvl==='Low'?'low':'med',label:lvl,reason:esc((out.rating&&out.rating.reason)||'')};
+  let email='';
+  if(out.email){email=(out.email.subject?('Subject: '+out.email.subject+'\n\n'):'')+(out.email.body||'');}
+  showResults(ctx,found,miss,DUE,{rating,email,suggested:(out.suggestedFields||[])});
+}
+/* ================= end AI review ================= */
+
+function dueText(juris){return (juris==='ACT'||juris==='VIC')?'10 business days':'20 business days';}
 
 function runReview(){
   const text=document.getElementById('contract').value||'';
@@ -612,15 +756,11 @@ function runReview(){
   const miss=[];
   for(const m of MISSING){ if(m.need(text)){ miss.push({...m,action:m.action.split('{DUE}').join(DUE)}); } }
 
-  render(ctx,found,miss,DUE);
-  LAST={ctx,found,miss,DUE};
-  const res=document.getElementById('results');res.classList.add('show');
-  document.getElementById('verdict').classList.add('show');
-  revealCards();
-  document.getElementById('verdict').scrollIntoView({behavior:'smooth',block:'start'});
+  showResults(ctx,found,miss,DUE);
 }
 
-function render(ctx,found,miss,DUE){
+function render(ctx,found,miss,DUE,opts){
+  opts=opts||{};
   // counts
   const nHigh=found.filter(f=>f.sev==='high').length;
   const nMed=found.filter(f=>f.sev==='med').length;
@@ -670,14 +810,14 @@ function render(ctx,found,miss,DUE){
     `<a class="btn sm" target="_blank" rel="noopener" href="https://connectonline.asic.gov.au/RegistrySearch/faces/landing/SearchRegisters.jspx?searchText=${nameQ}">↗ ASIC registers</a>`+
     `<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+(liquidation+OR+insolvency+OR+administration+OR+judgment+OR+%22payment+dispute%22)">↗ Adverse-news search</a>`+
     `<a class="btn sm" target="_blank" rel="noopener" href="https://publishednotices.asic.gov.au/browsesearch-notices/">↗ ASIC published (insolvency) notices</a>`+
-    (ctx.juris==='NSW'
-      ? `<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+site:caselaw.nsw.gov.au">↗ NSW Caselaw</a>`
-      : `<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+adjudication+ACRS+OR+%22security+of+payment%22+ACT">↗ ACT adjudication</a>`);
+    ({NSW:`<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+site:caselaw.nsw.gov.au">↗ NSW Caselaw</a>`,
+      VIC:`<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+site:austlii.edu.au+(VSC+OR+VCAT+OR+%22security+of+payment%22)">↗ VIC Caselaw / VCAT</a>`,
+      ACT:`<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/search?q=${nameQ}+adjudication+ACRS+OR+%22security+of+payment%22+ACT">↗ ACT adjudication</a>`}[ctx.juris]||'');
   document.getElementById('lookupNote').textContent=
     `Searching for: ${ctx.name}${abnDigits?' · ABN/ACN '+ctx.abn:''}. Confirm the entity you are contracting with is the one on the register (watch for trading names vs the actual legal entity, and $2 or recently-registered shelf companies).`;
 
   // Step 3 profile + rating
-  const rating=computeRating(found,miss);
+  const rating=opts.rating||computeRating(found,miss);
   document.getElementById('rate').innerHTML=
     `<div class="rate ${rating.key}"><div class="dot">${rating.label.toUpperCase()}</div>
       <div><div class="rt">Overall contract risk: ${rating.label}</div>
@@ -712,12 +852,26 @@ function render(ctx,found,miss,DUE){
   sug.push('Director names + prior-entity history (phoenix check)');
   sug.push('Superintendent / principal\'s representative named and their authority limit');
   sug.push('Retention/bank-guarantee held by EMC vs given by EMC (net security position)');
+  const sugFinal=(opts.suggested&&opts.suggested.length)?opts.suggested:sug;
   document.getElementById('suggest').innerHTML='Based on this review: '+
-    '<ul style="margin:8px 0 0;padding-left:18px">'+sug.map(s=>`<li style="margin:4px 0">${s}</li>`).join('')+'</ul>';
+    '<ul style="margin:8px 0 0;padding-left:18px">'+sugFinal.map(s=>`<li style="margin:4px 0">${esc(s)}</li>`).join('')+'</ul>';
 
   // Step 4 email
-  document.getElementById('email').textContent=buildEmail(ctx,found,miss,DUE,rating);
+  document.getElementById('email').textContent=opts.email||buildEmail(ctx,found,miss,DUE,rating);
   document.getElementById('legalNote').innerHTML=legalRefs(ctx.juris);
+}
+
+/* escape helper for AI-supplied text rendered into innerHTML contexts */
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* shared results-reveal used by both offline and AI paths */
+function showResults(ctx,found,miss,DUE,opts){
+  render(ctx,found,miss,DUE,opts);
+  LAST={ctx,found,miss,DUE};
+  document.getElementById('results').classList.add('show');
+  document.getElementById('verdict').classList.add('show');
+  revealCards();
+  document.getElementById('verdict').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function computeRating(found,miss){
@@ -734,18 +888,20 @@ function computeRating(found,miss){
   return {key,label,reason};
 }
 
+const ACL='<b>Australian Consumer Law</b> (Competition and Consumer Act 2010 (Cth) Sch 2) — s.18 (misleading or deceptive conduct), ss.20–22 (unconscionable conduct), ss.23–24 (unfair terms in standard-form small-business contracts). General contract-law principles (offer/acceptance, certainty of terms, and the entire-agreement/parol-evidence rules) also apply.';
 function legalRefs(j){
-  if(j==='NSW') return 'Legislation cited: <b>Building and Construction Industry Security of Payment Act 1999 (NSW)</b> — s.11 (due date for payment), s.12 (pay-when-paid provisions have no effect), s.13 (payment claims), s.15/16 &amp; s.27 (right to suspend on non-payment), s.34 (no contracting out). <b>Australian Consumer Law</b> (Competition and Consumer Act 2010 (Cth) Sch 2) — s.18 (misleading or deceptive conduct), ss.20–22 (unconscionable conduct), ss.23–24 (unfair terms in standard-form small-business contracts).';
-  return 'Legislation cited: <b>Building and Construction Industry (Security of Payment) Act 2009 (ACT)</b> — s.11 (due date; 10 business days default), s.14 (pay-when-paid provisions have no effect), s.15 (payment claims), s.24 &amp; s.40 (right to suspend on non-payment), s.9/s.42 (no contracting out). <b>Australian Consumer Law</b> (Competition and Consumer Act 2010 (Cth) Sch 2) — s.18 (misleading or deceptive conduct), ss.20–22 (unconscionable conduct), ss.23–24 (unfair terms in standard-form small-business contracts).';
+  if(j==='NSW') return 'Legislation cited: <b>Building and Construction Industry Security of Payment Act 1999 (NSW)</b> — s.11 (due date for payment), s.12 (pay-when-paid provisions have no effect), s.13 (payment claims), s.15/16 &amp; s.27 (right to suspend on non-payment), s.34 (no contracting out). '+ACL;
+  if(j==='VIC') return 'Legislation cited: <b>Building and Construction Industry Security of Payment Act 2002 (Vic)</b> — s.12 (due date; 10 business days default), s.13 (pay-when-paid provisions have no effect), s.14 (payment claims), s.29 (right to suspend on non-payment), s.48 (no contracting out). Note Victoria\'s excluded-amounts regime (ss.10A–10B) limits certain variation/latent-condition claims via adjudication — price and notify those precisely. '+ACL;
+  return 'Legislation cited: <b>Building and Construction Industry (Security of Payment) Act 2009 (ACT)</b> — s.11 (due date; 10 business days default), s.14 (pay-when-paid provisions have no effect), s.15 (payment claims), s.24 &amp; s.40 (right to suspend on non-payment), s.9/s.42 (no contracting out). '+ACL;
 }
 
 function buildEmail(ctx,found,miss,DUE,rating){
-  const act=ctx.juris==='NSW'
-    ? 'the Building and Construction Industry Security of Payment Act 1999 (NSW)'
-    : 'the Building and Construction Industry (Security of Payment) Act 2009 (ACT)';
-  const s_pwp=ctx.juris==='NSW'?'s.12':'s.14';
-  const s_due=ctx.juris==='NSW'?'s.11':'s.11';
-  const s_out=ctx.juris==='NSW'?'s.34':'s.42';
+  const ACTS={
+    NSW:['the Building and Construction Industry Security of Payment Act 1999 (NSW)','s.12','s.11','s.34'],
+    ACT:['the Building and Construction Industry (Security of Payment) Act 2009 (ACT)','s.14','s.11','s.42'],
+    VIC:['the Building and Construction Industry Security of Payment Act 2002 (Vic)','s.13','s.12','s.48']
+  };
+  const [act,s_pwp,s_due,s_out]=ACTS[ctx.juris]||ACTS.NSW;
   const ref=ctx.cref?` (${ctx.cref})`:'';
   const items=[];
 
