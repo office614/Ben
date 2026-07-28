@@ -168,6 +168,9 @@
       </div>
     </div>
 
+    <label>Counterparty email <span style="text-transform:none;color:var(--dim);font-weight:400">(optional — used for the "Open in Gmail" draft)</span></label>
+    <input type="text" id="cpEmail" placeholder="e.g. accounts@headcontractor.com.au">
+
     <label>Contract text</label>
     <div id="drop">
       <textarea id="contract" placeholder="Paste the full contract, subcontract or PO text here — or drop a PDF / .txt file anywhere on this box. The more clauses you include, the more the review can detect."></textarea>
@@ -221,6 +224,7 @@
       <h2><span class="num">4</span> Draft response to counterparty</h2>
       <p class="sub">Direct and commercial — raises the flagged issues and cites the legislation behind EMC's position. Review before sending.</p>
       <div class="actions no-print" style="margin-top:0;margin-bottom:14px">
+        <button class="btn sm primary" onclick="openGmail()">✉ Open in Gmail</button>
         <button class="btn sm" onclick="copyEmail()">⧉ Copy email</button>
         <button class="btn sm" onclick="window.print()">⎙ Print / Save PDF</button>
         <button class="btn sm" onclick="exportTxt()">⬇ Export review (.txt)</button>
@@ -358,7 +362,49 @@ const RULES = [
   title:'Dispute clause forcing arbitration/expert determination as sole remedy',
   test:t=>/(binding arbitration|expert determination|mediation).{0,40}(sole|only|final|exclusive)|exclusive jurisdiction.{0,30}(court|state)|dispute.{0,25}(must|shall).{0,20}(not|before).{0,20}(commence|proceeding|court)/i.test(t),
   body:'The dispute clause purports to make arbitration/expert determination the sole remedy or bars court/adjudication.',
-  action:'<b>Preserve EMC cl.14.</b> Nothing may limit EMC\'s statutory right to adjudicate under the SOP Act or to pursue court recovery of unpaid amounts. Add a carve-out that the dispute procedure does not restrict SOP Act rights.'}
+  action:'<b>Preserve EMC cl.14.</b> Nothing may limit EMC\'s statutory right to adjudicate under the SOP Act or to pursue court recovery of unpaid amounts. Add a carve-out that the dispute procedure does not restrict SOP Act rights.'},
+
+ {id:'timebar', clause:7, type:'conflict', sev:'high',
+  title:'Time-bar on claims / variations / extensions of time',
+  test:t=>/(within|no later than|not more than)\s+\d+\s+(business\s+)?days?[^.]{0,70}(claim|notice|variation|extension of time|\bEOT\b)/i.test(t)||/(otherwise|failing which|else|in default)[^.]{0,45}(barred|waive[d]?|forfeit|no entitlement|absolutely barred)/i.test(t)||/condition[s]? precedent[^.]{0,45}(claim|payment|variation|extension)/i.test(t),
+  body:'Claims, variations or EOTs are subject to a strict notice period or condition precedent, with the entitlement barred if the deadline is missed.',
+  action:'<b>Resist / soften the time-bar.</b> Short notice periods that forfeit entitlements sit below EMC cl.7/8/13. Seek a reasonable period and that late notice only limits recovery to the extent of actual prejudice. A time-bar cannot defeat a valid payment claim under the SOP Act.'},
+
+ {id:'latent', clause:6, type:'conflict', sev:'high',
+  title:'Latent / differing site conditions carried at EMC\'s risk',
+  test:t=>/latent condition/i.test(t)||/(site|ground|subsurface|soil|geotechnical) conditions[^.]{0,60}(own risk|at (its|the subcontractor.?s) risk|no (claim|adjustment|extension|additional (cost|payment)))/i.test(t)||/(deemed|taken) to have (inspected|examined|satisfied itself|allowed for)[^.]{0,60}(site|ground|conditions|nature of the (work|ground))/i.test(t),
+  body:'Latent or differing site conditions are allocated to EMC (or EMC is deemed to have allowed for all conditions) with no cost or time adjustment.',
+  action:'<b>Amend — critical for earthworks.</b> Conditions outside the signed Addendum Ledger scope (EMC cl.1) are variations (cl.4/6): remobilisation, extended preliminaries and program impact are recoverable, with an EOT. Do not accept a blanket "all site conditions at your risk" or "deemed to have allowed" clause.'},
+
+ {id:'termconv', clause:14, type:'weaker', sev:'med',
+  title:'Principal may terminate for convenience',
+  test:t=>/terminat[^.]{0,30}(for )?convenience/i.test(t)||/terminat[^.]{0,45}(at any time|without cause|for any reason|at its (sole )?discretion|for no reason)/i.test(t),
+  body:'The principal may terminate for convenience / at will.',
+  action:'<b>Add a fair termination payment.</b> On any convenience termination EMC must be paid for all work performed, approved variations, plant demobilisation and reasonable costs of termination — and those amounts remain claimable under the SOP Act (EMC cl.13/14).'},
+
+ {id:'novation', clause:15, type:'weaker', sev:'med',
+  title:'Novation / assignment of the contract',
+  test:t=>/novat(e|ion|ed)/i.test(t)||/(principal|head contractor|company)[^.]{0,25}may assign[^.]{0,45}(without|no)[^.]{0,20}consent/i.test(t),
+  body:'The contract can be novated or assigned, potentially without EMC\'s consent.',
+  action:'<b>Require EMC\'s written consent</b> to any novation, with the incoming party assuming all payment obligations. Preserve EMC\'s accrued and SOP Act rights (cl.14) on novation.'},
+
+ {id:'dlp', clause:11, type:'weaker', sev:'low',
+  title:'Long defects-liability / warranty period',
+  test:function(t){const m=t.match(/(defects?\s*liability|warranty|maintenance)\s*period[^.]{0,25}?(\d+)\s*(month|year)/i);if(m){const n=+m[2];const months=/year/i.test(m[3])?n*12:n;this._m=m[0];return months>12;}return false;},
+  body:'The defects-liability / warranty period appears longer than 12 months ({DLP}).',
+  action:'Confirm the period is commercially reasonable and matches the retention-release timetable. Preserve EMC cl.11 — right to inspect alleged defects, independent assessor for disputes, and itemised written notice before any deduction.'},
+
+ {id:'insurance', clause:10, type:'weaker', sev:'low',
+  title:'Insurance / professional-indemnity requirements',
+  test:t=>/professional indemnity|\$\s?\d[\d,]*\s*(million|m\b)[^.]{0,25}(insurance|cover|liability)|public liability[^.]{0,25}\$?\s?\d/i.test(t),
+  body:'The contract sets insurance / PI limits.',
+  action:'Confirm EMC\'s current policies meet the required limits (public liability, plant/mobile plant, and PI only if design is involved). EMC does not carry professional-indemnity cover for construct-only earthworks — push back on PI requirements where EMC does no design.'},
+
+ {id:'guarantee', clause:15, type:'weaker', sev:'med',
+  title:'Personal / director / parent-company guarantee required from EMC',
+  test:t=>/(personal|director.?s?|parent company)\s+guarantee/i.test(t),
+  body:'The contract requires a personal, director or parent-company guarantee from EMC.',
+  action:'<b>Resist or limit.</b> A director\'s personal guarantee shifts corporate risk onto individuals. If security is genuinely required, offer retention or a capped bank guarantee (EMC cl.12) instead of a personal guarantee.'}
 ];
 
 /* Missing-clause checks: EMC positions that SHOULD appear; if absent, recommend adding */
@@ -398,7 +444,8 @@ function runReview(){
     abn:document.getElementById('cpAbn').value.trim(),
     juris:document.getElementById('juris').value,
     ctype:document.getElementById('ctype').value,
-    cref:document.getElementById('cref').value.trim()
+    cref:document.getElementById('cref').value.trim(),
+    cpEmail:document.getElementById('cpEmail').value.trim()
   };
   if(text.trim().length<40){alert('Paste the contract text first (at least a few clauses).');return;}
   const DUE=dueText(ctx.juris);
@@ -410,7 +457,7 @@ function runReview(){
     try{hit=r.test(text,ctx);}catch(e){hit=false;}
     if(hit){
       let body=r.body, action=r.action;
-      const reps={'{DUE}':DUE,'{HITS}':(r._hits||[]).slice(0,6).join(', '),'{RET}':r._m||'retention'};
+      const reps={'{DUE}':DUE,'{HITS}':(r._hits||[]).slice(0,6).join(', '),'{RET}':r._m||'retention','{DLP}':r._m||'the stated period'};
       for(const k in reps){body=body.split(k).join(reps[k]);action=action.split(k).join(reps[k]);}
       found.push({...r,body,action});
     }
@@ -598,7 +645,14 @@ function plainAction(f){
     retention:'Please confirm the retention amount, cap and release milestones.',
     unlimited:'Please cap our liability and exclude consequential loss and matters outside our control.',
     noscope:'Please fix the scope to the signed schedule; anything beyond it to be handled as a priced variation.',
-    oustadj:'Please confirm the dispute clause does not restrict our statutory adjudication rights.'
+    oustadj:'Please confirm the dispute clause does not restrict our statutory adjudication rights.',
+    timebar:'Please extend the notice period and confirm that late notice only limits recovery to the extent of any actual prejudice — a time-bar cannot defeat a valid payment claim.',
+    latent:'Please confirm latent or differing site conditions are treated as variations with cost and time adjustment, rather than carried entirely at our risk.',
+    termconv:'If you retain a right to terminate for convenience, please confirm we are paid for work done, approved variations and demobilisation.',
+    novation:'Please confirm any novation or assignment requires our written consent and preserves our payment rights.',
+    dlp:'Please confirm the defects-liability period and align it with the retention-release dates.',
+    insurance:'Please confirm the required insurance limits; note we do not carry professional indemnity for construct-only work.',
+    guarantee:'Please remove the personal / director guarantee — we can offer retention or a capped bank guarantee instead.'
   };
   return (map[f.id]||'Please amend to reflect our standard position.').split('{DUE}').join(dueText(document.getElementById('juris').value));
 }
@@ -607,6 +661,24 @@ function plainAction(f){
 function copyEmail(){
   const t=document.getElementById('email').textContent;
   navigator.clipboard.writeText(t).then(()=>toast('Email copied to clipboard')).catch(()=>toast('Copy failed — select the text manually'));
+}
+function splitEmail(){
+  const full=document.getElementById('email').textContent||'';
+  const m=full.match(/^Subject:\s*(.*?)\r?\n\r?\n/);
+  if(m)return{subject:m[1].trim(),body:full.slice(m[0].length)};
+  return{subject:'',body:full};
+}
+function openGmail(){
+  if(!LAST){toast('Run the review first');return;}
+  const {subject,body}=splitEmail();
+  const to=LAST.ctx.cpEmail||'';
+  const url='https://mail.google.com/mail/?view=cm&fs=1&tf=1'+
+    (to?'&to='+encodeURIComponent(to):'')+
+    '&su='+encodeURIComponent(subject)+
+    '&body='+encodeURIComponent(body);
+  const w=window.open(url,'_blank','noopener');
+  if(!w){toast('Pop-up blocked — allow pop-ups, or use Copy email');return;}
+  toast('Opening a Gmail draft'+(to?' to '+to:' — add the recipient in Gmail'));
 }
 function exportTxt(){
   if(!LAST){return;}
@@ -725,6 +797,12 @@ const SAMPLE=`SUBCONTRACT AGREEMENT — EARTHWORKS
 15.1 A retention of 10% of the contract value shall be withheld.
 
 18.1 The Subcontractor shall indemnify the Head Contractor against any and all loss, claim or damage howsoever arising.
+
+16.1 The Subcontractor is deemed to have inspected the site and allowed for all ground and subsurface conditions, and shall have no claim for latent conditions.
+
+17.1 Any claim for a variation or extension of time must be made in writing within 5 business days, failing which the claim is absolutely barred.
+
+19.1 The Head Contractor may terminate this subcontract for convenience at any time.
 
 20.1 Any dispute must be referred to expert determination which shall be final and binding, and the Subcontractor shall not commence any court proceeding.`;
 </script>

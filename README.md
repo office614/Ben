@@ -19,7 +19,9 @@ Use **Load worked example** to see it in action against a sample subcontract.
 1. **Clause-by-clause risk detection.** Scans the contract against EMC's 15 standard terms and flags every clause that is *weaker than*, *conflicts with*, or is *missing* relative to EMC's position — each mapped to the specific EMC clause number with exactly what to **strike or add**.
 2. **Counterparty look-up.** Deep-links (pre-filled with the entity/ABN) into the ABN Lookup register, ASIC registers, ASIC published insolvency notices, caselaw and adverse-news searches, plus a structured template to record entity status, incorporation date, registered address and any adverse findings. *Public-record and news checking only — not a commercial credit report.*
 3. **Risk profile.** A structured profile on the standing template with an overall **low / medium / high** rating derived from the flags, plus suggested extra fields to track next time.
-4. **Draft response.** A direct, commercial email to the counterparty raising the flagged issues, citing the applicable **Security of Payment Act** provisions (NSW or ACT) and **Australian Consumer Law** sections. Copy, print/PDF, or export the whole review as text.
+4. **Draft response.** A direct, commercial email to the counterparty raising the flagged issues, citing the applicable **Security of Payment Act** provisions (NSW or ACT) and **Australian Consumer Law** sections. **Open in Gmail** (opens a pre-filled Gmail compose window — enter a counterparty email in the intake and the recipient is filled too), copy, print/PDF, or export the whole review as text.
+
+The detection engine covers pay-when-paid, over-length payment terms, verbal variations, ambiguity in the principal's favour, set-off, removal of suspension rights, contracting-out of SoP, LDs / "time of the essence", uncapped indemnity, open-ended scope, ouster of adjudication, and earthmoving-specific risks: **latent / differing site conditions**, **time-bars / conditions precedent** on claims and EOTs, **termination for convenience**, novation/assignment, long defects-liability periods, insurance/PI requirements, and personal/director guarantees.
 
 ## Benchmark
 
