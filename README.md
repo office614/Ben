@@ -7,8 +7,10 @@ An interactive, single-file browser app for **Earth Moving Creations (EMC)** —
 Open **`index.html`** in any browser (double-click, or host it anywhere). No install, no server, no build step. Everything runs locally in the browser — nothing is uploaded or sent anywhere.
 
 1. Enter the counterparty (name, ABN/ACN), jurisdiction (NSW/ACT) and contract type.
-2. Paste the contract text (or upload a `.txt`/`.md` file). For PDF/Word, copy the text and paste it in.
+2. Add the contract — **drop a PDF (or `.txt`) onto the contract box**, choose one with the file picker, or paste the text directly. PDF text is extracted locally in the browser (image-only/scanned PDFs won't extract — paste those).
 3. Press **Run full review**.
+
+> PDF extraction uses a vendored copy of [pdf.js](https://mozilla.github.io/pdf.js/) in `vendor/` — keep that folder alongside `index.html`. Everything still runs offline; nothing is fetched at runtime.
 
 Use **Load worked example** to see it in action against a sample subcontract.
 
