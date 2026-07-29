@@ -300,26 +300,177 @@
     .card>h2,.hero h1{color:#000}
   }
 
-  /* ===== Base-platform calm layer (Sonos-inspired) — deeper black, softer chrome, muted glow.
-     Layered last so it tunes the whole feel centrally; accent tokens stay tenant-driven. ===== */
+  /* =========================================================================
+     BASE PLATFORM — calm layer (Sonos-inspired)
+     Layered last so it retunes the whole app centrally without touching the
+     markup or logic. Near-black ground, flat surfaces, generous air, plain
+     sentence-case labels, one accent used sparingly. The accent tokens stay
+     tenant-driven (set from the uploaded logo), and semantic severity colours
+     stay distinct from the accent.
+     ========================================================================= */
   :root{
-    --ground:#08090b; --ground-2:#0b0d10;
-    --panel:#0f1013; --panel-2:#131519; --panel-3:#181b21;
-    --field:#0f1116; --field-2:#151820;
-    --line:#1d2129; --line-2:#272c35;
-    --ink:#f3f5f8; --ink-2:#b7bfca; --steel:#98a0ac; --steel-dim:#6d7682;
+    --ground:#0a0a0b; --ground-2:#0d0d0f;
+    --panel:#141416; --panel-2:#18181b; --panel-3:#1d1d21;
+    --field:#141416; --field-2:#1a1a1e;
+    --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+    --ink:#f5f5f7; --ink-2:#a1a1a6; --steel:#a1a1a6; --steel-dim:#6e6e73; --dim:#5c5c61;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Plex Sans',Helvetica,Arial,sans-serif;
+    --r:16px;
   }
-  body{background:var(--ground)}
-  #ember{display:none}                                   /* calm hero — no particle noise */
-  .hero{min-height:min(62vh,500px);margin-bottom:26px}
-  .hero .scrim{background:linear-gradient(90deg,rgba(8,9,11,.95),rgba(8,9,11,.6) 52%,rgba(8,9,11,.24))}
-  .topbar{background:linear-gradient(180deg,rgba(8,9,11,.92),rgba(8,9,11,.66))}
-  .card{background:var(--panel);border-color:var(--line);border-radius:20px;padding:30px;box-shadow:none;margin-bottom:20px}
-  .btn{border-radius:13px}
-  .btn.primary{box-shadow:0 6px 20px rgba(0,0,0,.38)}
-  .num{box-shadow:none}
-  .chip{background:rgba(255,255,255,.035);border-color:var(--line)}
-  @media(max-width:640px){.card{padding:22px}}
+  body{background:var(--ground);font-family:var(--sans);line-height:1.5}
+  a{color:var(--ink)}
+  .wrap{max-width:820px;padding:0 22px 90px}          /* single calm column */
+
+  /* --- header: minimal chrome --- */
+  .topbar{background:rgba(10,10,11,.72);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+  .topbar .tb{max-width:820px;gap:12px}
+  .topbar .tn{font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:-.01em;text-transform:none}
+  .topbar .tn small{font-family:var(--sans);font-size:12px;letter-spacing:0;color:var(--steel-dim);text-transform:none;margin-top:0}
+  .topbar img{border-radius:8px;box-shadow:none}
+  .topbar .loc{font-family:var(--sans);font-size:13px;letter-spacing:0;color:var(--steel-dim)}
+  .brandbtn{font-family:var(--sans);font-size:13px;letter-spacing:0;text-transform:none;border-radius:20px;padding:7px 14px;color:var(--ink-2)}
+  .brandbtn:hover{border-color:var(--line-2);background:var(--panel-2)}
+
+  /* --- hero: keep the brand graphic, quiet the rest --- */
+  #ember{display:none}
+  .hero{min-height:min(52vh,430px);margin:0 0 34px;border-radius:0}
+  .hero .scrim{background:linear-gradient(90deg,rgba(10,10,11,.95),rgba(10,10,11,.58) 54%,rgba(10,10,11,.2))}
+  .hero-inner{max-width:820px;padding:40px 22px 34px}
+  .eyebrow{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink-2)}
+  .eyebrow .spark{box-shadow:none;width:6px;height:6px}
+  .hero h1{font-family:var(--sans);font-weight:700;text-transform:none;letter-spacing:-.028em;line-height:1.06;
+    font-size:clamp(30px,5vw,46px)}
+  .hero .lede{font-size:16px;color:var(--ink-2);margin:14px 0 22px}
+  .chip{font-family:var(--sans);font-size:13px;letter-spacing:0;background:rgba(255,255,255,.05);
+    border-color:var(--line);border-radius:20px;padding:7px 14px;color:var(--ink-2)}
+  .chip b{font-weight:600}
+  .chip.hot{border-color:var(--line-2);color:var(--ink)}
+  .chip.hot::before{box-shadow:none;width:6px;height:6px}
+
+  /* --- cards: flat, roomy, no gradient or hairline --- */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:32px;box-shadow:none;margin-bottom:20px}
+  .card::before{display:none}
+  .card > h2{font-family:var(--sans);font-weight:700;text-transform:none;letter-spacing:-.02em;font-size:23px;
+    border:0;padding:0;margin:0 0 8px;display:flex;align-items:center;gap:11px}
+  .card > h2 .num{font-family:var(--sans);font-weight:600;font-size:13px;background:var(--panel-3);color:var(--ink-2);
+    border:0;border-radius:9px;width:30px;height:30px;box-shadow:none}
+  .card .sub{color:var(--steel-dim);font-size:15px;margin:0 0 26px;max-width:62ch;line-height:1.55}
+
+  /* --- fields: sentence-case labels, big soft targets --- */
+  label{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--ink-2);letter-spacing:0;
+    text-transform:none;margin:20px 0 8px}
+  input[type=text],select{height:54px;background:var(--field);border:1px solid var(--line);border-radius:14px;
+    font-family:var(--sans);font-size:16px;padding:0 18px}
+  textarea{background:var(--field);border:1px solid var(--line);border-radius:14px;font-family:var(--sans);
+    font-size:15px;line-height:1.6;padding:16px 18px;min-height:150px}
+  input[type=text]:focus,select:focus,textarea:focus{border-color:var(--crimson);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--crimson) 18%,transparent)}
+  input[type=text]::placeholder,textarea::placeholder{color:var(--steel-dim)}
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a1a1a6' stroke-width='2.4'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 17px center;background-size:14px}
+  .row,.row3{gap:16px}
+  @media(max-width:620px){.row,.row3{grid-template-columns:1fr}}
+
+  /* --- buttons: pill primary, quiet secondaries --- */
+  .btn{font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:-.01em;text-transform:none;
+    border-radius:24px;padding:13px 22px;background:var(--panel-3);border:1px solid var(--line);color:var(--ink)}
+  .btn:hover{border-color:var(--line-2);color:#fff;transform:none;background:var(--field-2)}
+  .btn.primary{background:var(--crimson);border-color:transparent;color:#fff;box-shadow:none;
+    padding:15px 30px;font-size:16px}
+  .btn.primary:hover{filter:brightness(1.1)}
+  .btn.sm{padding:9px 16px;font-size:13.5px}
+  .btn.ghost{background:transparent;border-color:transparent;color:var(--ink-2)}
+  .btn.ghost:hover{background:var(--panel-3);color:var(--ink);border-color:transparent}
+  .actions{gap:12px;margin-top:26px;align-items:center}
+  .filehint,.note,.cp-src,.foot{font-size:13px;line-height:1.6;color:var(--steel-dim)}
+
+  /* --- AI panel + dropzone --- */
+  .ai-panel{background:var(--panel-2);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .ai-head{font-family:var(--sans);font-weight:600;text-transform:none;letter-spacing:-.01em;font-size:15px}
+  .ai-dot{box-shadow:none}
+  #drophint{border-radius:14px;font-family:var(--sans);font-size:15px}
+
+  /* --- verdict: calm, one big number --- */
+  .verdict{border-radius:20px;border:1px solid var(--line);background:var(--panel);padding:26px 28px}
+  .verdict .vbar{width:3px}
+  .verdict .vlabel{font-family:var(--sans);font-size:13px;letter-spacing:0;text-transform:none;color:var(--steel-dim)}
+  .verdict .vlevel{font-family:var(--sans);font-weight:700;text-transform:none;letter-spacing:-.03em;font-size:44px}
+  .verdict .vmeta{font-family:var(--sans);font-size:13.5px;color:var(--steel-dim)}
+  .verdict .vreason{font-size:15px;line-height:1.55;margin-top:12px}
+
+  /* --- stats: quiet tiles --- */
+  .stats{grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:24px}
+  .stat{background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:16px 17px}
+  .stat .n{font-family:var(--sans);font-weight:700;font-size:32px;letter-spacing:-.03em}
+  .stat .l{font-family:var(--sans);font-size:12.5px;letter-spacing:0;text-transform:none;color:var(--steel-dim);margin-top:5px}
+
+  /* --- findings: severity as a soft left rail --- */
+  h3.sec{font-family:var(--sans);font-size:14px;font-weight:600;text-transform:none;letter-spacing:0;
+    color:var(--steel-dim);border:0;padding:0;margin:30px 0 14px}
+  .flag{border:1px solid var(--line);border-radius:16px;padding:18px 20px 18px 22px;margin:12px 0;background:var(--panel-2)}
+  .flag::before{width:3px;border-radius:3px 0 0 3px}
+  .flag .ttl{font-size:16px;font-weight:600;letter-spacing:-.01em}
+  .flag .cls{font-family:var(--sans);font-size:13px;color:var(--steel-dim);margin-top:4px}
+  .flag .body{font-size:14.5px;margin-top:9px;line-height:1.55}
+  .flag .action{font-size:14px;margin-top:13px;padding:14px 16px;background:var(--field);
+    border:1px solid var(--line);border-radius:12px;line-height:1.55}
+  .tag{font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:0;text-transform:none;border-radius:20px;padding:4px 11px}
+
+  /* --- rating + tables + counterparty --- */
+  .rate{border-radius:16px;padding:18px 20px;background:var(--panel-2);border:1px solid var(--line)}
+  .rate .dot{border-radius:14px;width:52px;height:52px}
+  .rate .rt{font-family:var(--sans);font-weight:600;text-transform:none;letter-spacing:-.01em;font-size:17px}
+  .rate .rr{font-size:14px;margin-top:4px;color:var(--steel-dim)}
+  table.profile{font-size:14.5px}
+  table.profile td{padding:13px 4px;border-top:1px solid var(--line)}
+  table.profile td.k{font-family:var(--sans);font-size:14px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--steel-dim)}
+  .cp-badge{font-family:var(--sans);font-size:12.5px;letter-spacing:0;border-radius:20px;padding:5px 12px}
+  .cp-row{border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0;background:var(--panel-2)}
+  .cp-row .cp-label{font-family:var(--sans);font-weight:600;text-transform:none;letter-spacing:-.01em;font-size:15.5px}
+  .cp-row textarea{font-family:var(--sans);font-size:14.5px;min-height:48px;border-radius:12px}
+  .cp-adverse li{border-radius:12px;padding:13px 15px;font-size:14px}
+  .cp-adverse li a{font-family:var(--sans);font-size:13.5px}
+  .lookup-links{gap:10px}
+
+  /* --- drafted documents --- */
+  .email-box{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;line-height:1.65;
+    background:var(--field);border:1px solid var(--line);border-radius:16px;padding:22px}
+  details.tc{border:1px solid var(--line);border-radius:16px;background:var(--panel-2);margin-top:14px}
+  details.tc>summary{font-family:var(--sans);font-weight:600;font-size:15.5px;padding:16px 20px;letter-spacing:-.01em}
+  details.tc>summary::before{color:var(--steel-dim)}
+  details.tc .tcbody{padding:2px 20px 20px;font-size:14.5px;line-height:1.6}
+  @media(max-width:760px){details.tc .tcbody{columns:1}}
+  .pill{font-family:var(--sans);font-size:13px;border-radius:20px;padding:7px 13px;background:var(--panel-3);border:1px solid var(--line)}
+
+  /* --- make-it-yours modal, matched to the calm base --- */
+  .bm-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+  .bm-head h3{font-family:var(--sans);font-weight:700;text-transform:none;letter-spacing:-.02em;font-size:22px}
+  .bm-lead{font-size:14.5px;line-height:1.55;color:var(--ink-2);margin-bottom:22px}
+  .bm-grid{gap:16px}
+  .bm-grid label{font-family:var(--sans);font-size:14px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink-2)}
+  .bm-grid input{height:50px;border-radius:13px;font-family:var(--sans);font-size:15.5px;padding:0 16px;border-color:var(--line)}
+  .bm-logo img{border-radius:13px;width:60px;height:60px;border-color:var(--line)}
+  .bm-foot{margin-top:24px}
+
+  @media(max-width:640px){
+    .card{padding:24px 20px}
+    .hero{min-height:auto}
+    .hero-inner{padding:32px 20px 28px}
+    .hero h1{font-size:clamp(27px,7.4vw,34px)}
+    .hero .lede{font-size:15px;max-width:none}
+    .btn{width:100%;justify-content:center}
+    .btn.sm,.cp-row .btn,.lookup-links .btn{width:auto}
+    .actions{flex-direction:column;align-items:stretch}
+    /* header: keep it on one line — name truncates, location drops out */
+    .topbar .tb{gap:10px;padding-right:14px;padding-left:14px}
+    .topbar .tn{font-size:14px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .topbar .tn small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .topbar .loc{display:none}
+    .brandbtn{margin-left:0;flex:0 0 auto;font-size:12.5px;padding:7px 12px}
+    /* chips read as a compact wrap, not a stack */
+    .hero-chips{gap:8px}
+    .chip{font-size:12.5px;padding:6px 12px}
+  }
 </style>
 
 </head>

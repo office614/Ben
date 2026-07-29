@@ -146,6 +146,66 @@
   .tenant-mark .tm-name{font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:clamp(20px,3vw,30px);color:#fff;line-height:1}
 
   @media (prefers-reduced-motion:reduce){#ember{display:none}.btn:hover{transform:none}.emc-exc,.emc-dirt,.emc-glow{display:none}}
+
+  /* ===== Base platform — calm layer, matched to the app (Sonos-inspired) ===== */
+  :root{
+    --ground:#0a0a0b; --panel:#141416; --panel2:#18181b; --field:#141416;
+    --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.14);
+    --ink:#f5f5f7; --ink2:#a1a1a6; --steel:#a1a1a6; --steel-dim:#6e6e73; --dim:#5c5c61;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Plex Sans',Helvetica,Arial,sans-serif;
+  }
+  body{background:var(--ground);font-family:var(--sans);line-height:1.5}
+  #ember{display:none}
+  .topbar{background:rgba(10,10,11,.72);backdrop-filter:blur(16px)}
+  .topbar .tn{font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:-.01em;text-transform:none}
+  .topbar .tn small{font-family:var(--sans);font-size:12px;letter-spacing:0;color:var(--steel-dim);text-transform:none;margin-top:0}
+  .topbar img{border-radius:8px;box-shadow:none}
+  .topbar a.launch{font-family:var(--sans);font-weight:600;font-size:14px;letter-spacing:-.01em;text-transform:none;
+    border-radius:22px;padding:9px 17px;box-shadow:none;border-color:transparent}
+  .hero{min-height:min(74vh,640px)}
+  .hero .scrim{background:linear-gradient(90deg,rgba(10,10,11,.95),rgba(10,10,11,.6) 54%,rgba(10,10,11,.2) 100%),
+     linear-gradient(0deg,rgba(10,10,11,.92) 2%,rgba(10,10,11,.15) 36%,transparent 64%)}
+  .eyebrow{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink2)}
+  .eyebrow .spark{box-shadow:none;width:6px;height:6px}
+  .hero h1{font-family:var(--sans);font-weight:700;text-transform:none;letter-spacing:-.03em;line-height:1.05;
+    font-size:clamp(34px,6vw,64px);max-width:20ch}
+  .hero .lede{font-size:17px;color:var(--ink2);max-width:52ch}
+  .btn{font-family:var(--sans);font-weight:600;font-size:15.5px;letter-spacing:-.01em;text-transform:none;
+    border-radius:26px;padding:14px 24px;border-color:var(--line);background:var(--panel2);color:var(--ink)}
+  .btn:hover{border-color:var(--line2);transform:none;background:#1f1f23}
+  .btn.primary{background:var(--crimson);border-color:transparent;box-shadow:none}
+  .btn.primary:hover{filter:brightness(1.1)}
+  .chip{font-family:var(--sans);font-size:13px;letter-spacing:0;border-radius:20px;padding:7px 14px;
+    background:rgba(255,255,255,.05);border-color:var(--line);color:var(--ink2)}
+  .chip b{font-weight:600;color:var(--ink)}
+  section{padding:74px 0}
+  section.alt{background:transparent}
+  h2.sec{font-family:var(--sans);font-weight:700;text-transform:none;letter-spacing:-.025em;font-size:clamp(25px,3.4vw,34px)}
+  .sub{font-size:16px;color:var(--steel-dim);margin-bottom:34px}
+  .steps,.modes,.cover{gap:16px}
+  .step,.mode,.juris{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:26px}
+  .step::before{display:none}
+  .step .n{font-family:var(--sans);font-weight:600;font-size:12.5px;letter-spacing:0;color:var(--steel-dim)}
+  .step h3,.mode h3{font-family:var(--sans);font-weight:700;text-transform:none;letter-spacing:-.02em;font-size:19px;margin:8px 0 9px}
+  .step p,.mode ul{font-size:15px;line-height:1.6;color:var(--ink2)}
+  .mode.ai{border-color:var(--line2);background:var(--panel2)}
+  .mode .tag{font-family:var(--sans);font-size:12.5px;letter-spacing:0;text-transform:none;color:var(--steel-dim)}
+  .juris .code{font-family:var(--sans);font-weight:700;font-size:27px;letter-spacing:-.02em}
+  .juris .nm{font-size:14px}
+  .juris .law{font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--steel-dim)}
+  .install{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:30px}
+  .install h3{font-family:var(--sans);font-weight:700;text-transform:none;letter-spacing:-.02em;font-size:20px}
+  .install ol{font-size:15px;line-height:1.8}
+  .install img{border-radius:16px;box-shadow:none}
+  kbd{font-family:var(--sans);font-size:13px;border-radius:7px}
+  .foot{font-size:13px;line-height:1.7}
+  .foot .brand{font-family:var(--sans);font-weight:600;text-transform:none;letter-spacing:-.01em;font-size:15px}
+  @media(max-width:640px){
+    section{padding:54px 0}
+    .step,.mode,.juris{padding:22px}
+    .topbar .tn{font-size:14px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .cta .btn{width:100%;justify-content:center}
+  }
 </style>
 </head>
 <body>
