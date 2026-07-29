@@ -119,27 +119,44 @@
   .foot b{color:var(--steel-dim)}
   .foot .brand{font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--steel);font-size:15px}
 
-  /* Animated EMC brand mark — the C drops off, an excavator digs it out and sets it back; seamless loop */
-  .emc-frame{position:relative;width:440px;height:184px;max-width:100%;margin:0 auto 24px}
-  .emc-frame::before{content:"";position:absolute;inset:-8% -12%;background:radial-gradient(ellipse at 50% 46%,rgba(5,6,8,.78),transparent 68%);z-index:0}
-  .emc-stage{position:absolute;top:50%;left:50%;width:700px;height:280px;transform:translate(-50%,-50%) scale(.62);transform-origin:center;overflow:hidden;z-index:1;
-    display:flex;flex-direction:column;justify-content:center;align-items:center}
-  .emc-logo{font-family:'Arial Black',Impact,Arial,sans-serif;font-size:140px;font-weight:900;color:#ff2233;letter-spacing:-8px;line-height:1;position:relative;z-index:5;
-    text-shadow:0 0 10px #ff0033,0 0 20px #ff0033,0 0 40px #ff0033,0 0 80px #ff0033}
-  .emc-c{display:inline-block;position:relative;transform-origin:center bottom;will-change:transform,opacity}
-  .emc-sub{margin-top:12px;font-family:Arial,Helvetica,sans-serif;font-size:18px;color:#c8ccd2;letter-spacing:10px;text-transform:uppercase;text-shadow:0 0 8px rgba(200,204,210,.4);z-index:5}
-  .emc-exc{position:absolute;width:160px;height:140px;top:-160px;left:58%;transform:translateX(-50%);opacity:0;z-index:10;pointer-events:none}
-  .emc-cab{width:70px;height:45px;background:linear-gradient(180deg,#4a4a4a,#2a2a2a);border:3px solid #666;border-radius:6px 6px 2px 2px;position:absolute;top:0;left:20px;box-shadow:inset 0 2px 4px rgba(255,255,255,.15)}
-  .emc-cab::after{content:'';position:absolute;top:8px;left:10px;width:45px;height:18px;background:#1a3a5c;border:2px solid #333;border-radius:2px}
-  .emc-boom{width:12px;height:70px;background:linear-gradient(90deg,#555,#333);position:absolute;top:30px;left:55px;transform-origin:top center;border-radius:2px}
-  .emc-stick{width:10px;height:55px;background:linear-gradient(90deg,#555,#333);position:absolute;top:90px;left:56px;transform-origin:top center;border-radius:2px}
-  .emc-bucket{width:55px;height:35px;background:linear-gradient(180deg,#3a3a3a,#1a1a1a);border:3px solid #555;border-radius:0 0 8px 8px;position:absolute;top:135px;left:35px;transform-origin:top center;box-shadow:0 4px 8px rgba(0,0,0,.5)}
-  .emc-bucket::before{content:'';position:absolute;bottom:-8px;left:4px;right:4px;height:10px;background:repeating-linear-gradient(90deg,#222 0 8px,transparent 8px 12px)}
-  .emc-bucket::after{content:'';position:absolute;bottom:4px;left:6px;right:6px;height:14px;background:linear-gradient(to bottom,#ff6600,#cc2200);border-radius:0 0 4px 4px;box-shadow:0 0 12px #ff4400,0 0 24px #ff2200;opacity:0;transition:opacity .3s}
+  /* Animated EMC brand mark — clickable Sonos-style button entry point */
+  .emc-frame{position:relative;width:100%;max-width:580px;height:auto;margin:0 auto 32px;display:flex;flex-direction:column;align-items:center;gap:16px}
+  .emc-logo-btn{
+    position:relative;width:280px;height:280px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.15),transparent 50%),
+                radial-gradient(circle at center,#1a1a1a,#0a0a0a);
+    border:3px solid #ff2f36;
+    box-shadow:0 0 30px rgba(255,47,54,.4),0 8px 32px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.1);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    transition:all 0.3s cubic-bezier(0.23,1,0.320,1);
+    will-change:transform,box-shadow
+  }
+  .emc-logo-btn:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 50px rgba(255,47,54,.6),0 12px 48px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.2)
+  }
+  .emc-logo-btn:active{
+    transform:scale(0.97);
+    box-shadow:0 0 30px rgba(255,47,54,.3),0 4px 16px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.1)
+  }
+  .emc-logo-img{
+    width:240px;height:240px;object-fit:contain;object-position:center;filter:drop-shadow(0 0 8px rgba(255,47,54,.3))
+  }
+  .emc-sub{margin-top:8px;font-family:Arial,Helvetica,sans-serif;font-size:18px;color:#c8ccd2;letter-spacing:10px;text-transform:uppercase;text-shadow:0 0 8px rgba(200,204,210,.4);z-index:5}
+  .emc-exc{position:absolute;width:120px;height:100px;top:-100px;left:50%;transform:translateX(-50%);opacity:0;z-index:10;pointer-events:none}
+  .emc-cab{width:50px;height:32px;background:linear-gradient(180deg,#4a4a4a,#2a2a2a);border:2px solid #666;border-radius:4px 4px 2px 2px;position:absolute;top:0;left:16px;box-shadow:inset 0 2px 4px rgba(255,255,255,.15)}
+  .emc-cab::after{content:'';position:absolute;top:6px;left:8px;width:32px;height:12px;background:#1a3a5c;border:2px solid #333;border-radius:1px}
+  .emc-boom{width:9px;height:50px;background:linear-gradient(90deg,#555,#333);position:absolute;top:22px;left:42px;transform-origin:top center;border-radius:2px}
+  .emc-stick{width:7px;height:40px;background:linear-gradient(90deg,#555,#333);position:absolute;top:66px;left:42px;transform-origin:top center;border-radius:2px}
+  .emc-bucket{width:40px;height:24px;background:linear-gradient(180deg,#3a3a3a,#1a1a1a);border:2px solid #555;border-radius:0 0 6px 6px;position:absolute;top:100px;left:27px;transform-origin:top center;box-shadow:0 3px 6px rgba(0,0,0,.5)}
+  .emc-bucket::before{content:'';position:absolute;bottom:-6px;left:3px;right:3px;height:7px;background:repeating-linear-gradient(90deg,#222 0 6px,transparent 6px 9px)}
+  .emc-bucket::after{content:'';position:absolute;bottom:3px;left:4px;right:4px;height:10px;background:linear-gradient(to bottom,#ff6600,#cc2200);border-radius:0 0 3px 3px;box-shadow:0 0 10px #ff4400,0 0 18px #ff2200;opacity:0;transition:opacity .3s}
   .emc-bucket.has-load::after{opacity:1}
-  .emc-dirt{position:absolute;width:90px;height:35px;background:radial-gradient(ellipse at center,#5a3a1a,#3a2510 70%,transparent);border-radius:50%;bottom:40px;left:58%;transform:translateX(-50%) scale(0);opacity:0;z-index:3;box-shadow:0 0 20px rgba(255,80,0,.3)}
-  .emc-glow{position:absolute;width:200px;height:60px;background:radial-gradient(ellipse at center,rgba(255,60,0,.25),transparent 70%);bottom:20px;left:58%;transform:translateX(-50%);opacity:0;z-index:1;pointer-events:none}
-  @media(max-width:560px){.emc-frame{width:300px;height:132px;margin-bottom:18px}.emc-stage{transform:translate(-50%,-50%) scale(.42)}}
+  .emc-dirt{position:absolute;width:70px;height:25px;background:radial-gradient(ellipse at center,#5a3a1a,#3a2510 70%,transparent);border-radius:50%;bottom:30px;left:50%;transform:translateX(-50%) scale(0);opacity:0;z-index:3;box-shadow:0 0 16px rgba(255,80,0,.3)}
+  .emc-glow{position:absolute;width:150px;height:45px;background:radial-gradient(ellipse at center,rgba(255,60,0,.25),transparent 70%);bottom:15px;left:50%;transform:translateX(-50%);opacity:0;z-index:1;pointer-events:none}
+  @media(max-width:560px){.emc-frame{max-width:100%;margin-bottom:24px}.emc-logo-btn{width:220px;height:220px}.emc-logo-img{width:190px;height:190px}}
 
   @media (prefers-reduced-motion:reduce){#ember{display:none}.btn:hover{transform:none}.emc-exc,.emc-dirt,.emc-glow{display:none}}
 </style>
@@ -160,19 +177,19 @@
   <canvas id="ember"></canvas>
   <div class="scrim"></div>
   <div class="hero-inner">
-    <div class="emc-frame" role="img" aria-label="EMC — Earth Moving Creations">
-      <div class="emc-stage" id="emcStage">
-        <div class="emc-logo">EM<span class="emc-c" data-emc="c">C</span></div>
-        <div class="emc-sub">Earth Moving Creations</div>
-        <div class="emc-exc" data-emc="exc">
+    <div class="emc-frame" role="region" aria-label="EMC — Earth Moving Creations entry point">
+      <a class="emc-logo-btn" href="app.html" title="Launch EMC Contract Review app">
+        <img class="emc-logo-img" src="assets/emc-logo.jpeg" alt="EMC Earth Moving Creations">
+        <div class="emc-exc" data-emc="exc" style="position:absolute;pointer-events:none">
           <div class="emc-cab"></div>
           <div class="emc-boom" data-emc="boom"></div>
           <div class="emc-stick" data-emc="stick"></div>
           <div class="emc-bucket" data-emc="bucket"></div>
         </div>
-        <div class="emc-dirt" data-emc="dirt"></div>
-        <div class="emc-glow" data-emc="glow"></div>
-      </div>
+        <div class="emc-dirt" data-emc="dirt" style="position:absolute;pointer-events:none"></div>
+        <div class="emc-glow" data-emc="glow" style="position:absolute;pointer-events:none"></div>
+      </a>
+      <div class="emc-sub">Earth Moving Creations</div>
     </div>
     <div class="eyebrow"><span class="spark"></span>EMC Contract Intake &amp; Risk Review</div>
     <h1>Contract risk, <span class="red">checked before you sign</span>.</h1>
@@ -283,46 +300,41 @@ function toggleInstall(){
   function tick(){x.clearRect(0,0,W,H);for(const p of parts){p.y-=p.v;p.x+=p.drift;p.life+=0.004;const a=Math.max(0,0.85-p.life);if(p.y<-12||a<=0){Object.assign(p,mk());continue;}const R=p.r*4;const g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,R);g.addColorStop(0,`hsla(${p.hue},100%,62%,${a})`);g.addColorStop(1,'hsla(18,100%,50%,0)');x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,R,0,7);x.fill();}requestAnimationFrame(tick);}
   init();tick();let t;addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(init,200);});
 })();
-/* Animated EMC brand mark: C drops → excavator digs it out → sets it back. First frame === last frame (seamless loop). */
+/* Excavator animation around circular button: digs, picks up embers, places them. Loop ~8s. */
 (function emcLogo(){
-  const stage=document.getElementById('emcStage');if(!stage)return;
-  if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)return; // static logo, no loop
-  const q=s=>stage.querySelector('[data-emc="'+s+'"]');
-  const cLetter=q('c'),excavator=q('exc'),boom=q('boom'),stick=q('stick'),bucket=q('bucket'),dirt=q('dirt'),glow=q('glow');
-  const T={drop:1200,excavatorIn:800,pickup:900,place:1100,excavatorOut:700,settle:1500};
+  const btn=document.querySelector('.emc-logo-btn');if(!btn)return;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const q=s=>btn.querySelector('[data-emc="'+s+'"]');
+  const excavator=q('exc'),boom=q('boom'),stick=q('stick'),bucket=q('bucket'),dirt=q('dirt'),glow=q('glow');
+  const T={excavatorIn:600,digging:2200,pickup:700,place:800,excavatorOut:600,settle:1200};
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   const setT=(el,t)=>{el.style.transform=t;};
   function resetAll(){
-    cLetter.style.transition='none';cLetter.style.transform='translate(0,0) rotate(0deg)';cLetter.style.opacity='1';
-    excavator.style.transition='none';excavator.style.opacity='0';excavator.style.top='-160px';excavator.style.left='58%';
+    excavator.style.transition='none';excavator.style.opacity='0';excavator.style.top='-100px';excavator.style.left='50%';
     boom.style.transform='rotate(0deg)';stick.style.transform='rotate(0deg)';bucket.style.transform='rotate(0deg)';bucket.classList.remove('has-load');
     dirt.style.transition='none';dirt.style.transform='translateX(-50%) scale(0)';dirt.style.opacity='0';
-    glow.style.opacity='0';void cLetter.offsetWidth;
+    glow.style.opacity='0';void excavator.offsetWidth;
   }
   async function runCycle(){
     resetAll();
-    cLetter.style.transition='transform 1.1s cubic-bezier(0.55,0.05,0.65,0.9),opacity 0.8s ease';await sleep(50);
-    setT(cLetter,'translate(8px,165px) rotate(28deg)');cLetter.style.opacity='0.85';await sleep(T.drop);
-    excavator.style.transition='top 0.7s cubic-bezier(0.22,1,0.36,1),opacity 0.5s ease';excavator.style.opacity='1';excavator.style.top='10px';await sleep(T.excavatorIn);
+    excavator.style.transition='top 0.6s cubic-bezier(0.22,1,0.36,1),opacity 0.5s ease';excavator.style.opacity='1';excavator.style.top='20px';await sleep(T.excavatorIn);
     glow.style.transition='opacity 0.4s';glow.style.opacity='1';
-    dirt.style.transition='transform 0.6s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s';dirt.style.opacity='1';dirt.style.transform='translateX(-50%) scale(1)';
+    dirt.style.transition='transform 0.5s cubic-bezier(0.34,1.56,0.64,1),opacity 0.4s';dirt.style.opacity='1';dirt.style.transform='translateX(-50%) scale(1)';
     for(let i=0;i<3;i++){
-      boom.style.transition=stick.style.transition=bucket.style.transition='transform 0.28s ease-in';
-      setT(boom,'rotate(18deg)');setT(stick,'rotate(25deg)');setT(bucket,'rotate(35deg)');await sleep(280);
-      boom.style.transition=stick.style.transition=bucket.style.transition='transform 0.22s ease-out';
-      setT(boom,'rotate(-5deg)');setT(stick,'rotate(-8deg)');setT(bucket,'rotate(-10deg)');await sleep(220);
+      boom.style.transition='transform 0.25s ease-in';boom.style.transform='rotate(-40deg)';await sleep(150);
+      boom.style.transition='transform 0.2s ease-out';boom.style.transform='rotate(0deg)';await sleep(100);
+      stick.style.transition='transform 0.25s ease-in';stick.style.transform='rotate(-30deg)';await sleep(130);
+      stick.style.transition='transform 0.2s ease-out';stick.style.transform='rotate(0deg)';await sleep(80);
     }
     bucket.classList.add('has-load');
-    cLetter.style.transition='transform 0.7s cubic-bezier(0.25,0.8,0.25,1),opacity 0.3s';setT(cLetter,'translate(55px,55px) rotate(-15deg) scale(0.85)');cLetter.style.opacity='1';await sleep(T.pickup);
-    excavator.style.transition='top 0.6s ease';excavator.style.top='-30px';setT(cLetter,'translate(55px,-40px) rotate(0deg) scale(0.9)');await sleep(600);
-    excavator.style.transition='top 0.8s cubic-bezier(0.4,0,0.2,1),left 0.8s ease';excavator.style.top='10px';excavator.style.left='50%';
-    cLetter.style.transition='transform 0.85s cubic-bezier(0.4,0,0.2,1)';setT(cLetter,'translate(0,0) rotate(0deg) scale(1)');await sleep(T.place);
-    bucket.classList.remove('has-load');cLetter.style.transition='none';setT(cLetter,'translate(0,0) rotate(0deg)');cLetter.style.opacity='1';
-    dirt.style.transition='opacity 0.5s,transform 0.5s';dirt.style.opacity='0';dirt.style.transform='translateX(-50%) scale(0.3)';glow.style.opacity='0';
-    excavator.style.transition='top 0.7s ease,opacity 0.5s ease';excavator.style.top='-160px';excavator.style.opacity='0';await sleep(T.excavatorOut);
+    excavator.style.transition='top 0.5s ease';excavator.style.top='-50px';await sleep(T.pickup);
+    excavator.style.transition='top 0.8s cubic-bezier(0.4,0,0.2,1),left 0.8s ease';excavator.style.top='20px';excavator.style.left='50%';await sleep(T.place);
+    bucket.classList.remove('has-load');
+    dirt.style.transition='opacity 0.4s,transform 0.4s';dirt.style.opacity='0';dirt.style.transform='translateX(-50%) scale(0.2)';glow.style.opacity='0';
+    excavator.style.transition='top 0.6s ease,opacity 0.5s ease';excavator.style.top='-100px';excavator.style.opacity='0';await sleep(T.excavatorOut);
     await sleep(T.settle);runCycle();
   }
-  addEventListener('load',()=>setTimeout(runCycle,800));
+  addEventListener('load',()=>setTimeout(runCycle,1000));
 })();
 if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
 </script>
