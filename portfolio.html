@@ -18,7 +18,6 @@
             --text-secondary: #b0b0b0;
             --accent: #d97706;
             --accent-light: #f97316;
-            --accent-dark: #92400e;
         }
 
         html, body {
@@ -34,7 +33,7 @@
             line-height: 1.6;
         }
 
-        /* Animated background glow */
+        /* Subtle background */
         body::before {
             content: '';
             position: fixed;
@@ -42,21 +41,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background:
-                radial-gradient(circle at 20% 50%, rgba(217, 119, 6, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(217, 119, 6, 0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 50% 50%, rgba(217, 119, 6, 0.03) 0%, transparent 70%);
             pointer-events: none;
             z-index: 0;
-            animation: bg-pulse 6s ease-in-out infinite;
         }
 
-        @keyframes bg-pulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1.2; }
-        }
-
-        /* Spark Animation */
-        @keyframes spark-burst {
+        /* Minimal spark for premium feel */
+        @keyframes spark-minimal {
             0% {
                 opacity: 1;
                 transform: translate(0, 0) scale(1);
@@ -67,20 +58,15 @@
             }
         }
 
-        @keyframes spark-glow {
-            0%, 100% { box-shadow: 0 0 15px var(--accent-light); }
-            50% { box-shadow: 0 0 30px var(--accent-light), 0 0 50px rgba(249, 115, 22, 0.8); }
-        }
-
         .spark {
             position: fixed;
             pointer-events: none;
-            width: 8px;
-            height: 8px;
-            background: radial-gradient(circle, var(--accent-light), var(--accent));
+            width: 4px;
+            height: 4px;
+            background: var(--accent-light);
             border-radius: 50%;
-            animation: spark-burst 1.2s ease-out forwards, spark-glow 0.8s ease-in-out;
-            box-shadow: 0 0 20px var(--accent-light);
+            animation: spark-minimal 1s ease-out forwards;
+            opacity: 0.6;
         }
 
         /* Navigation */
@@ -102,20 +88,19 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            height: 50px;
+            height: 45px;
         }
 
         .logo-img {
             height: 100%;
             width: auto;
-            filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.6));
-            animation: logo-float 3s ease-in-out infinite;
+            max-width: 180px;
+            filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.3));
+            transition: all 0.3s ease;
         }
 
-        @keyframes logo-float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
+        .logo-img:hover {
+            filter: drop-shadow(0 0 25px rgba(249, 115, 22, 0.5));
         }
 
         .nav-menu-toggle {
@@ -125,28 +110,23 @@
             color: var(--accent-light);
             font-size: 1.5rem;
             cursor: pointer;
-            width: 40px;
-            height: 40px;
-            align-items: center;
-            justify-content: center;
         }
 
         .nav-menu {
             display: flex;
             gap: 3rem;
             list-style: none;
-            align-items: center;
         }
 
         .nav-menu a {
-            color: var(--text-primary);
+            color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.9rem;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             transition: all 0.3s ease;
             position: relative;
-            font-weight: 500;
+            font-weight: 400;
         }
 
         .nav-menu a::before {
@@ -155,19 +135,17 @@
             bottom: -8px;
             left: 0;
             width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-light), var(--accent));
+            height: 1px;
+            background: var(--accent-light);
             transition: width 0.3s ease;
-            box-shadow: 0 0 15px var(--accent-light);
-        }
-
-        .nav-menu a:hover::before {
-            width: 100%;
         }
 
         .nav-menu a:hover {
             color: var(--accent-light);
-            text-shadow: 0 0 15px rgba(249, 115, 22, 0.7);
+        }
+
+        .nav-menu a:hover::before {
+            width: 100%;
         }
 
         /* Hero Section */
@@ -182,33 +160,23 @@
             overflow: hidden;
         }
 
-        .hero-video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 1;
-            filter: brightness(0.6) contrast(1.1);
-        }
-
         .hero-image {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 1.5;
-            animation: hero-zoom 20s ease-in-out infinite;
-            mix-blend-mode: screen;
-            opacity: 0.8;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 80%;
+            max-height: 80%;
+            width: auto;
+            height: auto;
+            z-index: 1;
+            animation: subtle-zoom 15s ease-in-out infinite;
+            filter: drop-shadow(0 0 60px rgba(249, 115, 22, 0.2));
         }
 
-        @keyframes hero-zoom {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        @keyframes subtle-zoom {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.02); }
         }
 
         .hero-overlay {
@@ -217,156 +185,49 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%);
             z-index: 2;
-            animation: overlay-pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes overlay-pulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.6; }
         }
 
         .hero-content {
             position: relative;
             z-index: 3;
             text-align: center;
-            animation: fade-in-up 1.2s ease-out;
-        }
-
-        @keyframes fade-in-up {
-            0% {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .hero h1 {
-            font-size: clamp(2rem, 10vw, 6rem);
+            font-size: clamp(1.5rem, 8vw, 4rem);
             font-weight: 300;
-            letter-spacing: 4px;
-            margin-bottom: 2rem;
+            letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--text-primary);
-            text-shadow: 0 0 50px rgba(249, 115, 22, 0.5), 0 0 100px rgba(249, 115, 22, 0.3);
-            animation: title-glow 2s ease-in-out infinite;
-        }
-
-        @keyframes title-glow {
-            0%, 100% { text-shadow: 0 0 50px rgba(249, 115, 22, 0.5), 0 0 100px rgba(249, 115, 22, 0.3); }
-            50% { text-shadow: 0 0 70px rgba(249, 115, 22, 0.8), 0 0 120px rgba(249, 115, 22, 0.5); }
-        }
-
-        .hero-subtitle {
-            font-size: clamp(0.9rem, 2.5vw, 1.3rem);
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            color: var(--accent-light);
-            text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(249, 115, 22, 0.6);
-            animation: subtitle-fade 1.5s ease-out 0.3s both;
-        }
-
-        @keyframes subtitle-fade {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            text-shadow: 0 0 30px rgba(249, 115, 22, 0.2);
         }
 
         .hero-tagline {
-            font-size: 1rem;
-            letter-spacing: 3px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
             color: var(--text-secondary);
-            margin-bottom: 4rem;
+            margin-top: 1rem;
             text-transform: uppercase;
-            animation: subtitle-fade 1.5s ease-out 0.6s both;
         }
 
-        .enter-btn {
-            background: linear-gradient(135deg, rgba(217, 119, 6, 0.4), rgba(249, 115, 22, 0.3));
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--accent-light);
-            color: var(--accent-light);
-            padding: 1.5rem 3.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 50px;
-            transition: all 0.4s ease;
-            letter-spacing: 2.5px;
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
             text-transform: uppercase;
-            font-weight: 600;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(249, 115, 22, 0.4), inset 0 0 20px rgba(249, 115, 22, 0.1);
-            animation: button-pulse 2s ease-in-out infinite;
+            animation: bounce 2s ease-in-out infinite;
         }
 
-        @keyframes button-pulse {
-            0%, 100% {
-                box-shadow: 0 0 30px rgba(249, 115, 22, 0.4), inset 0 0 20px rgba(249, 115, 22, 0.1);
-            }
-            50% {
-                box-shadow: 0 0 50px rgba(249, 115, 22, 0.7), inset 0 0 30px rgba(249, 115, 22, 0.3);
-            }
-        }
-
-        .enter-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.6s;
-        }
-
-        .enter-btn:hover::before {
-            left: 100%;
-        }
-
-        .enter-btn:hover {
-            background: linear-gradient(135deg, rgba(217, 119, 6, 0.7), rgba(249, 115, 22, 0.6));
-            box-shadow: 0 0 60px rgba(249, 115, 22, 0.9), inset 0 0 30px rgba(249, 115, 22, 0.4);
-            transform: translateY(-3px);
-        }
-
-        .enter-btn:active {
-            transform: translateY(-1px);
-        }
-
-        /* Floating particles */
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--accent-light);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 2;
-            opacity: 0.6;
-            box-shadow: 0 0 10px var(--accent-light);
-        }
-
-        @keyframes float-up {
-            0% {
-                opacity: 0;
-                transform: translateY(0) translateX(var(--px, 0));
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) translateX(var(--px, 0));
-            }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
         }
 
         /* Projects Section */
@@ -385,68 +246,42 @@
             margin-bottom: 3rem;
             text-transform: uppercase;
             color: var(--text-primary);
-            text-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
-            border-bottom: 3px solid var(--accent);
+            border-bottom: 2px solid var(--accent);
             padding-bottom: 1.5rem;
             display: inline-block;
-            animation: slide-in 0.8s ease-out;
-        }
-
-        @keyframes slide-in {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
         }
 
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 3rem;
-            margin-top: 3rem;
+            margin-top: 2rem;
         }
 
         .project-card {
             position: relative;
             overflow: hidden;
             aspect-ratio: 1;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
-            border: 2px solid rgba(249, 115, 22, 0.4);
+            border: 1px solid rgba(249, 115, 22, 0.2);
             transition: all 0.4s ease;
-            animation: card-appear 0.8s ease-out;
-        }
-
-        @keyframes card-appear {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .project-card:hover {
             border-color: var(--accent-light);
-            box-shadow: 0 0 40px rgba(249, 115, 22, 0.6), inset 0 0 30px rgba(249, 115, 22, 0.1);
-            transform: translateY(-10px);
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
         }
 
         .project-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s ease;
+            transition: transform 0.5s ease;
         }
 
         .project-card:hover img {
-            transform: scale(1.1) rotate(2deg);
+            transform: scale(1.05);
         }
 
         .project-overlay {
@@ -455,14 +290,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(217, 119, 6, 0.3));
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             transition: opacity 0.4s ease;
             z-index: 2;
-            backdrop-filter: blur(5px);
         }
 
         .project-card:hover .project-overlay {
@@ -470,12 +304,11 @@
         }
 
         .project-title {
-            color: var(--accent-light);
-            font-size: 1.8rem;
+            color: var(--text-primary);
+            font-size: 1.5rem;
             text-align: center;
             font-weight: 300;
             letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(249, 115, 22, 0.8);
         }
 
         /* About Section */
@@ -488,33 +321,20 @@
         }
 
         .about-content {
-            font-size: 1.15rem;
-            line-height: 2;
+            font-size: 1.1rem;
+            line-height: 1.9;
             color: var(--text-secondary);
             margin-bottom: 2.5rem;
-            border-left: 4px solid var(--accent);
-            padding-left: 2.5rem;
-            animation: content-fade 1s ease-out 0.3s both;
-        }
-
-        @keyframes content-fade {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            border-left: 2px solid var(--accent);
+            padding-left: 2rem;
         }
 
         /* Footer */
         footer {
             padding: 4rem 2rem;
-            background: linear-gradient(to top, rgba(21, 21, 21, 0.95), transparent);
+            background: linear-gradient(to top, rgba(21, 21, 21, 0.9), transparent);
             text-align: center;
-            border-top: 2px solid rgba(249, 115, 22, 0.3);
-            margin-top: 4rem;
+            border-top: 1px solid rgba(249, 115, 22, 0.1);
             position: relative;
             z-index: 2;
         }
@@ -527,40 +347,22 @@
         }
 
         .social-links a {
-            color: var(--accent-light);
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 1rem;
+            font-size: 0.9rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             transition: all 0.3s ease;
             position: relative;
-            font-weight: 500;
-        }
-
-        .social-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-light);
-            transition: width 0.3s ease;
-            box-shadow: 0 0 10px var(--accent-light);
-        }
-
-        .social-links a:hover::after {
-            width: 100%;
         }
 
         .social-links a:hover {
-            text-shadow: 0 0 15px rgba(249, 115, 22, 0.7);
+            color: var(--accent-light);
         }
 
         .contact-info {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            animation: fade-in 1s ease-out;
+            font-size: 0.9rem;
         }
 
         /* Responsive */
@@ -576,10 +378,10 @@
                 right: 0;
                 left: 0;
                 flex-direction: column;
-                background: rgba(21, 21, 21, 0.98);
-                gap: 1.5rem;
+                background: rgba(21, 21, 21, 0.95);
+                gap: 1rem;
                 padding: 2rem;
-                border-bottom: 2px solid rgba(249, 115, 22, 0.3);
+                border-bottom: 1px solid rgba(249, 115, 22, 0.1);
             }
 
             .nav-menu.active {
@@ -587,11 +389,7 @@
             }
 
             .nav-menu-toggle {
-                display: flex;
-            }
-
-            .hero h1 {
-                margin-bottom: 1.5rem;
+                display: block;
             }
 
             .projects {
@@ -600,7 +398,6 @@
 
             .projects-grid {
                 grid-template-columns: 1fr;
-                gap: 2rem;
             }
 
             .section-title {
@@ -611,35 +408,19 @@
         html {
             scroll-behavior: smooth;
         }
-
-        /* Page transition */
-        .page-transition {
-            animation: page-fade 0.8s ease-out;
-        }
-
-        @keyframes page-fade {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav>
         <div class="logo-container">
-            <img src="assets/logo-small.png" alt="Diamond Logo" class="logo-img">
+            <img src="assets/logo-small.png" alt="Diamond Welding" class="logo-img">
         </div>
         <button class="nav-menu-toggle" onclick="toggleMenu()">☰</button>
         <ul class="nav-menu" id="navMenu">
             <li><a href="#home">Home</a></li>
             <li><a href="#projects">Projects</a></li>
-            <li><a href="#practice">Practice</a></li>
+            <li><a href="#practice">About</a></li>
             <li><a href="#media">Portfolio</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
@@ -647,43 +428,33 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <video autoplay muted loop playsinline class="hero-video">
-            <source src="assets/welding-background.mp4" type="video/mp4">
-        </video>
-        <img src="assets/diamond-glow.jpeg" alt="Illuminated Diamond" class="hero-image">
+        <img src="assets/welding-spark.jpeg" alt="Diamond" class="hero-image">
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1>Diamond</h1>
-            <p class="hero-subtitle">Welding & Fabrication</p>
-            <p class="hero-tagline">Brilliance by Design</p>
-            <button class="enter-btn" onclick="handleEnter()">Enter</button>
+            <p class="hero-tagline">Welding & Fabrication — Brilliance by Design</p>
         </div>
+        <div class="scroll-indicator">Scroll to Explore</div>
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="projects page-transition">
+    <section id="projects" class="projects">
         <h2 class="section-title">Projects</h2>
         <div class="projects-grid">
-            <div class="project-card" onclick="triggerSparks(event)">
+            <div class="project-card" onclick="minimalSpark(event)">
                 <img src="assets/precision-work.jpeg" alt="Precision Welding">
                 <div class="project-overlay">
                     <p class="project-title">Precision Welding</p>
                 </div>
             </div>
-            <div class="project-card" onclick="triggerSparks(event)">
+            <div class="project-card" onclick="minimalSpark(event)">
                 <img src="assets/metal-fabrication.png" alt="Metal Fabrication">
                 <div class="project-overlay">
                     <p class="project-title">Metal Fabrication</p>
                 </div>
             </div>
-            <div class="project-card" onclick="triggerSparks(event)">
-                <img src="assets/welding-spark.jpeg" alt="Welding Process">
-                <div class="project-overlay">
-                    <p class="project-title">Active Welding</p>
-                </div>
-            </div>
-            <div class="project-card" onclick="triggerSparks(event)">
-                <img src="assets/metal-detail.jpeg" alt="Metal Detail">
+            <div class="project-card" onclick="minimalSpark(event)">
+                <img src="assets/metal-detail.jpeg" alt="Detail Work">
                 <div class="project-overlay">
                     <p class="project-title">Fine Details</p>
                 </div>
@@ -691,14 +462,14 @@
         </div>
     </section>
 
-    <!-- Practice Section -->
+    <!-- About Section -->
     <section id="practice" class="about">
         <h2 class="section-title">Our Practice</h2>
         <p class="about-content">
-            At Diamond Welding & Fabrication, we specialize in precision metal work and expert welding services. With years of experience in the industry, our team delivers exceptional quality in every project, combining technical expertise with innovative engineering solutions.
+            At Diamond Welding & Fabrication, we specialize in precision metal work and expert welding services. Our team combines technical expertise with innovative engineering solutions, delivering exceptional quality in every project.
         </p>
         <p class="about-content">
-            We take pride in our meticulous attention to detail and commitment to excellence. From concept to completion, we ensure that every weld, every cut, and every finished piece meets the highest standards of precision and durability.
+            From concept to completion, we ensure that every weld, every cut, and every finished piece meets the highest standards of precision and durability. Your vision becomes our craft.
         </p>
     </section>
 
@@ -706,22 +477,22 @@
     <section id="media" class="projects">
         <h2 class="section-title">Portfolio</h2>
         <div class="projects-grid">
-            <div class="project-card" onclick="triggerSparks(event)">
-                <img src="assets/welding-spark.jpeg" alt="Close-up Welding">
+            <div class="project-card" onclick="minimalSpark(event)">
+                <img src="assets/metal-detail.jpeg" alt="Fabrication">
                 <div class="project-overlay">
-                    <p class="project-title">Active Process</p>
+                    <p class="project-title">Fabrication</p>
                 </div>
             </div>
-            <div class="project-card" onclick="triggerSparks(event)">
-                <img src="assets/metal-detail.jpeg" alt="Fabrication Detail">
+            <div class="project-card" onclick="minimalSpark(event)">
+                <img src="assets/precision-work.jpeg" alt="Precision">
                 <div class="project-overlay">
-                    <p class="project-title">Detail Work</p>
+                    <p class="project-title">Precision</p>
                 </div>
             </div>
-            <div class="project-card" onclick="triggerSparks(event)">
-                <img src="assets/precision-work.jpeg" alt="Custom Projects">
+            <div class="project-card" onclick="minimalSpark(event)">
+                <img src="assets/metal-fabrication.png" alt="Expertise">
                 <div class="project-overlay">
-                    <p class="project-title">Custom Solutions</p>
+                    <p class="project-title">Expertise</p>
                 </div>
             </div>
         </div>
@@ -730,12 +501,12 @@
     <!-- Footer -->
     <footer id="contact">
         <div class="social-links">
-            <a href="#" title="Instagram" onclick="triggerSparks(event)">Instagram</a>
-            <a href="#" title="Email" onclick="triggerSparks(event)">Email</a>
-            <a href="#" title="Phone" onclick="triggerSparks(event)">Phone</a>
+            <a href="#">Instagram</a>
+            <a href="#">Email</a>
+            <a href="#">Phone</a>
         </div>
         <div class="contact-info">
-            <p>© 2024 Diamond Welding & Fabrication. All rights reserved.</p>
+            <p>© 2024 Diamond Welding & Fabrication</p>
             <p>Precision Metal Work | Expert Welding | Engineering Solutions</p>
         </div>
     </footer>
@@ -752,13 +523,25 @@
             });
         });
 
-        // Enhanced spark creation with more realistic welding sparks
+        function minimalSpark(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            // Subtle spark burst (not excessive)
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    createSpark(centerX, centerY);
+                }, i * 40);
+            }
+        }
+
         function createSpark(x, y) {
             const spark = document.createElement('div');
             spark.className = 'spark';
 
             const angle = Math.random() * Math.PI * 2;
-            const velocity = 80 + Math.random() * 250;
+            const velocity = 60 + Math.random() * 150;
             const tx = Math.cos(angle) * velocity;
             const ty = Math.sin(angle) * velocity;
 
@@ -767,93 +550,9 @@
             spark.style.setProperty('--tx', tx + 'px');
             spark.style.setProperty('--ty', ty + 'px');
 
-            // Random spark colors (orange to yellow)
-            const colors = ['#f97316', '#fb923c', '#fbbf24', '#fcd34d'];
-            spark.style.background = colors[Math.floor(Math.random() * colors.length)];
-            spark.style.width = (3 + Math.random() * 8) + 'px';
-            spark.style.height = spark.style.width;
-
             document.body.appendChild(spark);
-            setTimeout(() => spark.remove(), 1200);
+            setTimeout(() => spark.remove(), 1000);
         }
-
-        // Burst of sparks on interaction
-        function triggerSparks(event) {
-            const rect = event.currentTarget.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            // Create multiple sparks in a burst pattern
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    createSpark(centerX, centerY);
-                }, i * 25);
-            }
-        }
-
-        // Enhanced enter button with mega spark burst
-        function handleEnter() {
-            const btn = event.target;
-            const rect = btn.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            // MEGA spark burst
-            for (let i = 0; i < 80; i++) {
-                setTimeout(() => {
-                    createSpark(centerX, centerY);
-                }, i * 15);
-            }
-
-            // Add floating particles throughout the page
-            createFloatingParticles();
-
-            // Scroll to projects
-            setTimeout(() => {
-                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
-            }, 400);
-        }
-
-        // Floating particle animation on enter
-        function createFloatingParticles() {
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * window.innerWidth + 'px';
-                particle.style.top = window.innerHeight / 2 + 'px';
-                particle.style.setProperty('--px', (Math.random() - 0.5) * 200 + 'px');
-                particle.style.animation = `float-up ${2 + Math.random() * 2}s ease-out forwards`;
-                document.body.appendChild(particle);
-                setTimeout(() => particle.remove(), 4000);
-            }
-        }
-
-        // Ambient spark effects on page load and periodically
-        function ambientSparks() {
-            if (Math.random() > 0.7) {
-                createSpark(
-                    Math.random() * window.innerWidth,
-                    Math.random() * window.innerHeight * 0.5
-                );
-            }
-        }
-
-        setInterval(ambientSparks, 3000);
-
-        // Add hover spark effects to nav items
-        document.querySelectorAll('.nav-menu a').forEach(link => {
-            link.addEventListener('mouseover', (e) => {
-                const rect = link.getBoundingClientRect();
-                for (let i = 0; i < 5; i++) {
-                    setTimeout(() => {
-                        createSpark(
-                            rect.left + rect.width / 2,
-                            rect.top + rect.height
-                        );
-                    }, i * 50);
-                }
-            });
-        });
     </script>
 </body>
 </html>
