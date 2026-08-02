@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diamond Welding & Fabrication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #151515;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent: #d97706;
+            --accent-light: #f97316;
+            --accent-dark: #92400e;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Background overlay throughout */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(217, 119, 6, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(217, 119, 6, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0.95), transparent);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-light);
+            text-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+        }
+
+        .nav-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--accent-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-light), var(--accent));
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--accent-light);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-menu a:hover {
+            color: var(--accent-light);
+            text-shadow: 0 0 10px rgba(249, 115, 22, 0.6);
+        }
+
+        /* Spark Animation Keyframes */
+        @keyframes spark-burst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        @keyframes spark-glow {
+            0%, 100% { box-shadow: 0 0 10px var(--accent-light); }
+            50% { box-shadow: 0 0 20px var(--accent-light), 0 0 30px rgba(249, 115, 22, 0.5); }
+        }
+
+        .spark {
+            position: fixed;
+            pointer-events: none;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-light);
+            border-radius: 50%;
+            animation: spark-burst 1s ease-out forwards, spark-glow 0.6s ease-in-out;
+        }
+
+        /* Hero Section */
+        .hero {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.8) 0%, rgba(15, 15, 15, 0.9) 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 50% 30%, rgba(217, 119, 6, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 50% 70%, rgba(217, 119, 6, 0.08) 0%, transparent 60%);
+            animation: glow-pulse 4s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            animation: fade-in 1.2s ease-out;
+        }
+
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .diamond-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.6));
+            animation: diamond-spin 4s linear infinite;
+        }
+
+        @keyframes diamond-spin {
+            0%, 100% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            text-shadow: 0 0 30px rgba(249, 115, 22, 0.4);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            color: var(--accent-light);
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(249, 115, 22, 0.5);
+        }
+
+        .hero-tagline {
+            font-size: 1rem;
+            letter-spacing: 3px;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+        }
+
+        .enter-btn {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(249, 115, 22, 0.2));
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--accent-light);
+            color: var(--accent-light);
+            padding: 1.2rem 3rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.3), inset 0 0 20px rgba(249, 115, 22, 0.1);
+        }
+
+        .enter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .enter-btn:hover::before {
+            left: 100%;
+        }
+
+        .enter-btn:hover {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.5), rgba(249, 115, 22, 0.4));
+            box-shadow: 0 0 40px rgba(249, 115, 22, 0.6), inset 0 0 20px rgba(249, 115, 22, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .enter-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            text-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent-light);
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.4);
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+            backdrop-filter: blur(4px);
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        .project-title {
+            color: var(--accent-light);
+            font-size: 1.5rem;
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+        }
+
+        /* About Section */
+        .about {
+            padding: 5rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            border-left: 3px solid var(--accent);
+            padding-left: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: linear-gradient(to top, rgba(21, 21, 21, 0.8), transparent);
+            text-align: center;
+            border-top: 1px solid rgba(249, 115, 22, 0.2);
+            margin-top: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            color: var(--accent-light);
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .social-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent-light);
+            transition: width 0.3s ease;
+        }
+
+        .social-links a:hover::after {
+            width: 100%;
+        }
+
+        .social-links a:hover {
+            text-shadow: 0 0 10px rgba(249, 115, 22, 0.6);
+        }
+
+        .contact-info {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                left: 0;
+                flex-direction: column;
+                background: rgba(21, 21, 21, 0.95);
+                gap: 1rem;
+                padding: 2rem;
+                border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-menu-toggle {
+                display: flex;
+            }
+
+            .hero h1 {
+                margin-bottom: 1rem;
+            }
+
+            .projects {
+                padding: 3rem 1rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        .page-transition {
+            animation: page-fade 0.6s ease-out;
+        }
+
+        @keyframes page-fade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">◇ Diamond Welding</div>
+        <button class="nav-menu-toggle" onclick="toggleMenu()">☰</button>
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#practice">Practice</a></li>
+            <li><a href="#media">Portfolio</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="diamond-icon">◇</div>
+            <h1>Diamond</h1>
+            <p class="hero-subtitle">Welding & Fabrication</p>
+            <p class="hero-tagline">Brilliance by Design</p>
+            <button class="enter-btn" onclick="handleEnter()">Enter</button>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects page-transition">
+        <h2 class="section-title">Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop" alt="Precision Welding">
+                <div class="project-overlay">
+                    <p class="project-title">Precision Welding</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=400&fit=crop" alt="Metal Fabrication">
+                <div class="project-overlay">
+                    <p class="project-title">Metal Fabrication</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=400&h=400&fit=crop" alt="Engineering Work">
+                <div class="project-overlay">
+                    <p class="project-title">Engineering</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1581092335434-a8b79aa73e89?w=400&h=400&fit=crop" alt="Industrial Work">
+                <div class="project-overlay">
+                    <p class="project-title">Industrial Solutions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Practice Section -->
+    <section id="practice" class="about">
+        <h2 class="section-title">Our Practice</h2>
+        <p class="about-content">
+            At Diamond Welding & Fabrication, we specialize in precision metal work and expert welding services. With years of experience in the industry, our team delivers exceptional quality in every project, combining technical expertise with innovative engineering solutions.
+        </p>
+        <p class="about-content">
+            We take pride in our meticulous attention to detail and commitment to excellence. From concept to completion, we ensure that every weld, every cut, and every finished piece meets the highest standards of precision and durability.
+        </p>
+    </section>
+
+    <!-- Media Section -->
+    <section id="media" class="projects">
+        <h2 class="section-title">Portfolio</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=400&h=400&fit=crop" alt="Close-up Welding">
+                <div class="project-overlay">
+                    <p class="project-title">Close-up Work</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop" alt="Fabrication Detail">
+                <div class="project-overlay">
+                    <p class="project-title">Fabrication Detail</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=400&fit=crop" alt="Custom Projects">
+                <div class="project-overlay">
+                    <p class="project-title">Custom Projects</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="social-links">
+            <a href="#" title="Instagram">Instagram</a>
+            <a href="#" title="Email">Email</a>
+            <a href="#" title="Phone">Phone</a>
+        </div>
+        <div class="contact-info">
+            <p>© 2024 Diamond Welding & Fabrication. All rights reserved.</p>
+            <p>Precision Metal Work | Expert Welding | Engineering Solutions</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        }
+
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navMenu').classList.remove('active');
+            });
+        });
+
+        function createSpark(x, y) {
+            const spark = document.createElement('div');
+            spark.className = 'spark';
+
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = 50 + Math.random() * 150;
+            const tx = Math.cos(angle) * velocity;
+            const ty = Math.sin(angle) * velocity;
+
+            spark.style.left = x + 'px';
+            spark.style.top = y + 'px';
+            spark.style.setProperty('--tx', tx + 'px');
+            spark.style.setProperty('--ty', ty + 'px');
+
+            document.body.appendChild(spark);
+            setTimeout(() => spark.remove(), 1000);
+        }
+
+        function handleEnter() {
+            const btn = event.target;
+            const rect = btn.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            // Create spark burst effect
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    createSpark(centerX, centerY);
+                }, i * 30);
+            }
+
+            // Scroll to projects
+            setTimeout(() => {
+                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+
+        // Add click spark effects anywhere on the page
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('enter-btn')) return;
+            if (Math.random() > 0.95) {
+                createSpark(e.clientX, e.clientY);
+            }
+        });
+    </script>
+</body>
+</html>
