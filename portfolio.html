@@ -34,7 +34,7 @@
             line-height: 1.6;
         }
 
-        /* Background overlay throughout */
+        /* Animated background glow */
         body::before {
             content: '';
             position: fixed;
@@ -43,10 +43,44 @@
             width: 100%;
             height: 100%;
             background:
-                radial-gradient(circle at 20% 50%, rgba(217, 119, 6, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(217, 119, 6, 0.03) 0%, transparent 50%);
+                radial-gradient(circle at 20% 50%, rgba(217, 119, 6, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(217, 119, 6, 0.05) 0%, transparent 50%);
             pointer-events: none;
             z-index: 0;
+            animation: bg-pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes bg-pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1.2; }
+        }
+
+        /* Spark Animation */
+        @keyframes spark-burst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        @keyframes spark-glow {
+            0%, 100% { box-shadow: 0 0 15px var(--accent-light); }
+            50% { box-shadow: 0 0 30px var(--accent-light), 0 0 50px rgba(249, 115, 22, 0.8); }
+        }
+
+        .spark {
+            position: fixed;
+            pointer-events: none;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, var(--accent-light), var(--accent));
+            border-radius: 50%;
+            animation: spark-burst 1.2s ease-out forwards, spark-glow 0.8s ease-in-out;
+            box-shadow: 0 0 20px var(--accent-light);
         }
 
         /* Navigation */
@@ -56,21 +90,32 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            padding: 2rem;
+            padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(to bottom, rgba(10, 10, 10, 0.95), transparent);
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0.98), transparent);
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
-        .logo {
-            font-size: 1.2rem;
-            font-weight: 300;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--accent-light);
-            text-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            height: 50px;
+        }
+
+        .logo-img {
+            height: 100%;
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.6));
+            animation: logo-float 3s ease-in-out infinite;
+        }
+
+        @keyframes logo-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
         }
 
         .nav-menu-toggle {
@@ -96,59 +141,33 @@
         .nav-menu a {
             color: var(--text-primary);
             text-decoration: none;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             transition: all 0.3s ease;
             position: relative;
+            font-weight: 500;
         }
 
-        .nav-menu a::after {
+        .nav-menu a::before {
             content: '';
             position: absolute;
-            bottom: -5px;
+            bottom: -8px;
             left: 0;
             width: 0;
             height: 2px;
             background: linear-gradient(90deg, var(--accent-light), var(--accent));
             transition: width 0.3s ease;
-            box-shadow: 0 0 10px var(--accent-light);
+            box-shadow: 0 0 15px var(--accent-light);
         }
 
-        .nav-menu a:hover::after {
+        .nav-menu a:hover::before {
             width: 100%;
         }
 
         .nav-menu a:hover {
             color: var(--accent-light);
-            text-shadow: 0 0 10px rgba(249, 115, 22, 0.6);
-        }
-
-        /* Spark Animation Keyframes */
-        @keyframes spark-burst {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--tx), var(--ty)) scale(0);
-            }
-        }
-
-        @keyframes spark-glow {
-            0%, 100% { box-shadow: 0 0 10px var(--accent-light); }
-            50% { box-shadow: 0 0 20px var(--accent-light), 0 0 30px rgba(249, 115, 22, 0.5); }
-        }
-
-        .spark {
-            position: fixed;
-            pointer-events: none;
-            width: 6px;
-            height: 6px;
-            background: var(--accent-light);
-            border-radius: 50%;
-            animation: spark-burst 1s ease-out forwards, spark-glow 0.6s ease-in-out;
+            text-shadow: 0 0 15px rgba(249, 115, 22, 0.7);
         }
 
         /* Hero Section */
@@ -161,39 +180,51 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, rgba(10, 10, 10, 0.8) 0%, rgba(15, 15, 15, 0.9) 100%);
         }
 
-        .hero::before {
-            content: '';
+        .hero-image {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background:
-                radial-gradient(circle at 50% 30%, rgba(217, 119, 6, 0.15) 0%, transparent 60%),
-                radial-gradient(circle at 50% 70%, rgba(217, 119, 6, 0.08) 0%, transparent 60%);
-            animation: glow-pulse 4s ease-in-out infinite;
+            object-fit: cover;
             z-index: 1;
+            animation: hero-zoom 20s ease-in-out infinite;
         }
 
-        @keyframes glow-pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+        @keyframes hero-zoom {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 2;
+            animation: overlay-pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes overlay-pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.6; }
         }
 
         .hero-content {
             position: relative;
             z-index: 3;
             text-align: center;
-            animation: fade-in 1.2s ease-out;
+            animation: fade-in-up 1.2s ease-out;
         }
 
-        @keyframes fade-in {
+        @keyframes fade-in-up {
             0% {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(40px);
             }
             100% {
                 opacity: 1;
@@ -201,61 +232,76 @@
             }
         }
 
-        .diamond-icon {
-            font-size: 4rem;
-            margin-bottom: 2rem;
-            filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.6));
-            animation: diamond-spin 4s linear infinite;
-        }
-
-        @keyframes diamond-spin {
-            0%, 100% { transform: rotateY(0deg); }
-            50% { transform: rotateY(180deg); }
-        }
-
         .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-size: clamp(2rem, 10vw, 6rem);
             font-weight: 300;
-            letter-spacing: 3px;
-            margin-bottom: 0.5rem;
+            letter-spacing: 4px;
+            margin-bottom: 2rem;
             text-transform: uppercase;
             color: var(--text-primary);
-            text-shadow: 0 0 30px rgba(249, 115, 22, 0.4);
+            text-shadow: 0 0 50px rgba(249, 115, 22, 0.5), 0 0 100px rgba(249, 115, 22, 0.3);
+            animation: title-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes title-glow {
+            0%, 100% { text-shadow: 0 0 50px rgba(249, 115, 22, 0.5), 0 0 100px rgba(249, 115, 22, 0.3); }
+            50% { text-shadow: 0 0 70px rgba(249, 115, 22, 0.8), 0 0 120px rgba(249, 115, 22, 0.5); }
         }
 
         .hero-subtitle {
-            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-size: clamp(0.9rem, 2.5vw, 1.3rem);
             letter-spacing: 2px;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             color: var(--accent-light);
             text-transform: uppercase;
-            text-shadow: 0 0 15px rgba(249, 115, 22, 0.5);
+            text-shadow: 0 0 20px rgba(249, 115, 22, 0.6);
+            animation: subtitle-fade 1.5s ease-out 0.3s both;
+        }
+
+        @keyframes subtitle-fade {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         .hero-tagline {
             font-size: 1rem;
             letter-spacing: 3px;
             color: var(--text-secondary);
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
             text-transform: uppercase;
+            animation: subtitle-fade 1.5s ease-out 0.6s both;
         }
 
         .enter-btn {
-            background: linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(249, 115, 22, 0.2));
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.4), rgba(249, 115, 22, 0.3));
             backdrop-filter: blur(10px);
             border: 2px solid var(--accent-light);
             color: var(--accent-light);
-            padding: 1.2rem 3rem;
+            padding: 1.5rem 3.5rem;
             font-size: 1rem;
             cursor: pointer;
             border-radius: 50px;
-            transition: all 0.3s ease;
-            letter-spacing: 2px;
+            transition: all 0.4s ease;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
-            font-weight: 500;
+            font-weight: 600;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(249, 115, 22, 0.3), inset 0 0 20px rgba(249, 115, 22, 0.1);
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.4), inset 0 0 20px rgba(249, 115, 22, 0.1);
+            animation: button-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes button-pulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(249, 115, 22, 0.4), inset 0 0 20px rgba(249, 115, 22, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(249, 115, 22, 0.7), inset 0 0 30px rgba(249, 115, 22, 0.3);
+            }
         }
 
         .enter-btn::before {
@@ -265,8 +311,8 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
         }
 
         .enter-btn:hover::before {
@@ -274,18 +320,45 @@
         }
 
         .enter-btn:hover {
-            background: linear-gradient(135deg, rgba(217, 119, 6, 0.5), rgba(249, 115, 22, 0.4));
-            box-shadow: 0 0 40px rgba(249, 115, 22, 0.6), inset 0 0 20px rgba(249, 115, 22, 0.2);
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.7), rgba(249, 115, 22, 0.6));
+            box-shadow: 0 0 60px rgba(249, 115, 22, 0.9), inset 0 0 30px rgba(249, 115, 22, 0.4);
+            transform: translateY(-3px);
         }
 
         .enter-btn:active {
-            transform: translateY(0);
+            transform: translateY(-1px);
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-light);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.6;
+            box-shadow: 0 0 10px var(--accent-light);
+        }
+
+        @keyframes float-up {
+            0% {
+                opacity: 0;
+                transform: translateY(0) translateX(var(--px, 0));
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) translateX(var(--px, 0));
+            }
         }
 
         /* Projects Section */
         .projects {
-            padding: 5rem 2rem;
+            padding: 6rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
@@ -295,21 +368,33 @@
         .section-title {
             font-size: 2.5rem;
             font-weight: 300;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-bottom: 3rem;
             text-transform: uppercase;
             color: var(--text-primary);
             text-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 1.5rem;
             display: inline-block;
+            animation: slide-in 0.8s ease-out;
+        }
+
+        @keyframes slide-in {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            margin-top: 2rem;
+            gap: 3rem;
+            margin-top: 3rem;
         }
 
         .project-card {
@@ -318,24 +403,37 @@
             aspect-ratio: 1;
             border-radius: 8px;
             cursor: pointer;
-            border: 1px solid rgba(249, 115, 22, 0.3);
-            transition: all 0.3s ease;
+            border: 2px solid rgba(249, 115, 22, 0.4);
+            transition: all 0.4s ease;
+            animation: card-appear 0.8s ease-out;
+        }
+
+        @keyframes card-appear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .project-card:hover {
             border-color: var(--accent-light);
-            box-shadow: 0 0 30px rgba(249, 115, 22, 0.4);
+            box-shadow: 0 0 40px rgba(249, 115, 22, 0.6), inset 0 0 30px rgba(249, 115, 22, 0.1);
+            transform: translateY(-10px);
         }
 
         .project-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.6s ease;
         }
 
         .project-card:hover img {
-            transform: scale(1.05);
+            transform: scale(1.1) rotate(2deg);
         }
 
         .project-overlay {
@@ -344,14 +442,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(217, 119, 6, 0.3));
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
             z-index: 2;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(5px);
         }
 
         .project-card:hover .project-overlay {
@@ -360,16 +458,16 @@
 
         .project-title {
             color: var(--accent-light);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             text-align: center;
             font-weight: 300;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(249, 115, 22, 0.8);
         }
 
         /* About Section */
         .about {
-            padding: 5rem 2rem;
+            padding: 6rem 2rem;
             max-width: 1000px;
             margin: 0 auto;
             position: relative;
@@ -377,21 +475,33 @@
         }
 
         .about-content {
-            font-size: 1.1rem;
-            line-height: 1.8;
+            font-size: 1.15rem;
+            line-height: 2;
             color: var(--text-secondary);
-            margin-bottom: 2rem;
-            border-left: 3px solid var(--accent);
-            padding-left: 2rem;
+            margin-bottom: 2.5rem;
+            border-left: 4px solid var(--accent);
+            padding-left: 2.5rem;
+            animation: content-fade 1s ease-out 0.3s both;
+        }
+
+        @keyframes content-fade {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         /* Footer */
         footer {
-            padding: 3rem 2rem;
-            background: linear-gradient(to top, rgba(21, 21, 21, 0.8), transparent);
+            padding: 4rem 2rem;
+            background: linear-gradient(to top, rgba(21, 21, 21, 0.95), transparent);
             text-align: center;
-            border-top: 1px solid rgba(249, 115, 22, 0.2);
-            margin-top: 3rem;
+            border-top: 2px solid rgba(249, 115, 22, 0.3);
+            margin-top: 4rem;
             position: relative;
             z-index: 2;
         }
@@ -399,7 +509,7 @@
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 3rem;
             margin-bottom: 2rem;
         }
 
@@ -407,21 +517,23 @@
             color: var(--accent-light);
             text-decoration: none;
             font-size: 1rem;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             text-transform: uppercase;
             transition: all 0.3s ease;
             position: relative;
+            font-weight: 500;
         }
 
         .social-links a::after {
             content: '';
             position: absolute;
-            bottom: -5px;
+            bottom: -8px;
             left: 0;
             width: 0;
-            height: 1px;
+            height: 2px;
             background: var(--accent-light);
             transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--accent-light);
         }
 
         .social-links a:hover::after {
@@ -429,12 +541,13 @@
         }
 
         .social-links a:hover {
-            text-shadow: 0 0 10px rgba(249, 115, 22, 0.6);
+            text-shadow: 0 0 15px rgba(249, 115, 22, 0.7);
         }
 
         .contact-info {
             color: var(--text-secondary);
             font-size: 0.95rem;
+            animation: fade-in 1s ease-out;
         }
 
         /* Responsive */
@@ -446,14 +559,14 @@
             .nav-menu {
                 display: none;
                 position: absolute;
-                top: 60px;
+                top: 70px;
                 right: 0;
                 left: 0;
                 flex-direction: column;
-                background: rgba(21, 21, 21, 0.95);
-                gap: 1rem;
+                background: rgba(21, 21, 21, 0.98);
+                gap: 1.5rem;
                 padding: 2rem;
-                border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+                border-bottom: 2px solid rgba(249, 115, 22, 0.3);
             }
 
             .nav-menu.active {
@@ -465,15 +578,16 @@
             }
 
             .hero h1 {
-                margin-bottom: 1rem;
+                margin-bottom: 1.5rem;
             }
 
             .projects {
-                padding: 3rem 1rem;
+                padding: 4rem 1rem;
             }
 
             .projects-grid {
                 grid-template-columns: 1fr;
+                gap: 2rem;
             }
 
             .section-title {
@@ -485,15 +599,15 @@
             scroll-behavior: smooth;
         }
 
-        /* Loading animation */
+        /* Page transition */
         .page-transition {
-            animation: page-fade 0.6s ease-out;
+            animation: page-fade 0.8s ease-out;
         }
 
         @keyframes page-fade {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -505,7 +619,9 @@
 <body>
     <!-- Navigation -->
     <nav>
-        <div class="logo">◇ Diamond Welding</div>
+        <div class="logo-container">
+            <img src="assets/logo-small.png" alt="Diamond Logo" class="logo-img">
+        </div>
         <button class="nav-menu-toggle" onclick="toggleMenu()">☰</button>
         <ul class="nav-menu" id="navMenu">
             <li><a href="#home">Home</a></li>
@@ -518,10 +634,9 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <img src="assets/diamond-logo.jpeg" alt="Diamond Logo" class="hero-image" style="opacity: 0.3;">
+        <img src="assets/diamond-glow.jpeg" alt="Illuminated Diamond" class="hero-image">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <div class="diamond-icon">◇</div>
             <h1>Diamond</h1>
             <p class="hero-subtitle">Welding & Fabrication</p>
             <p class="hero-tagline">Brilliance by Design</p>
@@ -533,28 +648,28 @@
     <section id="projects" class="projects page-transition">
         <h2 class="section-title">Projects</h2>
         <div class="projects-grid">
-            <div class="project-card">
+            <div class="project-card" onclick="triggerSparks(event)">
                 <img src="assets/precision-work.jpeg" alt="Precision Welding">
                 <div class="project-overlay">
                     <p class="project-title">Precision Welding</p>
                 </div>
             </div>
-            <div class="project-card">
+            <div class="project-card" onclick="triggerSparks(event)">
                 <img src="assets/metal-fabrication.png" alt="Metal Fabrication">
                 <div class="project-overlay">
                     <p class="project-title">Metal Fabrication</p>
                 </div>
             </div>
-            <div class="project-card">
-                <img src="assets/welding-work.jpeg" alt="Engineering Work">
+            <div class="project-card" onclick="triggerSparks(event)">
+                <img src="assets/welding-spark.jpeg" alt="Welding Process">
                 <div class="project-overlay">
-                    <p class="project-title">Engineering</p>
+                    <p class="project-title">Active Welding</p>
                 </div>
             </div>
-            <div class="project-card">
-                <img src="assets/hero-building.jpeg" alt="Industrial Work">
+            <div class="project-card" onclick="triggerSparks(event)">
+                <img src="assets/metal-detail.jpeg" alt="Metal Detail">
                 <div class="project-overlay">
-                    <p class="project-title">Industrial Solutions</p>
+                    <p class="project-title">Fine Details</p>
                 </div>
             </div>
         </div>
@@ -571,26 +686,26 @@
         </p>
     </section>
 
-    <!-- Media Section -->
+    <!-- Portfolio Section -->
     <section id="media" class="projects">
         <h2 class="section-title">Portfolio</h2>
         <div class="projects-grid">
-            <div class="project-card">
-                <img src="assets/welding-work.jpeg" alt="Close-up Welding">
+            <div class="project-card" onclick="triggerSparks(event)">
+                <img src="assets/welding-spark.jpeg" alt="Close-up Welding">
                 <div class="project-overlay">
-                    <p class="project-title">Close-up Work</p>
+                    <p class="project-title">Active Process</p>
                 </div>
             </div>
-            <div class="project-card">
-                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop" alt="Fabrication Detail">
+            <div class="project-card" onclick="triggerSparks(event)">
+                <img src="assets/metal-detail.jpeg" alt="Fabrication Detail">
                 <div class="project-overlay">
-                    <p class="project-title">Fabrication Detail</p>
+                    <p class="project-title">Detail Work</p>
                 </div>
             </div>
-            <div class="project-card">
-                <img src="assets/metal-fabrication.png" alt="Custom Projects">
+            <div class="project-card" onclick="triggerSparks(event)">
+                <img src="assets/precision-work.jpeg" alt="Custom Projects">
                 <div class="project-overlay">
-                    <p class="project-title">Custom Projects</p>
+                    <p class="project-title">Custom Solutions</p>
                 </div>
             </div>
         </div>
@@ -599,9 +714,9 @@
     <!-- Footer -->
     <footer id="contact">
         <div class="social-links">
-            <a href="#" title="Instagram">Instagram</a>
-            <a href="#" title="Email">Email</a>
-            <a href="#" title="Phone">Phone</a>
+            <a href="#" title="Instagram" onclick="triggerSparks(event)">Instagram</a>
+            <a href="#" title="Email" onclick="triggerSparks(event)">Email</a>
+            <a href="#" title="Phone" onclick="triggerSparks(event)">Phone</a>
         </div>
         <div class="contact-info">
             <p>© 2024 Diamond Welding & Fabrication. All rights reserved.</p>
@@ -621,12 +736,13 @@
             });
         });
 
+        // Enhanced spark creation with more realistic welding sparks
         function createSpark(x, y) {
             const spark = document.createElement('div');
             spark.className = 'spark';
 
             const angle = Math.random() * Math.PI * 2;
-            const velocity = 50 + Math.random() * 150;
+            const velocity = 80 + Math.random() * 250;
             const tx = Math.cos(angle) * velocity;
             const ty = Math.sin(angle) * velocity;
 
@@ -635,35 +751,92 @@
             spark.style.setProperty('--tx', tx + 'px');
             spark.style.setProperty('--ty', ty + 'px');
 
+            // Random spark colors (orange to yellow)
+            const colors = ['#f97316', '#fb923c', '#fbbf24', '#fcd34d'];
+            spark.style.background = colors[Math.floor(Math.random() * colors.length)];
+            spark.style.width = (3 + Math.random() * 8) + 'px';
+            spark.style.height = spark.style.width;
+
             document.body.appendChild(spark);
-            setTimeout(() => spark.remove(), 1000);
+            setTimeout(() => spark.remove(), 1200);
         }
 
+        // Burst of sparks on interaction
+        function triggerSparks(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            // Create multiple sparks in a burst pattern
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    createSpark(centerX, centerY);
+                }, i * 25);
+            }
+        }
+
+        // Enhanced enter button with mega spark burst
         function handleEnter() {
             const btn = event.target;
             const rect = btn.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
 
-            // Create spark burst effect
-            for (let i = 0; i < 30; i++) {
+            // MEGA spark burst
+            for (let i = 0; i < 80; i++) {
                 setTimeout(() => {
                     createSpark(centerX, centerY);
-                }, i * 30);
+                }, i * 15);
             }
+
+            // Add floating particles throughout the page
+            createFloatingParticles();
 
             // Scroll to projects
             setTimeout(() => {
                 document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
-            }, 300);
+            }, 400);
         }
 
-        // Add click spark effects anywhere on the page
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('enter-btn')) return;
-            if (Math.random() > 0.95) {
-                createSpark(e.clientX, e.clientY);
+        // Floating particle animation on enter
+        function createFloatingParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * window.innerWidth + 'px';
+                particle.style.top = window.innerHeight / 2 + 'px';
+                particle.style.setProperty('--px', (Math.random() - 0.5) * 200 + 'px');
+                particle.style.animation = `float-up ${2 + Math.random() * 2}s ease-out forwards`;
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 4000);
             }
+        }
+
+        // Ambient spark effects on page load and periodically
+        function ambientSparks() {
+            if (Math.random() > 0.7) {
+                createSpark(
+                    Math.random() * window.innerWidth,
+                    Math.random() * window.innerHeight * 0.5
+                );
+            }
+        }
+
+        setInterval(ambientSparks, 3000);
+
+        // Add hover spark effects to nav items
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('mouseover', (e) => {
+                const rect = link.getBoundingClientRect();
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        createSpark(
+                            rect.left + rect.width / 2,
+                            rect.top + rect.height
+                        );
+                    }, i * 50);
+                }
+            });
         });
     </script>
 </body>
