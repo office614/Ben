@@ -64,15 +64,16 @@
         }
 
         .logo-nav {
-            height: 50px;
+            height: 55px;
             width: auto;
-            max-width: 140px;
-            filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.3));
+            max-width: 160px;
+            filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.4)) drop-shadow(0 0 10px rgba(249, 115, 22, 0.2));
             transition: filter 0.3s ease;
+            object-fit: contain;
         }
 
         .logo-nav:hover {
-            filter: drop-shadow(0 0 25px rgba(249, 115, 22, 0.5));
+            filter: drop-shadow(0 0 35px rgba(249, 115, 22, 0.7)) drop-shadow(0 0 15px rgba(249, 115, 22, 0.4));
         }
 
         .nav-menu {
@@ -139,12 +140,13 @@
         }
 
         .hero-logo {
-            width: 85vw;
-            max-width: 520px;
+            width: 80vw;
+            max-width: 550px;
             height: auto;
             margin: 0 auto 2rem;
-            filter: drop-shadow(0 0 50px rgba(249, 115, 22, 0.4));
+            filter: drop-shadow(0 0 70px rgba(249, 115, 22, 0.6)) drop-shadow(0 0 40px rgba(249, 115, 22, 0.3));
             animation: subtle-float 4s ease-in-out infinite;
+            object-fit: contain;
         }
 
         @keyframes subtle-float {
@@ -574,12 +576,12 @@
             }
 
             .logo-nav {
-                max-width: 100px;
-                height: 40px;
+                max-width: 110px;
+                height: 45px;
             }
 
             .hero-logo {
-                max-width: 280px;
+                max-width: 300px;
                 margin-bottom: 1rem;
             }
 
