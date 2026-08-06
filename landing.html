@@ -234,15 +234,57 @@
             backdrop-filter: blur(10px);
         }
 
+        /* Section Divider */
+        .section-divider {
+            height: 8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(to bottom, transparent, rgba(249, 115, 22, 0.05), transparent);
+        }
+
+        .divider-logo {
+            width: 80px;
+            height: auto;
+            opacity: 0;
+            transform: scale(0.8);
+            filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.3));
+            animation: divider-appear 1s ease-out forwards;
+        }
+
+        @keyframes divider-appear {
+            from {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+            to {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+        }
+
+        .divider-line {
+            position: absolute;
+            width: 40%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(249, 115, 22, 0.4), transparent);
+        }
+
+        .divider-line.left {
+            left: 0;
+        }
+
+        .divider-line.right {
+            right: 0;
+        }
+
         section {
             padding: 6rem 3rem;
             max-width: 1400px;
             margin: 0 auto;
-            border-top: 1px solid rgba(249, 115, 22, 0.1);
-        }
-
-        section:first-child {
-            border-top: none;
+            position: relative;
         }
 
         .section-title {
@@ -255,6 +297,18 @@
             border-bottom: 2px solid rgba(249, 115, 22, 0.6);
             padding-bottom: 1.5rem;
             display: inline-block;
+            animation: title-slide-in 0.8s ease-out;
+        }
+
+        @keyframes title-slide-in {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .section-content {
@@ -262,6 +316,18 @@
             line-height: 1.8;
             color: rgba(255, 255, 255, 0.8);
             max-width: 900px;
+            animation: content-fade-in 1s ease-out 0.2s both;
+        }
+
+        @keyframes content-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Editable Content */
@@ -304,6 +370,25 @@
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             cursor: pointer;
             background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(217, 119, 6, 0.05));
+            animation: gallery-item-in 0.6s ease-out both;
+        }
+
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes gallery-item-in {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .gallery-item:hover {
@@ -348,6 +433,33 @@
             padding: 1.5rem;
             width: 100%;
             font-weight: 600;
+        }
+
+        /* Accent Element - Small Animated Logo in Section */
+        .section-accent {
+            position: absolute;
+            width: 60px;
+            height: auto;
+            opacity: 0.15;
+            filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.2));
+            pointer-events: none;
+        }
+
+        .section-accent.top-right {
+            top: 2rem;
+            right: 2rem;
+            animation: float-accent 6s ease-in-out infinite;
+        }
+
+        .section-accent.bottom-left {
+            bottom: 2rem;
+            left: 2rem;
+            animation: float-accent 7s ease-in-out infinite reverse;
+        }
+
+        @keyframes float-accent {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
         }
 
         .edit-mode-toggle {
@@ -395,6 +507,10 @@
             .gallery-grid {
                 grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             }
+
+            .section-accent {
+                width: 50px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -438,6 +554,10 @@
             .gallery-grid {
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
                 gap: 1.5rem;
+            }
+
+            .section-accent {
+                display: none;
             }
 
             .edit-mode-toggle {
@@ -529,16 +649,32 @@
 
     <!-- Content -->
     <div class="content">
+        <!-- Section Divider -->
+        <div class="section-divider">
+            <div class="divider-line left"></div>
+            <img src="assets/diamond-logo.jpeg" alt="Diamond" class="divider-logo">
+            <div class="divider-line right"></div>
+        </div>
+
         <!-- Services Section -->
         <section id="services">
+            <img src="assets/diamond-logo.jpeg" alt="Diamond Accent" class="section-accent top-right">
             <h2 class="section-title">Our Services</h2>
             <p class="section-content editable-content" contenteditable="false">
                 At Diamond Welding & Fabrication, we specialize in precision metal work and custom fabrication solutions. Our expert team combines technical mastery with innovative engineering to deliver exceptional results for every project. From concept to completion, we ensure that each weld, cut, and finished piece meets the highest standards of quality and durability.
             </p>
         </section>
 
+        <!-- Section Divider -->
+        <div class="section-divider">
+            <div class="divider-line left"></div>
+            <img src="assets/diamond-logo.jpeg" alt="Diamond" class="divider-logo">
+            <div class="divider-line right"></div>
+        </div>
+
         <!-- Portfolio Section with Gallery -->
         <section id="portfolio">
+            <img src="assets/diamond-logo.jpeg" alt="Diamond Accent" class="section-accent bottom-left">
             <h2 class="section-title">Portfolio</h2>
             <p class="section-content editable-content" contenteditable="false">
                 Our portfolio showcases precision welding, metal fabrication, fine details, and custom engineering solutions. Each project represents our commitment to excellence, where craftsmanship meets innovation.
@@ -584,8 +720,16 @@
             </div>
         </section>
 
+        <!-- Section Divider -->
+        <div class="section-divider">
+            <div class="divider-line left"></div>
+            <img src="assets/diamond-logo.jpeg" alt="Diamond" class="divider-logo">
+            <div class="divider-line right"></div>
+        </div>
+
         <!-- About Section -->
         <section id="about">
+            <img src="assets/diamond-logo.jpeg" alt="Diamond Accent" class="section-accent top-right">
             <h2 class="section-title">About Us</h2>
             <p class="section-content editable-content" contenteditable="false">
                 Diamond Welding & Fabrication is a premier custom metal work facility serving clients who demand precision, quality, and innovation. Our state-of-the-art equipment and experienced team enable us to tackle complex projects with confidence. We believe in building lasting relationships with our clients through transparency, quality, and exceptional service. Every project is treated with the same level of care and attention to detail, whether it's a small custom piece or a large-scale industrial fabrication.
@@ -641,6 +785,24 @@
                     el.innerHTML = saved;
                 }
             });
+        });
+
+        // Smooth scroll animation trigger
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-title, .section-content').forEach(el => {
+            observer.observe(el);
         });
     </script>
 </body>
