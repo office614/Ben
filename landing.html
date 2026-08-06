@@ -626,7 +626,38 @@
 
     <!-- Navigation -->
     <nav>
-        <img src="assets/diamond-logo.jpeg" alt="Diamond Logo" class="logo-nav">
+        <svg class="logo-nav" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="diamondNavGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                </linearGradient>
+                <radialGradient id="glowNavGradient" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.6" />
+                    <stop offset="100%" style="stop-color:#f97316;stop-opacity:0" />
+                </radialGradient>
+                <filter id="goldNavGlow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            <circle cx="120" cy="120" r="115" fill="url(#glowNavGradient)" opacity="0.3"/>
+            <g filter="url(#goldNavGlow)">
+                <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondNavGradient)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondNavGradient)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondNavGradient)" stroke-width="2" stroke-linecap="round"/>
+                <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondNavGradient)" stroke-width="2" stroke-linecap="round"/>
+            </g>
+            <g transform="translate(120, 180)">
+                <path d="M -40,-20 L -40,10 Q 0,35 0,35 Q 0,35 40,10 L 40,-20 Z"
+                      fill="none" stroke="url(#diamondNavGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#goldNavGlow)"/>
+                <circle cx="0" cy="10" r="5" fill="url(#diamondNavGradient)" opacity="0.7"/>
+            </g>
+        </svg>
         <button class="nav-toggle" onclick="toggleMenu()">☰</button>
         <ul class="nav-menu" id="navMenu">
             <li><a href="#home" onclick="closeMenu()">Home</a></li>
@@ -652,13 +683,55 @@
         <!-- Section Divider -->
         <div class="section-divider">
             <div class="divider-line left"></div>
-            <img src="assets/diamond-logo.jpeg" alt="Diamond" class="divider-logo">
+            <svg class="divider-logo" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondDivider1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldDividerGlow1">
+                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldDividerGlow1)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondDivider1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondDivider1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondDivider1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondDivider1)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
             <div class="divider-line right"></div>
         </div>
 
         <!-- Services Section -->
         <section id="services">
-            <img src="assets/diamond-logo.jpeg" alt="Diamond Accent" class="section-accent top-right">
+            <svg class="section-accent top-right" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondAccent1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldAccentGlow1">
+                        <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldAccentGlow1)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondAccent1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondAccent1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondAccent1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondAccent1)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
             <h2 class="section-title">Our Services</h2>
             <p class="section-content editable-content" contenteditable="false">
                 At Diamond Welding & Fabrication, we specialize in precision metal work and custom fabrication solutions. Our expert team combines technical mastery with innovative engineering to deliver exceptional results for every project. From concept to completion, we ensure that each weld, cut, and finished piece meets the highest standards of quality and durability.
@@ -668,13 +741,55 @@
         <!-- Section Divider -->
         <div class="section-divider">
             <div class="divider-line left"></div>
-            <img src="assets/diamond-logo.jpeg" alt="Diamond" class="divider-logo">
+            <svg class="divider-logo" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondDivider2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldDividerGlow2">
+                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldDividerGlow2)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondDivider2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondDivider2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondDivider2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondDivider2)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
             <div class="divider-line right"></div>
         </div>
 
         <!-- Portfolio Section with Gallery -->
         <section id="portfolio">
-            <img src="assets/diamond-logo.jpeg" alt="Diamond Accent" class="section-accent bottom-left">
+            <svg class="section-accent bottom-left" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondAccent2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldAccentGlow2">
+                        <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldAccentGlow2)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondAccent2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondAccent2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondAccent2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondAccent2)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
             <h2 class="section-title">Portfolio</h2>
             <p class="section-content editable-content" contenteditable="false">
                 Our portfolio showcases precision welding, metal fabrication, fine details, and custom engineering solutions. Each project represents our commitment to excellence, where craftsmanship meets innovation.
@@ -725,13 +840,55 @@
         <!-- Section Divider -->
         <div class="section-divider">
             <div class="divider-line left"></div>
-            <img src="assets/diamond-logo.jpeg" alt="Diamond" class="divider-logo">
+            <svg class="divider-logo" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondDivider3" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldDividerGlow3">
+                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldDividerGlow3)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondDivider3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondDivider3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondDivider3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondDivider3)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
             <div class="divider-line right"></div>
         </div>
 
         <!-- About Section -->
         <section id="about">
-            <img src="assets/diamond-logo.jpeg" alt="Diamond Accent" class="section-accent top-right">
+            <svg class="section-accent top-right" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondAccent3" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldAccentGlow3">
+                        <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldAccentGlow3)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondAccent3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondAccent3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondAccent3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondAccent3)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
             <h2 class="section-title">About Us</h2>
             <p class="section-content editable-content" contenteditable="false">
                 Diamond Welding & Fabrication is a premier custom metal work facility serving clients who demand precision, quality, and innovation. Our state-of-the-art equipment and experienced team enable us to tackle complex projects with confidence. We believe in building lasting relationships with our clients through transparency, quality, and exceptional service. Every project is treated with the same level of care and attention to detail, whether it's a small custom piece or a large-scale industrial fabrication.
