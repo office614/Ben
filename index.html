@@ -12,10 +12,13 @@
             box-sizing: border-box;
         }
 
-        body {
+        html, body {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             overflow: hidden;
+        }
+
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #000000;
             display: flex;
@@ -34,20 +37,20 @@
             background: #000000;
         }
 
-        /* Logo centered */
         .logo-splash {
-            max-width: 400px;
-            width: 90%;
+            width: 85vw;
+            max-width: 480px;
             height: auto;
             z-index: 5;
-            filter: drop-shadow(0 0 30px rgba(249, 115, 22, 0.4));
-            animation: logo-fade-in 1.5s ease-out;
+            filter: drop-shadow(0 0 45px rgba(249, 115, 22, 0.65));
+            animation: logo-fade-in 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            image-rendering: -webkit-optimize-contrast;
         }
 
         @keyframes logo-fade-in {
             from {
                 opacity: 0;
-                transform: scale(0.9);
+                transform: scale(0.75);
             }
             to {
                 opacity: 1;
@@ -55,43 +58,55 @@
             }
         }
 
-        /* Interactive button - positioned at bottom of logo */
-        .logo-button {
+        .shield-button {
             position: absolute;
-            bottom: 20%;
+            bottom: 15%;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             z-index: 20;
             cursor: pointer;
-            border: none;
+            border: 1px solid rgba(249, 115, 22, 0.3);
             background: transparent;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
-            animation: glow-pulse 2.5s ease-in-out infinite;
+            border-radius: 6px;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.35), inset 0 0 20px rgba(249, 115, 22, 0.08);
+            animation: shield-glow 3.5s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        @keyframes glow-pulse {
+        .shield-text {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: rgba(249, 115, 22, 0.75);
+            text-transform: uppercase;
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        @keyframes shield-glow {
             0%, 100% {
-                box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+                box-shadow: 0 0 30px rgba(249, 115, 22, 0.35), inset 0 0 20px rgba(249, 115, 22, 0.08);
             }
             50% {
-                box-shadow: 0 0 40px rgba(249, 115, 22, 0.8);
+                box-shadow: 0 0 55px rgba(249, 115, 22, 0.65), inset 0 0 35px rgba(249, 115, 22, 0.15);
             }
         }
 
-        .logo-button:hover {
-            box-shadow: 0 0 50px rgba(249, 115, 22, 0.9);
-            transform: translateX(-50%) scale(1.2);
+        .shield-button:hover {
+            box-shadow: 0 0 70px rgba(249, 115, 22, 0.75), inset 0 0 40px rgba(249, 115, 22, 0.2);
+            border-color: rgba(249, 115, 22, 0.6);
+            transform: translateX(-50%) scale(1.1);
         }
 
-        .logo-button:active {
+        .shield-button:active {
             transform: translateX(-50%) scale(0.95);
         }
 
-        /* Spark animation */
         @keyframes spark-burst {
             0% {
                 opacity: 1;
@@ -106,15 +121,14 @@
         .spark {
             position: fixed;
             pointer-events: none;
-            width: 5px;
-            height: 5px;
-            background: radial-gradient(circle, #fbbf24, #f97316);
+            width: 7px;
+            height: 7px;
+            background: radial-gradient(circle at 25% 25%, #fff, #fbbf24, #f97316);
             border-radius: 50%;
-            animation: spark-burst 1.2s ease-out forwards;
-            box-shadow: 0 0 15px #f97316;
+            animation: spark-burst 1.5s ease-out forwards;
+            box-shadow: 0 0 20px #f97316;
         }
 
-        /* Loading state */
         .loading-overlay {
             position: absolute;
             width: 100%;
@@ -130,7 +144,7 @@
 
         .loading-overlay.active {
             display: flex;
-            animation: fade-in 0.5s ease-out forwards;
+            animation: fade-in 0.6s ease-out forwards;
         }
 
         @keyframes fade-in {
@@ -140,25 +154,46 @@
 
         .loading-text {
             font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: rgba(249, 115, 22, 0.8);
+            letter-spacing: 3px;
+            color: rgba(249, 115, 22, 0.85);
             text-transform: uppercase;
-            animation: pulse 1.5s ease-in-out infinite;
+            animation: pulse 1.6s ease-in-out infinite;
+            font-weight: 500;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.4; }
+            0%, 100% { opacity: 0.6; }
             50% { opacity: 1; }
         }
 
         @media (max-width: 768px) {
             .logo-splash {
+                max-width: 380px;
+            }
+
+            .shield-button {
+                width: 70px;
+                height: 70px;
+            }
+
+            .shield-text {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-splash {
                 max-width: 300px;
             }
 
-            .logo-button {
-                width: 50px;
-                height: 50px;
+            .shield-button {
+                width: 60px;
+                height: 60px;
+                bottom: 18%;
+            }
+
+            .shield-text {
+                font-size: 0.6rem;
             }
         }
     </style>
@@ -166,11 +201,11 @@
 <body>
     <div class="splash-container">
         <img src="assets/diamond-logo.jpeg" alt="Diamond Welding" class="logo-splash">
-        
-        <button class="logo-button" onclick="activateSplash()" title="Enter"></button>
-
+        <button class="shield-button" onclick="activateSplash()" title="Enter Site">
+            <div class="shield-text">Enter</div>
+        </button>
         <div class="loading-overlay">
-            <div class="loading-text">Entering...</div>
+            <div class="loading-text">Igniting...</div>
         </div>
     </div>
 
@@ -178,54 +213,39 @@
         function createSpark(x, y) {
             const spark = document.createElement('div');
             spark.className = 'spark';
-
             const angle = Math.random() * Math.PI * 2;
-            const velocity = 80 + Math.random() * 200;
+            const velocity = 110 + Math.random() * 240;
             const tx = Math.cos(angle) * velocity;
             const ty = Math.sin(angle) * velocity;
-
             spark.style.left = x + 'px';
             spark.style.top = y + 'px';
             spark.style.setProperty('--tx', tx + 'px');
             spark.style.setProperty('--ty', ty + 'px');
-
             document.body.appendChild(spark);
-            setTimeout(() => spark.remove(), 1200);
+            setTimeout(() => spark.remove(), 1500);
         }
 
         function activateSplash() {
-            const button = document.querySelector('.logo-button');
+            const button = document.querySelector('.shield-button');
             const loading = document.querySelector('.loading-overlay');
             const rect = button.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
 
-            // Disable button
             button.disabled = true;
             button.style.pointerEvents = 'none';
 
-            // Create spark burst
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    createSpark(centerX, centerY);
-                }, i * 20);
+            for (let i = 0; i < 65; i++) {
+                setTimeout(() => createSpark(centerX, centerY), i * 16);
             }
 
-            // Show loading
-            setTimeout(() => {
-                loading.classList.add('active');
-            }, 400);
-
-            // Transition to landing page
-            setTimeout(() => {
-                window.location.href = 'landing.html';
-            }, 1800);
+            setTimeout(() => loading.classList.add('active'), 400);
+            setTimeout(() => window.location.href = 'landing.html', 2100);
         }
 
-        // Keyboard support
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-                document.querySelector('.logo-button').click();
+                document.querySelector('.shield-button').click();
             }
         });
     </script>

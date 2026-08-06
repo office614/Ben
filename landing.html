@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <title>Diamond Welding & Fabrication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Video Background */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), transparent);
+            backdrop-filter: blur(8px);
+        }
+
+        .logo-nav {
+            height: 50px;
+            width: auto;
+            max-width: 140px;
+            filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.3));
+            transition: filter 0.3s ease;
+        }
+
+        .logo-nav:hover {
+            filter: drop-shadow(0 0 25px rgba(249, 115, 22, 0.5));
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3.5rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #f97316;
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-menu a:hover {
+            color: #f97316;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #f97316;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            animation: fade-in-up 1.2s ease-out 0.3s both;
+        }
+
+        .hero-logo {
+            width: 85vw;
+            max-width: 520px;
+            height: auto;
+            margin: 0 auto 2rem;
+            filter: drop-shadow(0 0 50px rgba(249, 115, 22, 0.4));
+            animation: subtle-float 4s ease-in-out infinite;
+        }
+
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin: 2rem 0;
+            color: #ffffff;
+            text-shadow: 0 0 30px rgba(249, 115, 22, 0.2);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: rgba(249, 115, 22, 0.9);
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 2.5rem;
+            background: radial-gradient(circle at 35% 35%, rgba(249, 115, 22, 0.9), rgba(217, 119, 6, 0.6));
+            border: 2px solid rgba(249, 115, 22, 0.8);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.4), inset 0 0 20px rgba(249, 115, 22, 0.1);
+            text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+        }
+
+        .cta-button:hover {
+            background: radial-gradient(circle at 35% 35%, rgba(249, 115, 22, 1), rgba(217, 119, 6, 0.8));
+            box-shadow: 0 0 60px rgba(249, 115, 22, 0.7), inset 0 0 30px rgba(249, 115, 22, 0.2);
+            transform: scale(1.05);
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: rgba(249, 115, 22, 0.6);
+            text-transform: uppercase;
+            animation: bounce 2.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(12px); }
+        }
+
+        /* Content Sections */
+        .content {
+            position: relative;
+            z-index: 3;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+        }
+
+        section {
+            padding: 6rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(249, 115, 22, 0.1);
+        }
+
+        section:first-child {
+            border-top: none;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            color: #ffffff;
+            border-bottom: 2px solid rgba(249, 115, 22, 0.6);
+            padding-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .section-content {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 900px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            .nav-menu {
+                gap: 2.5rem;
+            }
+
+            section {
+                padding: 4rem 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 70px;
+                right: 0;
+                left: 0;
+                flex-direction: column;
+                background: rgba(0, 0, 0, 0.98);
+                gap: 1.5rem;
+                padding: 2rem;
+                border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .hero-logo {
+                max-width: 400px;
+            }
+
+            .hero-title {
+                font-size: clamp(1.5rem, 5vw, 2.5rem);
+            }
+
+            section {
+                padding: 3rem 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .logo-nav {
+                max-width: 100px;
+                height: 40px;
+            }
+
+            .hero-logo {
+                max-width: 280px;
+                margin-bottom: 1rem;
+            }
+
+            .hero-title {
+                font-size: clamp(1.2rem, 4vw, 1.8rem);
+                margin: 1rem 0;
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 2rem;
+            }
+
+            .cta-button {
+                padding: 1rem 2rem;
+                font-size: 0.75rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Video Background -->
+    <video class="video-background" autoplay muted loop playsinline>
+        <source src="assets/welding-background.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <img src="assets/diamond-logo.jpeg" alt="Diamond Logo" class="logo-nav">
+        <button class="nav-toggle" onclick="toggleMenu()">☰</button>
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#home" onclick="closeMenu()">Home</a></li>
+            <li><a href="#services" onclick="closeMenu()">Services</a></li>
+            <li><a href="#portfolio" onclick="closeMenu()">Portfolio</a></li>
+            <li><a href="#about" onclick="closeMenu()">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <img src="assets/diamond-glow.jpeg" alt="Diamond" class="hero-logo">
+            <h1 class="hero-title">Diamond</h1>
+            <p class="hero-subtitle">Welding & Fabrication — Brilliance by Design</p>
+            <a href="#services" class="cta-button">Explore Services</a>
+            <div class="scroll-indicator">Scroll to Discover</div>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Services Section -->
+        <section id="services">
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-content">
+                At Diamond Welding & Fabrication, we specialize in precision metal work and custom fabrication solutions. Our expert team combines technical mastery with innovative engineering to deliver exceptional results for every project. From concept to completion, we ensure that each weld, cut, and finished piece meets the highest standards of quality and durability.
+            </p>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio">
+            <h2 class="section-title">Portfolio</h2>
+            <p class="section-content">
+                Our portfolio showcases precision welding, metal fabrication, fine details, and custom engineering solutions. Each project represents our commitment to excellence, where craftsmanship meets innovation. We take pride in delivering work that exceeds expectations and stands the test of time.
+            </p>
+        </section>
+
+        <!-- About Section -->
+        <section id="about">
+            <h2 class="section-title">About Us</h2>
+            <p class="section-content">
+                Diamond Welding & Fabrication is a premier custom metal work facility serving clients who demand precision, quality, and innovation. Our state-of-the-art equipment and experienced team enable us to tackle complex projects with confidence. We believe in building lasting relationships with our clients through transparency, quality, and exceptional service.
+            </p>
+        </section>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.remove('active');
+        }
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+    </script>
+</body>
+</html>
