@@ -626,38 +626,7 @@
 
     <!-- Navigation -->
     <nav>
-        <svg class="logo-nav" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="diamondNavGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
-                    <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
-                </linearGradient>
-                <radialGradient id="glowNavGradient" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.6" />
-                    <stop offset="100%" style="stop-color:#f97316;stop-opacity:0" />
-                </radialGradient>
-                <filter id="goldNavGlow">
-                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                    <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                </filter>
-            </defs>
-            <circle cx="120" cy="120" r="115" fill="url(#glowNavGradient)" opacity="0.3"/>
-            <g filter="url(#goldNavGlow)">
-                <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondNavGradient)" stroke-width="2" stroke-linecap="round"/>
-                <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondNavGradient)" stroke-width="2" stroke-linecap="round"/>
-                <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondNavGradient)" stroke-width="2" stroke-linecap="round"/>
-                <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondNavGradient)" stroke-width="2" stroke-linecap="round"/>
-            </g>
-            <g transform="translate(120, 180)">
-                <path d="M -40,-20 L -40,10 Q 0,35 0,35 Q 0,35 40,10 L 40,-20 Z"
-                      fill="none" stroke="url(#diamondNavGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#goldNavGlow)"/>
-                <circle cx="0" cy="10" r="5" fill="url(#diamondNavGradient)" opacity="0.7"/>
-            </g>
-        </svg>
+        <img src="assets/diamond-logo.png" alt="Diamond Welding & Fabrication" class="logo-nav" />
         <button class="nav-toggle" onclick="toggleMenu()">☰</button>
         <ul class="nav-menu" id="navMenu">
             <li><a href="#home" onclick="closeMenu()">Home</a></li>
@@ -797,39 +766,38 @@
 
             <div class="gallery-grid">
                 <!-- Gallery items will use user's uploaded portfolio images -->
-                <!-- To add your images: Replace src="assets/portfolio-1.jpg" with your image filename -->
                 <div class="gallery-item">
-                    <img src="assets/diamond-glow.jpeg" alt="Professional Welding Work">
+                    <img src="assets/portfolio-1.jpg" alt="Professional Welding Work">
                     <div class="gallery-overlay">
                         <div class="gallery-label">Precision Welding</div>
                     </div>
                 </div>
                 <div class="gallery-item">
-                    <img src="assets/diamond-glow.jpeg" alt="Metal Fabrication">
+                    <img src="assets/portfolio-2.jpg" alt="Metal Fabrication">
                     <div class="gallery-overlay">
                         <div class="gallery-label">Metal Fabrication</div>
                     </div>
                 </div>
                 <div class="gallery-item">
-                    <img src="assets/diamond-glow.jpeg" alt="Industrial Welding">
+                    <img src="assets/portfolio-3.jpg" alt="Industrial Welding">
                     <div class="gallery-overlay">
                         <div class="gallery-label">Industrial Excellence</div>
                     </div>
                 </div>
                 <div class="gallery-item">
-                    <img src="assets/diamond-glow.jpeg" alt="Custom Steel Work">
+                    <img src="assets/portfolio-4.jpg" alt="Custom Steel Work">
                     <div class="gallery-overlay">
                         <div class="gallery-label">Custom Steel Work</div>
                     </div>
                 </div>
                 <div class="gallery-item">
-                    <img src="assets/diamond-glow.jpeg" alt="Metal Detail Work">
+                    <img src="assets/portfolio-5.jpg" alt="Metal Detail Work">
                     <div class="gallery-overlay">
                         <div class="gallery-label">Detail Work</div>
                     </div>
                 </div>
                 <div class="gallery-item">
-                    <img src="assets/diamond-glow.jpeg" alt="Fabrication Expertise">
+                    <img src="assets/portfolio-6.jpg" alt="Fabrication Expertise">
                     <div class="gallery-overlay">
                         <div class="gallery-label">Fabrication Expertise</div>
                     </div>
