@@ -264,6 +264,120 @@
             max-width: 900px;
         }
 
+        /* Editable Content */
+        .editable-content {
+            outline: none;
+            position: relative;
+            cursor: text;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 3px;
+        }
+
+        .editable-content:hover {
+            background: rgba(249, 115, 22, 0.05);
+            border-left: 2px solid rgba(249, 115, 22, 0.3);
+            padding-left: 1.5rem;
+        }
+
+        .editable-content:focus {
+            background: rgba(249, 115, 22, 0.1);
+            border-left: 3px solid rgba(249, 115, 22, 0.6);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+            padding-left: 1.5rem;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            border-radius: 3px;
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(217, 119, 6, 0.05));
+        }
+
+        .gallery-item:hover {
+            border-color: rgba(249, 115, 22, 0.6);
+            box-shadow: 0 0 35px rgba(249, 115, 22, 0.3), inset 0 0 35px rgba(249, 115, 22, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: flex-end;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-label {
+            color: #f97316;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 1.5rem;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .edit-mode-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+            background: rgba(249, 115, 22, 0.9);
+            border: none;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .edit-mode-toggle:hover {
+            box-shadow: 0 0 50px rgba(249, 115, 22, 0.8);
+            transform: scale(1.05);
+        }
+
+        .edit-mode-toggle.active {
+            background: rgba(76, 175, 80, 0.9);
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             nav {
@@ -276,6 +390,10 @@
 
             section {
                 padding: 4rem 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             }
         }
 
@@ -316,6 +434,18 @@
             .section-title {
                 font-size: 1.6rem;
             }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .edit-mode-toggle {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.8rem 1.2rem;
+                font-size: 0.7rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -350,6 +480,19 @@
 
             .section-title {
                 font-size: 1.3rem;
+            }
+
+            section {
+                padding: 2rem 1rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .edit-mode-toggle {
+                padding: 0.7rem 1rem;
+                font-size: 0.65rem;
             }
         }
     </style>
@@ -389,29 +532,72 @@
         <!-- Services Section -->
         <section id="services">
             <h2 class="section-title">Our Services</h2>
-            <p class="section-content">
+            <p class="section-content editable-content" contenteditable="false">
                 At Diamond Welding & Fabrication, we specialize in precision metal work and custom fabrication solutions. Our expert team combines technical mastery with innovative engineering to deliver exceptional results for every project. From concept to completion, we ensure that each weld, cut, and finished piece meets the highest standards of quality and durability.
             </p>
         </section>
 
-        <!-- Portfolio Section -->
+        <!-- Portfolio Section with Gallery -->
         <section id="portfolio">
             <h2 class="section-title">Portfolio</h2>
-            <p class="section-content">
-                Our portfolio showcases precision welding, metal fabrication, fine details, and custom engineering solutions. Each project represents our commitment to excellence, where craftsmanship meets innovation. We take pride in delivering work that exceeds expectations and stands the test of time.
+            <p class="section-content editable-content" contenteditable="false">
+                Our portfolio showcases precision welding, metal fabrication, fine details, and custom engineering solutions. Each project represents our commitment to excellence, where craftsmanship meets innovation.
             </p>
+
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=450&fit=crop" alt="Professional Welding Work">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Precision Welding</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=450&fit=crop" alt="Metal Fabrication">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Metal Fabrication</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1537076537745-caaa6b60b7d4?w=600&h=450&fit=crop" alt="Industrial Welding">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Industrial Excellence</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1578926040698-6b3b3f9d3c33?w=600&h=450&fit=crop" alt="Custom Steel Work">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Custom Steel Work</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&h=450&fit=crop" alt="Metal Detail Work">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Detail Work</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1516937941344-00b4b0ba30c0?w=600&h=450&fit=crop" alt="Fabrication Expertise">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Fabrication Expertise</div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- About Section -->
         <section id="about">
             <h2 class="section-title">About Us</h2>
-            <p class="section-content">
-                Diamond Welding & Fabrication is a premier custom metal work facility serving clients who demand precision, quality, and innovation. Our state-of-the-art equipment and experienced team enable us to tackle complex projects with confidence. We believe in building lasting relationships with our clients through transparency, quality, and exceptional service.
+            <p class="section-content editable-content" contenteditable="false">
+                Diamond Welding & Fabrication is a premier custom metal work facility serving clients who demand precision, quality, and innovation. Our state-of-the-art equipment and experienced team enable us to tackle complex projects with confidence. We believe in building lasting relationships with our clients through transparency, quality, and exceptional service. Every project is treated with the same level of care and attention to detail, whether it's a small custom piece or a large-scale industrial fabrication.
             </p>
         </section>
     </div>
 
+    <!-- Edit Mode Toggle -->
+    <button class="edit-mode-toggle" onclick="toggleEditMode()" id="editToggle">📝 Edit Text</button>
+
     <script>
+        // Navigation functions
         function toggleMenu() {
             const menu = document.getElementById('navMenu');
             menu.classList.toggle('active');
@@ -424,6 +610,37 @@
 
         document.querySelectorAll('nav a').forEach(link => {
             link.addEventListener('click', closeMenu);
+        });
+
+        // Edit mode toggle
+        function toggleEditMode() {
+            const toggle = document.getElementById('editToggle');
+            const editables = document.querySelectorAll('.editable-content');
+            const isActive = toggle.classList.toggle('active');
+
+            editables.forEach(el => {
+                el.contentEditable = isActive;
+                el.style.cursor = isActive ? 'text' : 'default';
+            });
+
+            toggle.textContent = isActive ? '✓ Editing Mode' : '📝 Edit Text';
+        }
+
+        // Save edits to localStorage
+        document.addEventListener('blur', (e) => {
+            if (e.target.classList.contains('editable-content')) {
+                localStorage.setItem('editable-' + e.target.className, e.target.innerHTML);
+            }
+        }, true);
+
+        // Load saved edits on page load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.editable-content').forEach(el => {
+                const saved = localStorage.getItem('editable-' + el.className);
+                if (saved) {
+                    el.innerHTML = saved;
+                }
+            });
         });
     </script>
 </body>
