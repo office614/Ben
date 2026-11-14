@@ -12,318 +12,926 @@
             box-sizing: border-box;
         }
 
-        body {
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        /* Textured black background */
-        .landing-container {
+        html, body {
             width: 100%;
             height: 100%;
-            position: relative;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            overflow: hidden;
-            background: 
-                linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%),
-                repeating-linear-gradient(
-                    90deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(255, 255, 255, 0.02) 2px,
-                    rgba(255, 255, 255, 0.02) 4px
-                );
-            background-blend-mode: overlay;
+            overflow-x: hidden;
         }
 
-        /* Textured overlay */
-        .landing-container::before {
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Video Background */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), transparent);
+            backdrop-filter: blur(8px);
+        }
+
+        .logo-nav {
+            height: 55px;
+            width: auto;
+            max-width: 160px;
+            filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.4)) drop-shadow(0 0 10px rgba(249, 115, 22, 0.2));
+            transition: filter 0.3s ease;
+            object-fit: contain;
+        }
+
+        .logo-nav:hover {
+            filter: drop-shadow(0 0 35px rgba(249, 115, 22, 0.7)) drop-shadow(0 0 15px rgba(249, 115, 22, 0.4));
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3.5rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .nav-menu a::after {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
+            width: 0;
+            height: 1px;
+            background: #f97316;
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-menu a:hover {
+            color: #f97316;
+        }
+
+        .nav-menu a:hover::after {
             width: 100%;
-            height: 100%;
-            background-image: 
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /><feColorMatrix type="saturate" values="0"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>');
-            pointer-events: none;
-            z-index: 1;
         }
 
-        /* Diamond image - positioned at bottom, partial view */
-        .diamond-image {
-            position: absolute;
-            bottom: -20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            height: auto;
-            max-width: 1200px;
-            z-index: 2;
-            filter: brightness(1) contrast(1.05);
-            opacity: 0.9;
-        }
-
-        /* Diamond illuminate effect */
-        .diamond-image.illuminate {
-            animation: illuminate 1s ease-out forwards;
-            filter: brightness(2) contrast(1.3);
-        }
-
-        @keyframes illuminate {
-            0% {
-                filter: brightness(1) contrast(1.05);
-                opacity: 0.9;
-            }
-            50% {
-                filter: brightness(1.8) contrast(1.2);
-                opacity: 1;
-            }
-            100% {
-                filter: brightness(2.2) contrast(1.4);
-                opacity: 1;
-            }
-        }
-
-        /* Glow effect around diamond */
-        .diamond-glow {
-            position: absolute;
-            bottom: -15%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 1200px;
-            height: auto;
-            z-index: 1.5;
-            filter: blur(40px);
-            opacity: 0.3;
-            transition: opacity 0.3s ease;
-        }
-
-        .diamond-glow.active {
-            animation: glow-pulse 1s ease-out forwards;
-        }
-
-        @keyframes glow-pulse {
-            0% { opacity: 0.3; filter: blur(40px); }
-            50% { opacity: 0.8; filter: blur(60px); }
-            100% { opacity: 0.6; filter: blur(50px); }
-        }
-
-        /* Center interactive button */
-        .enter-button {
-            position: absolute;
-            bottom: 12%;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle at 35% 35%, rgba(249, 115, 22, 0.8), rgba(217, 119, 6, 0.5));
-            border: 2px solid rgba(249, 115, 22, 0.7);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 
-                0 0 25px rgba(249, 115, 22, 0.5),
-                inset 0 0 20px rgba(249, 115, 22, 0.2);
-            animation: button-glow 2.5s ease-in-out infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            color: #ffffff;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(249, 115, 22, 0.7);
-        }
-
-        @keyframes button-glow {
-            0%, 100% {
-                box-shadow: 
-                    0 0 25px rgba(249, 115, 22, 0.5),
-                    inset 0 0 20px rgba(249, 115, 22, 0.2);
-            }
-            50% {
-                box-shadow: 
-                    0 0 50px rgba(249, 115, 22, 0.8),
-                    inset 0 0 30px rgba(249, 115, 22, 0.4);
-            }
-        }
-
-        .enter-button:hover {
-            transform: translateX(-50%) scale(1.15);
-            box-shadow: 
-                0 0 60px rgba(249, 115, 22, 0.9),
-                inset 0 0 40px rgba(249, 115, 22, 0.5);
-        }
-
-        .enter-button:active {
-            transform: translateX(-50%) scale(0.9);
-        }
-
-        /* Spark animation */
-        @keyframes spark-burst {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--tx), var(--ty)) scale(0);
-            }
-        }
-
-        .spark {
-            position: fixed;
-            pointer-events: none;
-            width: 5px;
-            height: 5px;
-            background: radial-gradient(circle, #fbbf24, #f97316);
-            border-radius: 50%;
-            animation: spark-burst 1s ease-out forwards;
-            box-shadow: 0 0 12px #f97316;
-        }
-
-        /* Loading state */
-        .loading-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 30;
-            background: rgba(0, 0, 0, 0);
+        .nav-toggle {
             display: none;
+            background: none;
+            border: none;
+            color: #f97316;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
             align-items: center;
             justify-content: center;
-            animation: fade-in 0.5s ease-out forwards;
+            z-index: 3;
+            overflow: hidden;
         }
 
-        .loading-overlay.active {
-            display: flex;
+        .hero-content {
+            text-align: center;
+            animation: fade-in-up 1.2s ease-out 0.3s both;
         }
 
-        @keyframes fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .hero-logo {
+            width: 80vw;
+            max-width: 550px;
+            height: auto;
+            margin: 0 auto 2rem;
+            filter: drop-shadow(0 0 70px rgba(249, 115, 22, 0.6)) drop-shadow(0 0 40px rgba(249, 115, 22, 0.3));
+            animation: subtle-float 4s ease-in-out infinite;
+            object-fit: contain;
         }
 
-        .loading-text {
-            font-size: 1rem;
-            letter-spacing: 2px;
-            color: rgba(249, 115, 22, 0.8);
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 300;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            animation: pulse 1.5s ease-in-out infinite;
+            margin: 2rem 0;
+            color: #ffffff;
+            text-shadow: 0 0 30px rgba(249, 115, 22, 0.2);
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 1; }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: rgba(249, 115, 22, 0.9);
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 2.5rem;
+            background: radial-gradient(circle at 35% 35%, rgba(249, 115, 22, 0.9), rgba(217, 119, 6, 0.6));
+            border: 2px solid rgba(249, 115, 22, 0.8);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.4), inset 0 0 20px rgba(249, 115, 22, 0.1);
+            text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+        }
+
+        .cta-button:hover {
+            background: radial-gradient(circle at 35% 35%, rgba(249, 115, 22, 1), rgba(217, 119, 6, 0.8));
+            box-shadow: 0 0 60px rgba(249, 115, 22, 0.7), inset 0 0 30px rgba(249, 115, 22, 0.2);
+            transform: scale(1.05);
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: rgba(249, 115, 22, 0.6);
+            text-transform: uppercase;
+            animation: bounce 2.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(12px); }
+        }
+
+        /* Content Sections */
+        .content {
+            position: relative;
+            z-index: 3;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Section Divider */
+        .section-divider {
+            height: 8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(to bottom, transparent, rgba(249, 115, 22, 0.05), transparent);
+        }
+
+        .divider-logo {
+            width: 80px;
+            height: auto;
+            opacity: 0;
+            transform: scale(0.8);
+            filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.3));
+            animation: divider-appear 1s ease-out forwards;
+        }
+
+        @keyframes divider-appear {
+            from {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+            to {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+        }
+
+        .divider-line {
+            position: absolute;
+            width: 40%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(249, 115, 22, 0.4), transparent);
+        }
+
+        .divider-line.left {
+            left: 0;
+        }
+
+        .divider-line.right {
+            right: 0;
+        }
+
+        section {
+            padding: 6rem 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            color: #ffffff;
+            border-bottom: 2px solid rgba(249, 115, 22, 0.6);
+            padding-bottom: 1.5rem;
+            display: inline-block;
+            animation: title-slide-in 0.8s ease-out;
+        }
+
+        @keyframes title-slide-in {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section-content {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 900px;
+            animation: content-fade-in 1s ease-out 0.2s both;
+        }
+
+        @keyframes content-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Editable Content */
+        .editable-content {
+            outline: none;
+            position: relative;
+            cursor: text;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 3px;
+        }
+
+        .editable-content:hover {
+            background: rgba(249, 115, 22, 0.05);
+            border-left: 2px solid rgba(249, 115, 22, 0.3);
+            padding-left: 1.5rem;
+        }
+
+        .editable-content:focus {
+            background: rgba(249, 115, 22, 0.1);
+            border-left: 3px solid rgba(249, 115, 22, 0.6);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+            padding-left: 1.5rem;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            border-radius: 3px;
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(217, 119, 6, 0.05));
+            animation: gallery-item-in 0.6s ease-out both;
+        }
+
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes gallery-item-in {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .gallery-item:hover {
+            border-color: rgba(249, 115, 22, 0.6);
+            box-shadow: 0 0 35px rgba(249, 115, 22, 0.3), inset 0 0 35px rgba(249, 115, 22, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: flex-end;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-label {
+            color: #f97316;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 1.5rem;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        /* Accent Element - Small Animated Logo in Section */
+        .section-accent {
+            position: absolute;
+            width: 60px;
+            height: auto;
+            opacity: 0.15;
+            filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.2));
+            pointer-events: none;
+        }
+
+        .section-accent.top-right {
+            top: 2rem;
+            right: 2rem;
+            animation: float-accent 6s ease-in-out infinite;
+        }
+
+        .section-accent.bottom-left {
+            bottom: 2rem;
+            left: 2rem;
+            animation: float-accent 7s ease-in-out infinite reverse;
+        }
+
+        @keyframes float-accent {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .edit-mode-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+            background: rgba(249, 115, 22, 0.9);
+            border: none;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .edit-mode-toggle:hover {
+            box-shadow: 0 0 50px rgba(249, 115, 22, 0.8);
+            transform: scale(1.05);
+        }
+
+        .edit-mode-toggle.active {
+            background: rgba(76, 175, 80, 0.9);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            .nav-menu {
+                gap: 2.5rem;
+            }
+
+            section {
+                padding: 4rem 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
+
+            .section-accent {
+                width: 50px;
+            }
         }
 
         @media (max-width: 768px) {
-            .diamond-image {
-                bottom: -30%;
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 70px;
+                right: 0;
+                left: 0;
+                flex-direction: column;
+                background: rgba(0, 0, 0, 0.98);
+                gap: 1.5rem;
+                padding: 2rem;
+                border-bottom: 1px solid rgba(249, 115, 22, 0.2);
             }
 
-            .diamond-glow {
-                bottom: -25%;
+            .nav-menu.active {
+                display: flex;
             }
 
-            .enter-button {
-                width: 80px;
-                height: 80px;
+            .nav-toggle {
+                display: block;
+            }
+
+            .hero-logo {
+                max-width: 400px;
+            }
+
+            .hero-title {
+                font-size: clamp(1.5rem, 5vw, 2.5rem);
+            }
+
+            section {
+                padding: 3rem 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .section-accent {
+                display: none;
+            }
+
+            .edit-mode-toggle {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.8rem 1.2rem;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .logo-nav {
+                max-width: 110px;
+                height: 45px;
+            }
+
+            .hero-logo {
+                max-width: 300px;
+                margin-bottom: 1rem;
+            }
+
+            .hero-title {
+                font-size: clamp(1.2rem, 4vw, 1.8rem);
+                margin: 1rem 0;
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 2rem;
+            }
+
+            .cta-button {
+                padding: 1rem 2rem;
+                font-size: 0.75rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            section {
+                padding: 2rem 1rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .edit-mode-toggle {
+                padding: 0.7rem 1rem;
                 font-size: 0.65rem;
-                bottom: 15%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="landing-container">
-        <div class="diamond-glow"></div>
-        <img src="assets/diamond-splash.jpeg" alt="Diamond" class="diamond-image">
-        
-        <button class="enter-button" onclick="activateLanding()">
-            Enter
-        </button>
+    <!-- Video Background -->
+    <video class="video-background" autoplay muted loop playsinline>
+        <source src="assets/welding-background.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
 
-        <div class="loading-overlay">
-            <div class="loading-text">Illuminating...</div>
+    <!-- Navigation -->
+    <nav>
+        <img src="assets/diamond-logo.png" alt="Diamond Welding & Fabrication" class="logo-nav" />
+        <button class="nav-toggle" onclick="toggleMenu()">☰</button>
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#home" onclick="closeMenu()">Home</a></li>
+            <li><a href="#services" onclick="closeMenu()">Services</a></li>
+            <li><a href="#portfolio" onclick="closeMenu()">Portfolio</a></li>
+            <li><a href="#about" onclick="closeMenu()">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <img src="assets/diamond-glow.jpeg" alt="Diamond" class="hero-logo">
+            <h1 class="hero-title">Diamond</h1>
+            <p class="hero-subtitle">Welding & Fabrication — Brilliance by Design</p>
+            <a href="#services" class="cta-button">Explore Services</a>
+            <div class="scroll-indicator">Scroll to Discover</div>
         </div>
+    </section>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Section Divider -->
+        <div class="section-divider">
+            <div class="divider-line left"></div>
+            <svg class="divider-logo" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondDivider1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldDividerGlow1">
+                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldDividerGlow1)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondDivider1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondDivider1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondDivider1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondDivider1)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
+            <div class="divider-line right"></div>
+        </div>
+
+        <!-- Services Section -->
+        <section id="services">
+            <svg class="section-accent top-right" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondAccent1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldAccentGlow1">
+                        <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldAccentGlow1)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondAccent1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondAccent1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondAccent1)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondAccent1)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-content editable-content" contenteditable="false">
+                At Diamond Welding & Fabrication, we specialize in precision metal work and custom fabrication solutions. Our expert team combines technical mastery with innovative engineering to deliver exceptional results for every project. From concept to completion, we ensure that each weld, cut, and finished piece meets the highest standards of quality and durability.
+            </p>
+        </section>
+
+        <!-- Section Divider -->
+        <div class="section-divider">
+            <div class="divider-line left"></div>
+            <svg class="divider-logo" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondDivider2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldDividerGlow2">
+                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldDividerGlow2)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondDivider2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondDivider2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondDivider2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondDivider2)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
+            <div class="divider-line right"></div>
+        </div>
+
+        <!-- Portfolio Section with Gallery -->
+        <section id="portfolio">
+            <svg class="section-accent bottom-left" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondAccent2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldAccentGlow2">
+                        <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldAccentGlow2)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondAccent2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondAccent2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondAccent2)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondAccent2)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
+            <h2 class="section-title">Portfolio</h2>
+            <p class="section-content editable-content" contenteditable="false">
+                Our portfolio showcases precision welding, metal fabrication, fine details, and custom engineering solutions. Each project represents our commitment to excellence, where craftsmanship meets innovation.
+            </p>
+
+            <div class="gallery-grid">
+                <!-- Gallery items will use user's uploaded portfolio images -->
+                <div class="gallery-item">
+                    <img src="assets/portfolio-1.jpg" alt="Professional Welding Work">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Precision Welding</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/portfolio-2.jpg" alt="Metal Fabrication">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Metal Fabrication</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/portfolio-3.jpg" alt="Industrial Welding">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Industrial Excellence</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/portfolio-4.jpg" alt="Custom Steel Work">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Custom Steel Work</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/portfolio-5.jpg" alt="Metal Detail Work">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Detail Work</div>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/portfolio-6.jpg" alt="Fabrication Expertise">
+                    <div class="gallery-overlay">
+                        <div class="gallery-label">Fabrication Expertise</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Divider -->
+        <div class="section-divider">
+            <div class="divider-line left"></div>
+            <svg class="divider-logo" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondDivider3" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldDividerGlow3">
+                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldDividerGlow3)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondDivider3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondDivider3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondDivider3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondDivider3)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
+            <div class="divider-line right"></div>
+        </div>
+
+        <!-- About Section -->
+        <section id="about">
+            <svg class="section-accent top-right" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="diamondAccent3" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="goldAccentGlow3">
+                        <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <g filter="url(#goldAccentGlow3)">
+                    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondAccent3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondAccent3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondAccent3)" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondAccent3)" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+            </svg>
+            <h2 class="section-title">About Us</h2>
+            <p class="section-content editable-content" contenteditable="false">
+                Diamond Welding & Fabrication is a premier custom metal work facility serving clients who demand precision, quality, and innovation. Our state-of-the-art equipment and experienced team enable us to tackle complex projects with confidence. We believe in building lasting relationships with our clients through transparency, quality, and exceptional service. Every project is treated with the same level of care and attention to detail, whether it's a small custom piece or a large-scale industrial fabrication.
+            </p>
+        </section>
     </div>
 
+    <!-- Edit Mode Toggle -->
+    <button class="edit-mode-toggle" onclick="toggleEditMode()" id="editToggle">📝 Edit Text</button>
+
     <script>
-        function createSpark(x, y) {
-            const spark = document.createElement('div');
-            spark.className = 'spark';
-
-            const angle = Math.random() * Math.PI * 2;
-            const velocity = 80 + Math.random() * 200;
-            const tx = Math.cos(angle) * velocity;
-            const ty = Math.sin(angle) * velocity;
-
-            spark.style.left = x + 'px';
-            spark.style.top = y + 'px';
-            spark.style.setProperty('--tx', tx + 'px');
-            spark.style.setProperty('--ty', ty + 'px');
-
-            document.body.appendChild(spark);
-            setTimeout(() => spark.remove(), 1000);
+        // Navigation functions
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
         }
 
-        function activateLanding() {
-            const button = document.querySelector('.enter-button');
-            const diamond = document.querySelector('.diamond-image');
-            const glow = document.querySelector('.diamond-glow');
-            const loading = document.querySelector('.loading-overlay');
-            const rect = button.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            // Disable button
-            button.disabled = true;
-            button.style.pointerEvents = 'none';
-
-            // Create spark burst
-            for (let i = 0; i < 40; i++) {
-                setTimeout(() => {
-                    createSpark(centerX, centerY);
-                }, i * 25);
-            }
-
-            // Illuminate diamond
-            setTimeout(() => {
-                diamond.classList.add('illuminate');
-                glow.classList.add('active');
-            }, 150);
-
-            // Show loading
-            setTimeout(() => {
-                loading.classList.add('active');
-            }, 400);
-
-            // Transition to portfolio
-            setTimeout(() => {
-                window.location.href = 'portfolio.html';
-            }, 2000);
+        function closeMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.remove('active');
         }
 
-        // Keyboard support
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                document.querySelector('.enter-button').click();
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Edit mode toggle
+        function toggleEditMode() {
+            const toggle = document.getElementById('editToggle');
+            const editables = document.querySelectorAll('.editable-content');
+            const isActive = toggle.classList.toggle('active');
+
+            editables.forEach(el => {
+                el.contentEditable = isActive;
+                el.style.cursor = isActive ? 'text' : 'default';
+            });
+
+            toggle.textContent = isActive ? '✓ Editing Mode' : '📝 Edit Text';
+        }
+
+        // Save edits to localStorage
+        document.addEventListener('blur', (e) => {
+            if (e.target.classList.contains('editable-content')) {
+                localStorage.setItem('editable-' + e.target.className, e.target.innerHTML);
             }
+        }, true);
+
+        // Load saved edits on page load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.editable-content').forEach(el => {
+                const saved = localStorage.getItem('editable-' + el.className);
+                if (saved) {
+                    el.innerHTML = saved;
+                }
+            });
+        });
+
+        // Smooth scroll animation trigger
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-title, .section-content').forEach(el => {
+            observer.observe(el);
         });
     </script>
 </body>
