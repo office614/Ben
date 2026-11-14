@@ -1,0 +1,59 @@
+<svg viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="diamondGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f97316;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#f97316;stop-opacity:0" />
+    </radialGradient>
+    <filter id="goldGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Outer Glow -->
+  <circle cx="120" cy="120" r="115" fill="url(#glowGradient)" opacity="0.4"/>
+
+  <!-- Diamond Outline (Geometric) -->
+  <g filter="url(#goldGlow)">
+    <!-- Top point to middle-left -->
+    <line x1="120" y1="20" x2="60" y2="80" stroke="url(#diamondGradient)" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Top point to middle-right -->
+    <line x1="120" y1="20" x2="180" y2="80" stroke="url(#diamondGradient)" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Middle-left to bottom -->
+    <line x1="60" y1="80" x2="120" y2="160" stroke="url(#diamondGradient)" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Middle-right to bottom -->
+    <line x1="180" y1="80" x2="120" y2="160" stroke="url(#diamondGradient)" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Internal diamond facets for depth -->
+    <line x1="120" y1="20" x2="120" y2="160" stroke="url(#diamondGradient)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+    <line x1="60" y1="80" x2="180" y2="80" stroke="url(#diamondGradient)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+    <line x1="90" y1="50" x2="150" y2="110" stroke="url(#diamondGradient)" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+    <line x1="150" y1="50" x2="90" y2="110" stroke="url(#diamondGradient)" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+  </g>
+
+  <!-- Shield Badge Below Diamond -->
+  <g transform="translate(120, 180)">
+    <!-- Shield outline -->
+    <path d="M -40,-20 L -40,10 Q 0,35 0,35 Q 0,35 40,10 L 40,-20 Z"
+          fill="none" stroke="url(#diamondGradient)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#goldGlow)"/>
+
+    <!-- Shield center accent -->
+    <circle cx="0" cy="10" r="6" fill="url(#diamondGradient)" opacity="0.8"/>
+    <path d="M -3,0 L 3,0 M 0,-3 L 0,3" stroke="url(#diamondGradient)" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Decorative sparks/highlights -->
+  <g opacity="0.6" filter="url(#goldGlow)">
+    <circle cx="50" cy="50" r="2" fill="url(#diamondGradient)"/>
+    <circle cx="190" cy="50" r="2" fill="url(#diamondGradient)"/>
+    <circle cx="120" cy="30" r="2.5" fill="url(#diamondGradient)"/>
+  </g>
+</svg>

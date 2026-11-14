@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>Diamond Welding & Fabrication</title>
     <style>
         * {
@@ -14,10 +12,13 @@
             box-sizing: border-box;
         }
 
-        body {
+        html, body {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             overflow: hidden;
+        }
+
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #000000;
             display: flex;
@@ -36,100 +37,102 @@
             background: #000000;
         }
 
-        /* Diamond image */
-        .diamond-image {
+        /* Welding video background */
+        .welding-video {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: center;
-            z-index: 1;
-            filter: brightness(1) contrast(1.1);
-        }
-
-        /* Vein glow overlay - subtle until activated */
-        .vein-glow {
-            position: absolute;
-            width: 100%;
-            height: 100%;
             top: 0;
             left: 0;
-            z-index: 1.5;
-            background: radial-gradient(circle at center, rgba(249, 115, 22, 0.05) 0%, transparent 70%);
-            opacity: 0.2;
-            transition: opacity 0.3s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 1;
+            opacity: 0.65;
         }
 
-        /* Active vein glow */
-        .vein-glow.active {
-            opacity: 0.8;
-            animation: vein-pulse 0.8s ease-out;
-        }
-
-        @keyframes vein-pulse {
-            0% { opacity: 0.2; }
-            50% { opacity: 1; }
-            100% { opacity: 0.8; }
-        }
-
-        /* Center button - positioned at diamond center */
-        .diamond-button {
+        /* Video overlay for better contrast */
+        .video-overlay {
             position: absolute;
-            width: 140px;
-            height: 140px;
-            top: 50%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 1.5;
+            pointer-events: none;
+        }
+
+        .logo-splash {
+            width: 80vw;
+            max-width: 520px;
+            height: auto;
+            z-index: 5;
+            filter: drop-shadow(0 0 60px rgba(249, 115, 22, 0.8)) drop-shadow(0 0 30px rgba(249, 115, 22, 0.4));
+            animation: logo-fade-in 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            image-rendering: crisp-edges;
+            object-fit: contain;
+        }
+
+        @keyframes logo-fade-in {
+            from {
+                opacity: 0;
+                transform: scale(0.75);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .shield-button {
+            position: absolute;
+            bottom: 15%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-            background: radial-gradient(circle at 35% 35%, rgba(249, 115, 22, 0.9), rgba(217, 119, 6, 0.6));
-            border: 3px solid rgba(249, 115, 22, 0.8);
-            border-radius: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            z-index: 20;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow:
-                0 0 30px rgba(249, 115, 22, 0.6),
-                inset 0 0 30px rgba(249, 115, 22, 0.3);
-            animation: button-glow 2.5s ease-in-out infinite;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            background: transparent;
+            border-radius: 6px;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.35), inset 0 0 20px rgba(249, 115, 22, 0.08);
+            animation: shield-glow 3.5s ease-in-out infinite;
             display: flex;
             align-items: center;
             justify-content: center;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        @keyframes button-glow {
+        .shield-text {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: rgba(249, 115, 22, 0.75);
+            text-transform: uppercase;
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        @keyframes shield-glow {
             0%, 100% {
-                box-shadow:
-                    0 0 30px rgba(249, 115, 22, 0.6),
-                    inset 0 0 30px rgba(249, 115, 22, 0.3);
+                box-shadow: 0 0 30px rgba(249, 115, 22, 0.35), inset 0 0 20px rgba(249, 115, 22, 0.08);
             }
             50% {
-                box-shadow:
-                    0 0 60px rgba(249, 115, 22, 0.9),
-                    inset 0 0 40px rgba(249, 115, 22, 0.6);
+                box-shadow: 0 0 55px rgba(249, 115, 22, 0.65), inset 0 0 35px rgba(249, 115, 22, 0.15);
             }
         }
 
-        .diamond-button:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            box-shadow:
-                0 0 80px rgba(249, 115, 22, 0.9),
-                inset 0 0 50px rgba(249, 115, 22, 0.7);
+        .shield-button:hover {
+            box-shadow: 0 0 70px rgba(249, 115, 22, 0.75), inset 0 0 40px rgba(249, 115, 22, 0.2);
+            border-color: rgba(249, 115, 22, 0.6);
+            transform: translateX(-50%) scale(1.1);
         }
 
-        .diamond-button:active {
-            transform: translate(-50%, -50%) scale(0.95);
+        .shield-button:active {
+            transform: translateX(-50%) scale(0.95);
         }
 
-        /* Button text */
-        .button-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            color: #ffffff;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px rgba(249, 115, 22, 0.8);
-        }
-
-        /* Spark animation */
         @keyframes spark-burst {
             0% {
                 opacity: 1;
@@ -144,31 +147,30 @@
         .spark {
             position: fixed;
             pointer-events: none;
-            width: 6px;
-            height: 6px;
-            background: radial-gradient(circle, #fbbf24, #f97316);
+            width: 7px;
+            height: 7px;
+            background: radial-gradient(circle at 25% 25%, #fff, #fbbf24, #f97316);
             border-radius: 50%;
-            animation: spark-burst 1.2s ease-out forwards;
-            box-shadow: 0 0 15px #f97316;
+            animation: spark-burst 1.5s ease-out forwards;
+            box-shadow: 0 0 20px #f97316;
         }
 
-        /* Loading state */
         .loading-overlay {
             position: absolute;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            z-index: 20;
+            z-index: 30;
             background: rgba(0, 0, 0, 0);
             display: none;
             align-items: center;
             justify-content: center;
-            animation: fade-in 0.3s ease-out forwards;
         }
 
         .loading-overlay.active {
             display: flex;
+            animation: fade-in 0.6s ease-out forwards;
         }
 
         @keyframes fade-in {
@@ -178,40 +180,63 @@
 
         .loading-text {
             font-size: 1.2rem;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 3px;
+            color: rgba(249, 115, 22, 0.85);
             text-transform: uppercase;
-            animation: pulse 1.5s ease-in-out infinite;
+            animation: pulse 1.6s ease-in-out infinite;
+            font-weight: 500;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
+            0%, 100% { opacity: 0.6; }
             50% { opacity: 1; }
         }
 
         @media (max-width: 768px) {
-            .diamond-button {
-                width: 100px;
-                height: 100px;
+            .logo-splash {
+                max-width: 380px;
             }
 
-            .button-text {
-                font-size: 0.9rem;
+            .shield-button {
+                width: 70px;
+                height: 70px;
+            }
+
+            .shield-text {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-splash {
+                max-width: 320px;
+            }
+
+            .shield-button {
+                width: 65px;
+                height: 65px;
+                bottom: 18%;
+            }
+
+            .shield-text {
+                font-size: 0.6rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="splash-container">
-        <img src="assets/diamond-splash.jpeg" alt="Diamond" class="diamond-image">
-        <div class="vein-glow"></div>
+        <video class="welding-video" autoplay muted loop playsinline>
+            <source src="assets/welding-background.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
 
-        <button class="diamond-button" onclick="activateDiamond()" title="Enter">
-            <span class="button-text">Enter</span>
+        <img class="logo-splash" src="assets/diamond-logo.png" alt="Diamond Welding & Fabrication" />
+        <button class="shield-button" onclick="activateSplash()" title="Enter Site">
+            <div class="shield-text">Enter</div>
         </button>
-
         <div class="loading-overlay">
-            <div class="loading-text">Entering...</div>
+            <div class="loading-text">Igniting...</div>
         </div>
     </div>
 
@@ -219,60 +244,39 @@
         function createSpark(x, y) {
             const spark = document.createElement('div');
             spark.className = 'spark';
-
             const angle = Math.random() * Math.PI * 2;
-            const velocity = 100 + Math.random() * 300;
+            const velocity = 110 + Math.random() * 240;
             const tx = Math.cos(angle) * velocity;
             const ty = Math.sin(angle) * velocity;
-
             spark.style.left = x + 'px';
             spark.style.top = y + 'px';
             spark.style.setProperty('--tx', tx + 'px');
             spark.style.setProperty('--ty', ty + 'px');
-
             document.body.appendChild(spark);
-            setTimeout(() => spark.remove(), 1200);
+            setTimeout(() => spark.remove(), 1500);
         }
 
-        function activateDiamond() {
-            const button = document.querySelector('.diamond-button');
-            const veinglow = document.querySelector('.vein-glow');
+        function activateSplash() {
+            const button = document.querySelector('.shield-button');
             const loading = document.querySelector('.loading-overlay');
             const rect = button.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
 
-            // Disable button
             button.disabled = true;
             button.style.pointerEvents = 'none';
 
-            // Create massive spark burst
-            for (let i = 0; i < 60; i++) {
-                setTimeout(() => {
-                    createSpark(centerX, centerY);
-                }, i * 20);
+            for (let i = 0; i < 65; i++) {
+                setTimeout(() => createSpark(centerX, centerY), i * 16);
             }
 
-            // Light up the veins
-            setTimeout(() => {
-                veinglow.classList.add('active');
-            }, 100);
-
-            // Show loading text
-            setTimeout(() => {
-                loading.classList.add('active');
-            }, 300);
-
-            // Transition to landing page
-            setTimeout(() => {
-                window.location.href = 'landing.html';
-            }, 1800);
+            setTimeout(() => loading.classList.add('active'), 400);
+            setTimeout(() => window.location.href = 'landing.html', 2100);
         }
 
-        // Allow Enter key or spacebar
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-                document.querySelector('.diamond-button').click();
+                document.querySelector('.shield-button').click();
             }
         });
     </script>
