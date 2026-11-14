@@ -3,396 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>Diamond Welding & Fabrication</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html, body {
             width: 100%;
-            height: auto;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000000;
-            color: #ffffff;
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
             line-height: 1.6;
         }
 
-        /* Navigation */
-        nav {
+        header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            padding: 1.5rem 3rem;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.95), transparent);
-            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
         }
 
-        .nav-logo {
+        .header-logo {
             height: 50px;
             width: auto;
             max-width: 150px;
-            filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.4));
-            transition: all 0.3s ease;
             cursor: pointer;
         }
 
-        .nav-logo:hover {
-            filter: drop-shadow(0 0 40px rgba(249, 115, 22, 0.7));
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-        }
-
-        .nav-menu a {
-            color: rgba(255,255,255,0.8);
+        nav a {
+            color: #ccc;
             text-decoration: none;
-            font-size: 0.9rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
+            margin: 0 20px;
+            transition: color 0.3s;
         }
 
-        .nav-menu a:hover {
+        nav a:hover {
             color: #f97316;
         }
 
-        @media (max-width: 768px) {
-            nav {
-                padding: 1rem 1.5rem;
-            }
-
-            .nav-menu {
-                gap: 1.5rem;
-                font-size: 0.8rem;
-            }
+        .section {
+            padding: 80px 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        /* Hero Section */
         .hero {
-            width: 100%;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
-            margin-top: 0;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(249,115,22,0.1), transparent);
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .hero-content {
+            flex-direction: column;
             text-align: center;
-            z-index: 2;
-            animation: fadeUp 1s ease-out;
+            margin-top: -80px;
+            padding-top: 100px;
         }
 
         .hero-logo {
             max-width: 70vw;
-            width: 100%;
-            max-height: 50vh;
-            height: auto;
-            margin-bottom: 3rem;
-            filter: drop-shadow(0 0 100px rgba(249, 115, 22, 0.7));
-            animation: float 4s ease-in-out infinite;
+            max-height: 40vh;
+            margin-bottom: 30px;
+            animation: slideUp 1s ease-out;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 4rem);
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
             font-weight: 300;
-            letter-spacing: 4px;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 40px rgba(249, 115, 22, 0.3);
         }
 
-        .hero p {
+        .tagline {
             font-size: 1.2rem;
+            color: #f97316;
+            margin-bottom: 30px;
             letter-spacing: 2px;
-            color: rgba(249, 115, 22, 0.9);
-            text-transform: uppercase;
-            margin-bottom: 3rem;
         }
 
-        .cta-primary {
-            display: inline-block;
-            padding: 16px 45px;
-            background: linear-gradient(135deg, #f97316, #d97706);
-            border: 2px solid #f97316;
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        .cta {
+            padding: 15px 40px;
+            background: #f97316;
+            color: white;
+            border: none;
             border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.4s ease;
-            box-shadow: 0 0 50px rgba(249, 115, 22, 0.5);
+            transition: all 0.3s;
         }
 
-        .cta-primary:hover {
+        .cta:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 80px rgba(249, 115, 22, 0.8);
+            box-shadow: 0 0 40px rgba(249, 115, 22, 0.6);
         }
 
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Section */
-        section {
-            padding: 8rem 3rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        section h2 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 300;
-            letter-spacing: 3px;
-            margin-bottom: 3rem;
-            color: #ffffff;
-            border-bottom: 2px solid rgba(249, 115, 22, 0.5);
-            padding-bottom: 1.5rem;
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+            border-bottom: 2px solid #f97316;
+            padding-bottom: 15px;
             display: inline-block;
-            animation: slideIn 0.8s ease-out;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        section p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: rgba(255,255,255,0.85);
+        p {
+            font-size: 1.05rem;
+            color: #ddd;
+            margin-bottom: 15px;
             max-width: 800px;
-            margin-bottom: 3rem;
         }
 
-        /* Portfolio Grid */
-        .portfolio-grid {
+        .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2.5rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
         }
 
-        .portfolio-item {
+        .gallery-item {
             position: relative;
             overflow: hidden;
             aspect-ratio: 4/3;
             border-radius: 4px;
             border: 1px solid rgba(249, 115, 22, 0.3);
+            transition: all 0.4s;
             cursor: pointer;
-            transition: all 0.4s ease;
-            animation: itemFadeIn 0.6s ease-out backwards;
         }
 
-        .portfolio-item:nth-child(1) { animation-delay: 0.1s; }
-        .portfolio-item:nth-child(2) { animation-delay: 0.2s; }
-        .portfolio-item:nth-child(3) { animation-delay: 0.3s; }
-        .portfolio-item:nth-child(4) { animation-delay: 0.4s; }
-        .portfolio-item:nth-child(5) { animation-delay: 0.5s; }
-        .portfolio-item:nth-child(6) { animation-delay: 0.6s; }
-
-        @keyframes itemFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .portfolio-item img {
+        .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.4s;
         }
 
-        .portfolio-item:hover {
-            border-color: rgba(249, 115, 22, 0.7);
-            box-shadow: 0 0 40px rgba(249, 115, 22, 0.3), inset 0 0 40px rgba(249, 115, 22, 0.05);
+        .gallery-item:hover {
+            border-color: #f97316;
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.4);
             transform: translateY(-5px);
         }
 
-        .portfolio-item:hover img {
-            transform: scale(1.1);
+        .gallery-item:hover img {
+            transform: scale(1.08);
         }
 
-        .portfolio-label {
+        .gallery-label {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
             background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            padding: 2rem 1.5rem 1.5rem;
+            padding: 20px;
             color: #f97316;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
+            font-weight: bold;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s;
         }
 
-        .portfolio-item:hover .portfolio-label {
+        .gallery-item:hover .gallery-label {
             opacity: 1;
         }
 
-        /* Divider */
         .divider {
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
+            padding: 40px 0;
             color: rgba(249, 115, 22, 0.3);
             font-size: 2rem;
         }
 
-        /* Footer */
         footer {
-            padding: 4rem 3rem;
             text-align: center;
+            padding: 40px;
             border-top: 1px solid rgba(249, 115, 22, 0.2);
-            color: rgba(255,255,255,0.6);
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            color: #888;
         }
 
         @media (max-width: 768px) {
-            section {
-                padding: 4rem 1.5rem;
-            }
-
-            .portfolio-grid {
-                gap: 1.5rem;
-            }
-
-            .nav-menu {
-                display: none;
-            }
-        }
-
-        /* Scroll animations */
-        [data-animate] {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
-        }
-
-        [data-animate].in-view {
-            opacity: 1;
-            transform: translateY(0);
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            .section { padding: 50px 15px; }
+            nav { display: none; }
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav>
-        <img src="assets/diamond-logo.png" alt="Diamond" class="nav-logo" onclick="window.scrollTo(0,0)">
-        <ul class="nav-menu">
-            <li><a href="#services">Services</a></li>
-            <li><a href="#portfolio">Portfolio</a></li>
-            <li><a href="#about">About</a></li>
-        </ul>
-    </nav>
+    <header>
+        <img src="assets/diamond-logo.png" alt="Diamond" class="header-logo" onclick="window.scrollTo(0,0)">
+        <nav>
+            <a href="#services">Services</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#about">About</a>
+        </nav>
+    </header>
 
     <!-- Hero -->
     <section class="hero" id="home">
-        <div class="hero-content">
-            <img src="assets/diamond-logo.png" alt="Diamond Welding" class="hero-logo">
-            <h1>Diamond</h1>
-            <p>Welding & Fabrication — Brilliance by Design</p>
-            <a href="#services" class="cta-primary">Explore Services</a>
-        </div>
+        <img src="assets/diamond-logo.png" alt="Diamond" class="hero-logo">
+        <h1>Diamond</h1>
+        <p class="tagline">Welding & Fabrication — Brilliance by Design</p>
+        <button class="cta" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore Services</button>
     </section>
 
     <!-- Services -->
-    <section id="services" data-animate>
+    <section class="section" id="services">
         <h2>Our Services</h2>
-        <p>At Diamond Welding & Fabrication, we specialize in precision metal work and custom fabrication solutions. Our expert team combines technical mastery with innovative engineering to deliver exceptional results for every project. From concept to completion, we ensure that each weld, cut, and finished piece meets the highest standards of quality and durability.</p>
-        <p>We serve industries ranging from aerospace to construction, automotive to custom artistry. Our state-of-the-art equipment and experienced craftspeople are ready to bring your vision to life.</p>
+        <p>At Diamond Welding & Fabrication, we specialize in precision metal work and custom fabrication solutions. Our expert team combines technical mastery with innovative engineering to deliver exceptional results for every project.</p>
+        <p>From concept to completion, we ensure that each weld, cut, and finished piece meets the highest standards of quality and durability.</p>
     </section>
 
     <div class="divider">◆</div>
 
     <!-- Portfolio -->
-    <section id="portfolio" data-animate>
+    <section class="section" id="portfolio">
         <h2>Our Portfolio</h2>
         <p>A showcase of our finest work across precision welding, metal fabrication, and custom steel projects.</p>
-        <div class="portfolio-grid">
-            <div class="portfolio-item">
-                <img src="assets/portfolio-1.jpg" alt="Precision Welding">
-                <div class="portfolio-label">Precision Welding</div>
+
+        <div class="gallery">
+            <div class="gallery-item">
+                <img src="assets/portfolio-1.jpg" alt="Portfolio 1">
+                <div class="gallery-label">Precision Welding</div>
             </div>
-            <div class="portfolio-item">
-                <img src="assets/portfolio-2.jpg" alt="Metal Fabrication">
-                <div class="portfolio-label">Metal Fabrication</div>
+            <div class="gallery-item">
+                <img src="assets/portfolio-2.jpg" alt="Portfolio 2">
+                <div class="gallery-label">Metal Fabrication</div>
             </div>
-            <div class="portfolio-item">
-                <img src="assets/portfolio-3.jpg" alt="Industrial Excellence">
-                <div class="portfolio-label">Industrial Excellence</div>
+            <div class="gallery-item">
+                <img src="assets/portfolio-3.jpg" alt="Portfolio 3">
+                <div class="gallery-label">Industrial Excellence</div>
             </div>
-            <div class="portfolio-item">
-                <img src="assets/portfolio-4.jpg" alt="Custom Steel Work">
-                <div class="portfolio-label">Custom Steel Work</div>
+            <div class="gallery-item">
+                <img src="assets/portfolio-4.jpg" alt="Portfolio 4">
+                <div class="gallery-label">Custom Steel Work</div>
             </div>
-            <div class="portfolio-item">
-                <img src="assets/portfolio-5.jpg" alt="Detail Work">
-                <div class="portfolio-label">Detail Work</div>
+            <div class="gallery-item">
+                <img src="assets/portfolio-5.jpg" alt="Portfolio 5">
+                <div class="gallery-label">Detail Work</div>
             </div>
-            <div class="portfolio-item">
-                <img src="assets/portfolio-6.jpg" alt="Fabrication Expertise">
-                <div class="portfolio-label">Fabrication Expertise</div>
+            <div class="gallery-item">
+                <img src="assets/portfolio-6.jpg" alt="Portfolio 6">
+                <div class="gallery-label">Fabrication Expertise</div>
             </div>
         </div>
     </section>
@@ -400,39 +258,14 @@
     <div class="divider">◆</div>
 
     <!-- About -->
-    <section id="about" data-animate>
+    <section class="section" id="about">
         <h2>About Diamond</h2>
-        <p>Diamond Welding & Fabrication is a premier custom metal work facility serving clients who demand precision, quality, and innovation. Our state-of-the-art equipment and experienced team enable us to tackle complex projects with confidence.</p>
-        <p>We believe in building lasting relationships with our clients through transparency, quality, and exceptional service. Every project is treated with the same level of care and attention to detail, whether it's a small custom piece or a large-scale industrial fabrication.</p>
+        <p>Diamond Welding & Fabrication is a premier custom metal work facility serving clients who demand precision, quality, and innovation.</p>
+        <p>We believe in building lasting relationships with our clients through transparency, quality, and exceptional service. Every project is treated with the same level of care and attention to detail.</p>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2024 Diamond Welding & Fabrication. Brilliance by Design.</p>
     </footer>
-
-    <script>
-        // Smooth scroll for nav links
-        document.querySelectorAll('a[href^="#"]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = document.querySelector(link.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // Scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('in-view');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
-    </script>
 </body>
 </html>

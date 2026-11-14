@@ -3,25 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <title>Diamond Welding & Fabrication</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000000;
-            overflow: hidden;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; background: #000; }
+        body { display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; }
 
         .splash {
             width: 100%;
@@ -31,216 +17,88 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            background: #000;
         }
 
-        /* Video background */
-        video.bg {
+        .video-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            opacity: 0.5;
             z-index: 1;
-            opacity: 0.6;
         }
 
-        /* Dark overlay */
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, rgba(0,0,0,0.3), rgba(0,0,0,0.8));
-            z-index: 2;
-        }
-
-        /* Logo container */
-        .logo-container {
+        .content {
+            position: relative;
             z-index: 10;
             text-align: center;
-            animation: fadeInLogo 1.2s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
         }
 
-        .logo-img {
-            max-width: 90vw;
-            width: 100%;
-            max-height: 60vh;
+        .logo {
+            max-width: 80vw;
+            max-height: 50vh;
+            width: auto;
             height: auto;
-            filter: drop-shadow(0 0 80px rgba(249, 115, 22, 0.9));
-        }
-
-        @keyframes fadeInLogo {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* CTA Button */
-        .cta-btn {
-            position: absolute;
-            bottom: 60px;
-            z-index: 10;
-            padding: 18px 50px;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #ffffff;
-            background: linear-gradient(135deg, #f97316, #d97706);
-            border: 2px solid #f97316;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            box-shadow: 0 0 40px rgba(249, 115, 22, 0.6), inset 0 0 20px rgba(249, 115, 22, 0.2);
-            animation: pulseButton 2s ease-in-out infinite;
-        }
-
-        @keyframes pulseButton {
-            0%, 100% { box-shadow: 0 0 40px rgba(249, 115, 22, 0.6), inset 0 0 20px rgba(249, 115, 22, 0.2); }
-            50% { box-shadow: 0 0 70px rgba(249, 115, 22, 0.9), inset 0 0 30px rgba(249, 115, 22, 0.3); }
-        }
-
-        .cta-btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 90px rgba(249, 115, 22, 1), inset 0 0 40px rgba(249, 115, 22, 0.4);
-        }
-
-        .cta-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Spark effect */
-        .spark {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: radial-gradient(circle, #fbbf24, #f97316);
-            border-radius: 50%;
-            box-shadow: 0 0 20px #f97316;
-            pointer-events: none;
-            animation: sparkBurst 1.5s ease-out forwards;
-        }
-
-        @keyframes sparkBurst {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--tx), var(--ty)) scale(0);
-            }
-        }
-
-        /* Loading state */
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 20;
-            color: rgba(249, 115, 22, 0.8);
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeIn 0.6s ease-out 0.5s forwards;
+            animation: fadeIn 1.5s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        @media (max-width: 768px) {
-            .logo-img {
-                max-height: 50vh;
-            }
-
-            .cta-btn {
-                padding: 14px 40px;
-                font-size: 0.9rem;
-            }
+        .btn {
+            padding: 18px 50px;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: white;
+            background: #f97316;
+            border: 2px solid #f97316;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 40px rgba(249, 115, 22, 0.6);
         }
 
-        @media (max-width: 480px) {
-            .logo-img {
-                max-height: 40vh;
-            }
+        .btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 60px rgba(249, 115, 22, 0.9);
+        }
 
-            .cta-btn {
-                padding: 12px 30px;
-                font-size: 0.8rem;
-                letter-spacing: 2px;
-            }
+        .btn:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
 <body>
     <div class="splash">
-        <video class="bg" autoplay muted loop playsinline>
+        <video class="video-bg" autoplay muted loop playsinline>
             <source src="assets/welding-background.mp4" type="video/mp4">
         </video>
-        <div class="overlay"></div>
 
-        <div class="logo-container">
-            <img src="assets/diamond-logo.png" alt="Diamond Welding & Fabrication" class="logo-img">
+        <div class="content">
+            <img src="assets/diamond-logo.png" alt="Diamond Logo" class="logo">
+            <button class="btn" onclick="goToSite()">ENTER SITE</button>
         </div>
-
-        <button class="cta-btn" onclick="enterSite()">Enter Site</button>
-
-        <div class="loading">Entering...</div>
     </div>
 
     <script>
-        function createSpark(x, y) {
-            const spark = document.createElement('div');
-            spark.className = 'spark';
-            const angle = Math.random() * Math.PI * 2;
-            const dist = 150 + Math.random() * 300;
-            spark.style.left = x + 'px';
-            spark.style.top = y + 'px';
-            spark.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
-            spark.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
-            document.body.appendChild(spark);
-            setTimeout(() => spark.remove(), 1500);
+        function goToSite() {
+            window.location.href = 'landing.html';
         }
 
-        function enterSite() {
-            const btn = document.querySelector('.cta-btn');
-            const loading = document.querySelector('.loading');
-            const rect = btn.getBoundingClientRect();
-
-            btn.disabled = true;
-            btn.style.pointerEvents = 'none';
-
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    createSpark(rect.left + rect.width / 2, rect.top + rect.height / 2);
-                }, i * 20);
-            }
-
-            setTimeout(() => {
-                loading.style.opacity = '1';
-            }, 400);
-
-            setTimeout(() => {
-                window.location.href = 'landing.html';
-            }, 1800);
-        }
-
-        document.addEventListener('keydown', (e) => {
+        document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                document.querySelector('.cta-btn').click();
+                goToSite();
             }
         });
     </script>
