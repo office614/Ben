@@ -37,6 +37,31 @@
             background: #000000;
         }
 
+        /* Welding video background */
+        .welding-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 1;
+            opacity: 0.65;
+        }
+
+        /* Video overlay for better contrast */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 1.5;
+            pointer-events: none;
+        }
+
         .logo-splash {
             width: 80vw;
             max-width: 520px;
@@ -201,6 +226,11 @@
 </head>
 <body>
     <div class="splash-container">
+        <video class="welding-video" autoplay muted loop playsinline>
+            <source src="assets/welding-background.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+
         <img class="logo-splash" src="assets/diamond-logo.png" alt="Diamond Welding & Fabrication" />
         <button class="shield-button" onclick="activateSplash()" title="Enter Site">
             <div class="shield-text">Enter</div>
