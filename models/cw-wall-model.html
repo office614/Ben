@@ -1,0 +1,746 @@
+<title>CW1 / CW2 Wall Model</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap">
+<style>
+/* Layout: drafting-table split — control rail left, 3D model right, sheet tabs (tie layout, detail, quantities, sources) below. */
+:root{
+  --bg:#eef0ee; --panel:#f8f9f7; --ink:#1d2421; --muted:#5d6762; --line:#cfd5d1;
+  --accent:#d0661f; --accent-ink:#ffffff; --warn:#b3261e; --ok:#2f7a4a;
+  --concrete:#b9bdb8; --ply:#c9a25c; --viewport:#dfe3e0;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-head:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151a18; --panel:#1d2321; --ink:#e3e8e5; --muted:#9aa5a0; --line:#323b37;
+  --accent:#f08a43; --accent-ink:#1a120c; --warn:#ff7b6e; --ok:#6fcf93;
+  --concrete:#8d928e; --ply:#b48c48; --viewport:#232a27; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151a18; --panel:#1d2321; --ink:#e3e8e5; --muted:#9aa5a0; --line:#323b37;
+  --accent:#f08a43; --accent-ink:#1a120c; --warn:#ff7b6e; --ok:#6fcf93;
+  --concrete:#8d928e; --ply:#b48c48; --viewport:#232a27; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px}
+h1,h2,h3{font-family:var(--font-head);text-wrap:balance;margin:0}
+h1{font-size:1.55rem;font-weight:600;letter-spacing:.01em}
+h2{font-size:1.1rem;font-weight:600}
+h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 24px;margin-bottom:14px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+header.top p{margin:2px 0 0;color:var(--muted);max-width:70ch}
+.tb{display:grid;grid-template-columns:auto auto;gap:0 14px;font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.tb b{color:var(--ink);font-weight:500}
+.wrap{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.wrap{grid-template-columns:minmax(0,1fr)}}
+.rail{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:14px;max-height:calc(100vh - 40px);overflow:auto;position:sticky;top:12px}
+@media (max-width:900px){.rail{position:static;max-height:none}}
+fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:8px;align-items:center}
+.row label{font-size:13px;color:var(--ink)}
+.row label small{color:var(--muted);display:block;font-size:11px}
+input[type=number],select{width:100%;font:inherit;font-family:var(--font-mono);font-size:13px;padding:4px 6px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink)}
+select{font-family:var(--font-body)}
+.row.wide{grid-template-columns:minmax(0,1fr)}
+.toggles{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px}
+.toggles label{display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer}
+.sw{width:10px;height:10px;border-radius:2px;display:inline-block;flex:none}
+input[type=checkbox]{accent-color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stage{display:flex;flex-direction:column;gap:12px;min-width:0}
+.viewer{position:relative;background:var(--viewport);border:1px solid var(--line);border-radius:6px;overflow:hidden;height:min(62vh,640px);min-height:340px}
+#cv{display:block;width:100%;height:100%}
+.views{position:absolute;top:10px;left:10px;display:flex;flex-wrap:wrap;gap:6px}
+.btn{font:inherit;font-size:12px;font-weight:500;padding:5px 10px;border-radius:4px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.hud{position:absolute;right:10px;bottom:10px;background:color-mix(in srgb,var(--panel) 88%,transparent);border:1px solid var(--line);border-radius:4px;padding:6px 9px;font-family:var(--font-mono);font-size:11.5px;line-height:1.5;max-width:min(330px,70%)}
+.hud .w{color:var(--warn)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;min-width:0}
+.svgbox{overflow-x:auto}
+.svgbox svg{display:block;width:100%;min-width:640px;height:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--font-head);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td.n{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tblwrap{overflow-x:auto}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px}
+.flag{display:inline-block;font-size:11px;font-weight:600;padding:1px 6px;border-radius:3px;border:1px solid currentColor;letter-spacing:.03em}
+.flag.c{color:var(--ok)} .flag.a{color:var(--accent)} .flag.w{color:var(--warn)}
+ul.checks{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+ul.checks li.w{color:var(--warn)}
+p.note{color:var(--muted);font-size:12.5px;margin:8px 0 0;max-width:90ch}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;gap:5px;align-items:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <div>
+    <h1>CW1 / CW2 Off-Form Concrete Wall — Tender Model</h1>
+    <p>Proposed shed, 572 Tallebudgera Creek Road. Wall reinforcement from SIA drawing S50/S64 Issue B; footing data from S10/S20/S21. Concealed-gutter seat, 2700 × 1200 formply tie layout and cast-in fascia ferrules are parametric. Every layer can be switched off.</p>
+  </div>
+  <div class="tb">
+    <span>Project</span><b>SIA 15579</b>
+    <span>Basis</span><b>SIA Tender Issue B · 30/09/26</b>
+    <span>Piles</span><b>Morgan (new engineer) — not received</b>
+    <span>Status</span><b style="color:var(--accent)">Tender model · not for construction</b>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside class="rail" aria-label="Model controls">
+    <fieldset>
+      <h3>Wall</h3>
+      <div class="row"><label for="wallType">Wall type</label>
+        <select id="wallType"><option value="CW1">CW1 · double</option><option value="CW2">CW2 · single</option></select></div>
+      <div class="row wide"><label for="profile">Geometry / gutter condition</label>
+        <select id="profile">
+          <option value="mono">Raking blade — gutter seat at low end</option>
+          <option value="gable">Raking blade — gutter seats both ends</option>
+          <option value="flat">Eave wall — concealed gutter along top</option>
+        </select></div>
+      <div class="row"><label for="L">Length <small>mm</small></label><input id="L" type="number" value="6000" step="100" min="1200"></div>
+      <div class="row"><label for="t">Thickness <small>mm · SIA 190</small></label><input id="t" type="number" value="190" step="10" min="150"></div>
+      <div class="row"><label for="Hs">Gutter seat level <small>mm above footing</small></label><input id="Hs" type="number" value="2800" step="50" min="600"></div>
+      <div class="row"><label for="seatLen">Seat length <small>mm · rake walls</small></label><input id="seatLen" type="number" value="300" step="25" min="100"></div>
+      <div class="row"><label for="upstand">Upstand at seat <small>mm</small></label><input id="upstand" type="number" value="250" step="25" min="0"></div>
+      <div class="row"><label for="pitch">Roof pitch <small>degrees</small></label><input id="pitch" type="number" value="10" step="0.5" min="0" max="45"></div>
+      <div class="row"><label for="cover">Cover <small>mm · formed exposed</small></label><input id="cover" type="number" value="40" step="5" min="20"></div>
+    </fieldset>
+
+    <fieldset>
+      <h3>Footings, beams, piles</h3>
+      <div class="row"><label for="fW">Strip footing width <small>mm · TBC</small></label><input id="fW" type="number" value="600" step="50" min="300"></div>
+      <div class="row"><label for="fD">Strip footing depth <small>mm · TBC</small></label><input id="fD" type="number" value="500" step="50" min="300"></div>
+      <div class="row"><label for="pad">Pad footing at ends</label>
+        <select id="pad"><option value="PF1">PF1 2100×1500×600</option><option value="PF2" selected>PF2 1000×1000×600</option><option value="PF3">PF3 1500×1000×500</option><option value="PF4">PF4 800×800×500</option><option value="PF5">PF5 2200×1500×500</option></select></div>
+      <div class="row"><label for="slabT">Slab (poured after) <small>mm</small></label><input id="slabT" type="number" value="130" step="10" min="100"></div>
+      <div class="row"><label for="pileD">Pile dia <small>mm · Morgan TBC</small></label><input id="pileD" type="number" value="450" step="50" min="300"></div>
+      <div class="row"><label for="pileToe">Pile toe depth <small>mm below footing top</small></label><input id="pileToe" type="number" value="4000" step="100" min="1000"></div>
+    </fieldset>
+
+    <fieldset>
+      <h3>Formwork &amp; tie bolts</h3>
+      <div class="row"><label for="orient">Sheet orientation</label>
+        <select id="orient"><option value="P">Portrait 1200 w × 2700 h</option><option value="Lnd">Landscape 2700 w × 1200 h</option></select></div>
+      <div class="row"><label for="stagger">Brick (half-sheet) stagger</label><input id="stagger" type="checkbox" checked style="justify-self:start"></div>
+      <div class="row"><label for="bEdgeShort">Bolt edge, short side <small>mm from 1200 edge</small></label><input id="bEdgeShort" type="number" value="300" step="25" min="100"></div>
+      <div class="row"><label for="bEdgeLong">Bolt edge, long side <small>mm · 3 rows at 900</small></label><input id="bEdgeLong" type="number" value="450" step="25" min="100"></div>
+      <div class="row"><label for="bTopClr">Min. bolt to top edge <small>mm</small></label><input id="bTopClr" type="number" value="150" step="25" min="50"></div>
+    </fieldset>
+
+    <fieldset>
+      <h3>Cast-in fascia ferrules</h3>
+      <div class="row"><label for="fcrs">Ferrule crs <small>mm · eave wall</small></label><input id="fcrs" type="number" value="1200" step="100" min="300"></div>
+      <div class="row"><label for="fr1">Row 1 below seat <small>mm</small></label><input id="fr1" type="number" value="100" step="25" min="25"></div>
+      <div class="row"><label for="fr2">Row 2 below seat <small>mm · 0 = none</small></label><input id="fr2" type="number" value="250" step="25" min="0"></div>
+      <div class="row"><label for="fEdgeMin">Min. edge distance <small>mm · supplier TBC</small></label><input id="fEdgeMin" type="number" value="100" step="25" min="25"></div>
+    </fieldset>
+
+    <fieldset>
+      <h3>Layers</h3>
+      <div class="toggles" id="layers"></div>
+    </fieldset>
+
+    <fieldset>
+      <h3>View</h3>
+      <div class="row wide"><label for="cut">Section cut through concrete &amp; ply</label><input id="cut" type="range" min="0" max="100" value="100"></div>
+      <div class="row wide"><label for="opac">Concrete opacity</label><input id="opac" type="range" min="10" max="100" value="45"></div>
+    </fieldset>
+  </aside>
+
+  <section class="stage">
+    <div class="viewer">
+      <canvas id="cv" aria-label="3D wall model"></canvas>
+      <div class="views" role="group" aria-label="Camera views">
+        <button class="btn on" data-v="iso">Iso</button>
+        <button class="btn" data-v="front">Elevation</button>
+        <button class="btn" data-v="end">End / section</button>
+        <button class="btn" data-v="plan">Plan</button>
+        <button class="btn" data-v="seat">Gutter seat</button>
+      </div>
+      <div class="hud" id="hud"></div>
+    </div>
+    <div class="legend" id="legend"></div>
+
+    <div class="tabs" role="tablist">
+      <button class="btn on" data-tab="ties" role="tab">Tie bolt layout</button>
+      <button class="btn" data-tab="detail" role="tab">Edge &amp; gutter seat detail</button>
+      <button class="btn" data-tab="qty" role="tab">Tender quantities</button>
+      <button class="btn" data-tab="src" role="tab">Sources &amp; checks</button>
+    </div>
+
+    <div class="panel" id="tab-ties">
+      <h2>Form-tie layout — elevation, outer face</h2>
+      <p class="note" id="tieNote"></p>
+      <div class="svgbox" id="tieSvg"></div>
+    </div>
+    <div class="panel" id="tab-detail" hidden>
+      <h2>Edge detail &amp; concealed gutter seat</h2>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="svgbox" id="detSvg"></div>
+        <div>
+          <h3>Arris detail</h3>
+          <p class="note" style="color:var(--ink)">All exposed arrises: <b>3 mm pencil round</b>, formed by a 3 mm radius on the formply edge or a 3 mm PVC arris insert. No fillet strip at external corners. Re-entrant angles at the seat step: as below.</p>
+          <p class="note"><span class="flag w">Conflict</span> SIA general note FW14 says “chamfer re-entrant angles and fillet all corners by 25 mm UNO”. A 3 mm pencil round departs from that. It is permitted only if the architectural documents say so (the “UNO”). Get written acceptance from SDM/SIA before tender close. A 3 mm arris is also more prone to grout loss and chipping at stripping, so allow for sealed sheet edges and late stripping.</p>
+          <h3 style="margin-top:12px">Seat checks</h3>
+          <ul class="checks" id="seatChecks"></ul>
+        </div>
+      </div>
+    </div>
+    <div class="panel" id="tab-qty" hidden>
+      <h2>Tender quantities — one wall as modelled</h2>
+      <div class="tblwrap"><table id="qtyTable"></table></div>
+      <p class="note">Measured from the model geometry. Rebar mass uses N12 0.888 kg/m, N16 1.58 kg/m, L12TM bars 0.888 kg/m, R10 0.617 kg/m, without laps or wastage. Formwork counts are per face; both faces use the same layout so the ties pass straight through. Sheets marked “cut” need cutting at ends, the seat step or the rake.</p>
+    </div>
+    <div class="panel" id="tab-src" hidden>
+      <h2>Sources, assumptions and open items</h2>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Item</th><th>Value used</th><th>Basis</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>CW1</td><td>190 formed wall · vert N12-300 EF · horiz N12-200 EF · starters N12-200 EF, lap 600, cog 300 · N16 U-bars at ends</td><td>SIA S50 &amp; S64 concrete wall schedule / end detail, Issue B 30/09/26</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>CW2</td><td>190 formed wall · vert N12-200 central · horiz N16-200 central · starters N12-200 central, lap 600, cog 300 · bars 50 max from end</td><td>SIA S50 &amp; S64</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Cover</td><td>40 mm walls, formed &amp; exposed; 50 mm footings</td><td>SIA S01 cover table</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Concrete</td><td>Walls N32; footings N25; polished slab S32 (no fly ash)</td><td>SIA S01 / S10</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Pad footings</td><td>PF1 2100×1500×600 (9-N16 U T&amp;B) · PF2 1000 sq×600 (5-N16 U EW T&amp;B) · PF3 1500×1000×500 (6-N16 U) · PF4 800 sq×500 (4-N16 U EW) · PF5 2200×1500×500</td><td>SIA S10 schedule, S21 details</td><td><span class="flag c">Confirmed</span> location at wall ends is modelled only</td></tr>
+          <tr><td>Strip footing / footing beam</td><td>600 W × 500 D, 4-L12TM T&amp;B, R10-600 ligs</td><td>No CW strip-footing size found in S10/S20. Reinforcement borrowed from EB4 on S20.</td><td><span class="flag w">Assumed</span> confirm with SIA</td></tr>
+          <tr><td>Slab</td><td>130 polished, SL81 50 top cover, poured after walls, 10 mm isolation joint</td><td>SIA S10 slab legend; your 13/10/26 sequence request to SIA</td><td><span class="flag a">Proposed</span> sequence not yet accepted by SIA</td></tr>
+          <tr><td>Piles</td><td>Placeholder 450 dia under pads (or 2.5 m crs), toe 4.0 m</td><td>You told me Morgan now supersedes SIA for piles only. No Morgan drawings found in Gmail or Drive. 3.7 m natural ground was verbal (GT Geotechnical, 13/10/26).</td><td><span class="flag w">Placeholder</span> replace from Morgan</td></tr>
+          <tr><td>Wall height, length, pitch</td><td>Seat 2800, length 6000, pitch 10°</td><td>Roof model review Rev D marks heights “TBC”</td><td><span class="flag w">Assumed</span> set from SDM plans</td></tr>
+          <tr><td>Concealed gutter</td><td>Nominal 200 × 200 gutter zone on formed seat; 300 PFC fascia</td><td>Roof model review Rev D (“nominal ideas, not a resolved clearance check”); your 20/10/26 note to Ryan on gutter on a formed ledge</td><td><span class="flag a">Concept</span> SIA to confirm bearing, anchorage, movement</td></tr>
+          <tr><td>Fascia fixing</td><td>Cast-in threaded ferrules, 2 rows below seat, cleat plates to PFC</td><td>Your instruction (“cast-in thread bolts seat for fascia”). Size and edge distance not specified.</td><td><span class="flag w">Assumed</span> ferrule type, size, edge distance from supplier/SIA</td></tr>
+          <tr><td>Formwork</td><td>2700 × 1200 formply, 6 ties per sheet, half-sheet brick stagger, same layout both faces</td><td>Your instruction</td><td><span class="flag c">As instructed</span></td></tr>
+          <tr><td>Tie holes</td><td>Fill with colour-matched mortar</td><td>SIA FW16</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Construction joints</td><td>None in off-form face</td><td>SIA S50 section A note</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Arrises</td><td>3 mm pencil round</td><td>Your instruction; conflicts with SIA FW14 (25 mm fillet UNO)</td><td><span class="flag w">Conflict</span></td></tr>
+        </tbody>
+      </table></div>
+      <h3 style="margin-top:14px">Live model checks</h3>
+      <ul class="checks" id="checks"></ul>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const S = 0.001;
+const BAR_VIS = 1.5; // bar diameters drawn 1.5x for visibility
+
+const LAYERS = [
+  ["concrete","Concrete wall","#b9bdb8",true],
+  ["reo","Wall reinforcement","#c0392b",true],
+  ["starters","Starter bars","#2e8b57",true],
+  ["ubars","End U-bars / top bars","#8e44ad",true],
+  ["footing","Strip footing","#9aa09b",true],
+  ["footReo","Footing reo","#16a085",true],
+  ["pads","Pad footings","#8f958f",true],
+  ["padReo","Pad reo","#1f78b4",true],
+  ["slab","Slab (after)","#a7aca8",false],
+  ["form","Formply sheets","#c9a25c",false],
+  ["ties","Tie bolts","#222222",true],
+  ["gutter","Gutter, PFC, ferrules","#d4a017",true],
+  ["piles","Piles (Morgan TBC)","#7f8c8d",false],
+];
+const PADS = {PF1:{L:2100,W:1500,D:600,n:9},PF2:{L:1000,W:1000,D:600,n:5},PF3:{L:1500,W:1000,D:500,n:6},PF4:{L:800,W:800,D:500,n:4},PF5:{L:2200,W:1500,D:500,n:9}};
+
+// ---------- layer toggles ----------
+const lay = $("layers");
+LAYERS.forEach(([k,label,col,on])=>{
+  const l=document.createElement("label");
+  l.innerHTML=`<input type="checkbox" id="ly_${k}" ${on?"checked":""}><span class="sw" style="background:${col}"></span>${label}`;
+  lay.appendChild(l);
+});
+$("legend").innerHTML = [["#c0392b","Vertical bars"],["#e67e22","Horizontal bars"],["#2e8b57","Starters"],["#8e44ad","U-bars / top trimmers"],["#16a085","Footing trench mesh / ligs"],["#1f78b4","Pad U-bars"],["#222","Tie bolts"],["#d4a017","Cast-in ferrules"],["#4a6278","300 PFC fascia + cleats"]]
+  .map(([c,t])=>`<span><i class="sw" style="background:${c}"></i>${t}</span>`).join("") + `<span>Bar diameters drawn 1.5× for visibility</span>`;
+
+// ---------- params ----------
+function P(){
+  const n = id => parseFloat($(id).value)||0;
+  const p = {
+    type:$("wallType").value, profile:$("profile").value, L:n("L"), t:n("t"), Hs:n("Hs"), seat:n("seatLen"), up:n("upstand"),
+    pitch:n("pitch"), cover:n("cover"), fW:n("fW"), fD:n("fD"), pad:$("pad").value, slabT:n("slabT"), pileD:n("pileD"), pileToe:n("pileToe"),
+    orient:$("orient").value, stagger:$("stagger").checked, eS:n("bEdgeShort"), eL:n("bEdgeLong"), topClr:n("bTopClr"),
+    fcrs:n("fcrs"), fr1:n("fr1"), fr2:n("fr2"), fEdge:n("fEdgeMin"), cut:n("cut"), opac:n("opac")/100
+  };
+  p.L=Math.max(1200,p.L); p.t=Math.max(100,p.t); p.Hs=Math.max(600,p.Hs);
+  p.seat=Math.min(Math.max(100,p.seat), p.profile==="gable"? p.L/2-200 : p.L-300);
+  p.tan=Math.tan(p.pitch*Math.PI/180);
+  p.on={}; LAYERS.forEach(([k])=>p.on[k]=$("ly_"+k).checked);
+  return p;
+}
+
+// ---------- geometry ----------
+function topY(p,x){
+  const {profile,L,Hs,seat,up,tan}=p;
+  if(profile==="flat") return Hs;
+  if(profile==="mono"){ if(x<=seat) return Hs; return Hs+up+(x-seat)*tan; }
+  const d=Math.min(x,L-x); if(d<=seat) return Hs; return Hs+up+(d-seat)*tan;
+}
+function wallPoly(p){
+  const {profile,L,Hs,seat,up}=p;
+  if(profile==="flat") return [[0,0],[L,0],[L,Hs],[0,Hs]];
+  if(profile==="mono") return [[0,0],[L,0],[L,topY(p,L)],[seat,Hs+up],[seat,Hs],[0,Hs]];
+  return [[0,0],[L,0],[L,Hs],[L-seat,Hs],[L-seat,Hs+up],[L/2,topY(p,L/2)],[seat,Hs+up],[seat,Hs],[0,Hs]];
+}
+function area(poly){let a=0;for(let i=0;i<poly.length;i++){const[a1,b1]=poly[i],[a2,b2]=poly[(i+1)%poly.length];a+=a1*b2-a2*b1;}return Math.abs(a)/2;}
+function inPoly(poly,x,y){let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const[xi,yi]=poly[i],[xj,yj]=poly[j];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c;}return c;}
+function clipRect(poly,x0,y0,x1,y1){
+  const edges=[[q=>q[0]>=x0,(a,b)=>{const t=(x0-a[0])/(b[0]-a[0]);return[x0,a[1]+t*(b[1]-a[1])]}],
+               [q=>q[0]<=x1,(a,b)=>{const t=(x1-a[0])/(b[0]-a[0]);return[x1,a[1]+t*(b[1]-a[1])]}],
+               [q=>q[1]>=y0,(a,b)=>{const t=(y0-a[1])/(b[1]-a[1]);return[a[0]+t*(b[0]-a[0]),y0]}],
+               [q=>q[1]<=y1,(a,b)=>{const t=(y1-a[1])/(b[1]-a[1]);return[a[0]+t*(b[0]-a[0]),y1]}]];
+  let out=poly;
+  for(const[inside,inter] of edges){
+    const inp=out; out=[]; if(!inp.length)break;
+    for(let i=0;i<inp.length;i++){const cur=inp[i],prev=inp[(i+inp.length-1)%inp.length];
+      const ci=inside(cur),pi=inside(prev);
+      if(ci){ if(!pi) out.push(inter(prev,cur)); out.push(cur);} else if(pi) out.push(inter(prev,cur));}
+  }
+  return out;
+}
+
+// ---------- layout calcs (shared by 3D, SVG, qty) ----------
+function layout(p){
+  const poly=wallPoly(p);
+  const maxH=Math.max(...poly.map(q=>q[1]));
+  const sw = p.orient==="P"?1200:2700, sh = p.orient==="P"?2700:1200;
+  // bolt pattern inside a sheet: 2 x 3 (portrait) or 3 x 2 (landscape)
+  const short=[p.eS,1200-p.eS], long=[p.eL,p.eL+900,p.eL+1800];
+  const bx = p.orient==="P"? short : long, by = p.orient==="P"? long : short;
+  const sheets=[], bolts=[], dropped=[];
+  const courses=Math.ceil(maxH/sh);
+  for(let c=0;c<courses;c++){
+    const y0=c*sh, off=(p.stagger && c%2===1)? -sw/2 : 0;
+    for(let x0=off; x0<p.L; x0+=sw){
+      const pc=clipRect(poly,x0,y0,x0+sw,y0+sh);
+      const a=area(pc); if(a<1e3) continue;
+      const full = a > sw*sh-1;
+      const sheet={x0,y0,w:sw,h:sh,poly:pc,full,area:a,course:c,bolts:0};
+      sheets.push(sheet);
+      for(const dx of bx) for(const dy of by){
+        const x=x0+dx,y=y0+dy;
+        if(x<=0||x>=p.L||!inPoly(poly,x,y)) continue;
+        const okTop = inPoly(poly,x,y+p.topClr) ;
+        const okEnd = x>=100 && x<=p.L-100;
+        if(okTop&&okEnd){ bolts.push({x,y,sheet}); sheet.bolts++; } else dropped.push({x,y});
+      }
+    }
+  }
+  // ferrules
+  const ferr=[]; const rows=[p.fr1,p.fr2].filter(v=>v>0);
+  if(p.profile==="flat"){
+    const n=Math.max(1,Math.round((p.L-300)/p.fcrs)); const s=(p.L-300)/n;
+    for(let i=0;i<=n;i++) for(const r of rows) ferr.push({face:"outer",x:150+i*s,y:p.Hs-r,r});
+  } else {
+    for(const r of rows){ ferr.push({face:"end0",x:0,y:p.Hs-r,r}); if(p.profile==="gable") ferr.push({face:"endL",x:p.L,y:p.Hs-r,r}); }
+  }
+  // clashes: tie bolt within 150 of an outer-face ferrule
+  const clashes=[];
+  for(const f of ferr) if(f.face==="outer") for(const b of bolts){ if(Math.hypot(b.x-f.x,b.y-f.y)<150) clashes.push({b,f}); }
+  return {poly,maxH,sw,sh,sheets,bolts,dropped,ferr,clashes,courses,bx,by};
+}
+
+// ---------- three.js ----------
+const canvas=$("cv");
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+renderer.localClippingEnabled=true;
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(40,1,0.05,200);
+const controls=new THREE.OrbitControls(camera,canvas);
+controls.enableDamping=true; controls.dampingFactor=0.08;
+scene.add(new THREE.HemisphereLight(0xffffff,0x667066,0.75));
+const sun=new THREE.DirectionalLight(0xffffff,0.75); sun.position.set(6,10,8); scene.add(sun);
+const fill=new THREE.DirectionalLight(0xffffff,0.3); fill.position.set(-8,4,-6); scene.add(fill);
+let grid=null, root=null;
+const clipPlane=new THREE.Plane(new THREE.Vector3(-1,0,0),0);
+
+function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function applyTheme(){ scene.background=new THREE.Color(cssVar("--viewport")||"#dfe3e0"); }
+
+const matCache={};
+function mat(col,opts={}){
+  const key=col+JSON.stringify(opts);
+  if(!matCache[key]) matCache[key]=new THREE.MeshStandardMaterial(Object.assign({color:col,roughness:.7,metalness:.1},opts));
+  return matCache[key];
+}
+const cylCache={};
+function cyl(r){ if(!cylCache[r]) cylCache[r]=new THREE.CylinderGeometry(r,r,1,8,1); return cylCache[r]; }
+const UP=new THREE.Vector3(0,1,0);
+
+function build(p,lo){
+  if(root){ root.traverse(o=>{ if(o.geometry && !Object.values(cylCache).includes(o.geometry)) o.geometry.dispose(); }); scene.remove(root); }
+  root=new THREE.Group(); scene.add(root);
+  const L=p.L, t=p.t, c=p.cover;
+  const V=(x,y,z)=>new THREE.Vector3((x-L/2)*S,y*S,z*S);
+  const groups={}; LAYERS.forEach(([k])=>{groups[k]=new THREE.Group();groups[k].visible=p.on[k];root.add(groups[k]);});
+  const len={N12:0,N16:0,L12:0,R10:0};
+  function bar(g,a,b,d,col,kind){
+    const A=V(...a),B=V(...b); const dir=B.clone().sub(A); const l=dir.length(); if(l<1e-6)return;
+    const m=new THREE.Mesh(cyl(d/2*S*BAR_VIS),mat(col,{roughness:.5,metalness:.35}));
+    m.position.copy(A).add(B).multiplyScalar(.5); m.scale.set(1,l,1);
+    m.quaternion.setFromUnitVectors(UP,dir.normalize()); g.add(m);
+    if(kind) len[kind]+=l/S;
+  }
+  function poly3(g,pts,d,col,kind){for(let i=0;i<pts.length-1;i++) bar(g,pts[i],pts[i+1],d,col,kind);}
+  const cutX=(p.cut/100)*L; clipPlane.constant=(cutX-L/2)*S+1e-4;
+  const clipped = p.cut<100 ? [clipPlane] : [];
+
+  // concrete wall
+  const shp=new THREE.Shape(lo.poly.map(([x,y])=>new THREE.Vector2((x-L/2)*S,y*S)));
+  const wg=new THREE.ExtrudeGeometry(shp,{depth:t*S,bevelEnabled:false}); wg.translate(0,0,-t/2*S);
+  const cm=new THREE.MeshStandardMaterial({color:cssVar("--concrete")||"#b9bdb8",roughness:.92,metalness:0,transparent:p.opac<1,opacity:p.opac,depthWrite:p.opac>=1,side:THREE.DoubleSide,clippingPlanes:clipped});
+  const wall=new THREE.Mesh(wg,cm); wall.renderOrder=2; groups.concrete.add(wall);
+  const ed=new THREE.LineSegments(new THREE.EdgesGeometry(wg,20),new THREE.LineBasicMaterial({color:0x3b423e,clippingPlanes:clipped})); groups.concrete.add(ed);
+
+  // reinforcement
+  const dv=12, dh=p.type==="CW1"?12:16;
+  const vS=p.type==="CW1"?300:200, hS=200;
+  const zH = p.type==="CW1"? [t/2-c-dh/2, -(t/2-c-dh/2)] : [-(dh/2)];
+  const zV = p.type==="CW1"? [t/2-c-dh-dv/2, -(t/2-c-dh-dv/2)] : [dv/2];
+  const endOff = p.type==="CW1"? c+16+dv/2+4 : 50;
+  const nV=Math.max(1,Math.ceil((L-2*endOff)/vS)), sV=(L-2*endOff)/nV;
+  for(let i=0;i<=nV;i++){ const x=endOff+i*sV; const top=topY(p,x)-c;
+    for(const z of zV) bar(groups.reo,[x,50,z],[x,top,z],dv,"#c0392b","N12"); }
+  const hMax=lo.maxH-c;
+  for(let y=c+75; y<=hMax; y+=hS){
+    // spans along x where wall exists at this level
+    let a=null; const segs=[];
+    for(let x=c; x<=L-c+0.1; x+=10){ const ok=topY(p,x)-c>=y; if(ok&&a===null)a=x; if((!ok||x>L-c-5)&&a!==null){segs.push([a,ok?x:x-10]);a=null;} }
+    for(const[s0,s1] of segs) if(s1-s0>150) for(const z of zH) bar(groups.reo,[s0,y,z],[s1,y,z],dh,"#e67e22",dh===16?"N16":"N12");
+  }
+  // end U-bars (CW1) / top trimmers
+  if(p.type==="CW1"){
+    for(const xe of [0,L]){ const sgn=xe===0?1:-1; const xi=xe+sgn*(c+8);
+      for(let y=c+75; y<=topY(p,xe)-c; y+=hS){
+        poly3(groups.ubars,[[xi+sgn*600,y+14,zH[0]],[xi,y+14,zH[0]],[xi,y+14,zH[1]],[xi+sgn*600,y+14,zH[1]]],16,"#8e44ad","N16");
+      } }
+  }
+  const tz = p.type==="CW1"? zV : [zV[0]];
+  const topPts=[];
+  if(p.profile==="flat") topPts.push([c,p.Hs-c-6],[L-c,p.Hs-c-6]);
+  else { const yS=p.Hs-c-6, xs=p.seat+c;
+    topPts.push([c,yS],[xs,yS],[xs,p.Hs+p.up-c-6+ (c)*p.tan]);
+    if(p.profile==="mono") topPts.push([L-c,topY(p,L-c)-c-6]);
+    else { topPts.push([L/2,topY(p,L/2)-c-6],[L-xs,p.Hs+p.up-c-6+c*p.tan],[L-xs,yS],[L-c,yS]); } }
+  for(const z of tz) poly3(groups.ubars,topPts.map(([x,y])=>[x,y,z]),12,"#8e44ad","N12");
+
+  // starters
+  const fD=p.fD, fW=p.fW;
+  for(let x=100; x<=L-100; x+=200){
+    if(p.type==="CW1"){ for(const z of zV){ const sg=Math.sign(z); poly3(groups.starters,[[x,600,z],[x,-fD+50+6,z],[x,-fD+50+6,z+sg*Math.min(300,fW/2-z*sg-50)]],12,"#2e8b57","N12"); } }
+    else { const sg=(Math.round(x/200)%2)?1:-1; poly3(groups.starters,[[x,600,zV[0]-14],[x,-fD+56,zV[0]-14],[x,-fD+56,zV[0]-14+sg*300]],12,"#2e8b57","N12"); }
+  }
+
+  // strip footing
+  const fx0=-200, fx1=L+200;
+  const fg=new THREE.BoxGeometry((fx1-fx0)*S,fD*S,fW*S); fg.translate(((fx0+fx1)/2-L/2)*S,-fD/2*S,0);
+  const fm=new THREE.MeshStandardMaterial({color:0x9aa09b,roughness:.95,transparent:true,opacity:Math.min(.85,p.opac+.1),depthWrite:false,clippingPlanes:clipped});
+  groups.footing.add(new THREE.Mesh(fg,fm));
+  groups.footing.add(new THREE.LineSegments(new THREE.EdgesGeometry(fg),new THREE.LineBasicMaterial({color:0x4d544f,clippingPlanes:clipped})));
+  // trench mesh 4-L12TM top & bottom + R10-600 ligs
+  const fc=50; const zs=[0,1,2,3].map(i=>-fW/2+fc+12+i*(fW-2*fc-24)/3);
+  for(const y of [-fc-6-10, -fD+fc+6+10]) for(const z of zs) bar(groups.footReo,[fx0+fc,y,z],[fx1-fc,y,z],11.9,"#16a085","L12");
+  for(let x=fx0+fc+50;x<=fx1-fc;x+=600){ const yT=-fc, yB=-fD+fc, zA=-fW/2+fc, zB=fW/2-fc;
+    poly3(groups.footReo,[[x,yT,zA],[x,yT,zB],[x,yB,zB],[x,yB,zA],[x,yT,zA]],10,"#16a085","R10"); }
+
+  // pads at ends
+  const pd=PADS[p.pad]; const padXs=[0,L];
+  for(const xe of padXs){
+    const g=new THREE.BoxGeometry(pd.L*S,pd.D*S,pd.W*S); g.translate((xe-L/2)*S,-pd.D/2*S - (fD>pd.D?0:0),0);
+    groups.pads.add(new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x8f958f,roughness:.95,transparent:true,opacity:Math.min(.8,p.opac+.05),depthWrite:false,clippingPlanes:clipped})));
+    groups.pads.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:0x444,clippingPlanes:clipped})));
+    const cc=50; const yT=-cc-8, yB=-pd.D+cc+8;
+    for(let i=0;i<pd.n;i++){
+      const zz=-pd.W/2+cc+16+i*(pd.W-2*cc-32)/(pd.n-1);
+      poly3(groups.padReo,[[xe-pd.L/2+cc,yT,zz],[xe-pd.L/2+cc,yB,zz],[xe+pd.L/2-cc,yB,zz],[xe+pd.L/2-cc,yT,zz]],16,"#1f78b4","N16");
+      const xx=xe-pd.L/2+cc+16+i*(pd.L-2*cc-32)/(pd.n-1);
+      poly3(groups.padReo,[[xx,yT+16,-pd.W/2+cc],[xx,yB+16,-pd.W/2+cc],[xx,yB+16,pd.W/2-cc],[xx,yT+16,pd.W/2-cc]],16,"#1f78b4","N16");
+    }
+  }
+  // slab poured after walls (inside face = -z)
+  { const g=new THREE.BoxGeometry((L+400)*S,p.slabT*S,2000*S); g.translate(0,p.slabT/2*S,(-t/2-10-1000)*S);
+    groups.slab.add(new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0xa7aca8,roughness:.4,metalness:.05,transparent:true,opacity:.75,depthWrite:false})));
+    groups.slab.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:0x555}))); }
+
+  // formply sheets both faces
+  const plyMat=new THREE.MeshStandardMaterial({color:cssVar("--ply")||"#c9a25c",roughness:.8,transparent:true,opacity:.55,side:THREE.DoubleSide,depthWrite:false,clippingPlanes:clipped});
+  const cutMat=new THREE.MeshStandardMaterial({color:0xd98c3a,roughness:.8,transparent:true,opacity:.55,side:THREE.DoubleSide,depthWrite:false,clippingPlanes:clipped});
+  for(const sh of lo.sheets){
+    const s2=new THREE.Shape(sh.poly.map(([x,y])=>new THREE.Vector2((x-L/2)*S,y*S)));
+    for(const z of [t/2+9,-t/2-9]){
+      const g=new THREE.ShapeGeometry(s2); g.translate(0,0,z*S);
+      groups.form.add(new THREE.Mesh(g,sh.full?plyMat:cutMat));
+      const e=new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:0x5a3d12,clippingPlanes:clipped})); groups.form.add(e);
+    }
+  }
+  // tie bolts (through)
+  const tb=new THREE.CylinderGeometry(7*S,7*S,(t+140)*S,10); tb.rotateX(Math.PI/2);
+  const cone=new THREE.CylinderGeometry(12*S,22*S,20*S,12); cone.rotateX(Math.PI/2);
+  for(const b of lo.bolts){
+    const m=new THREE.Mesh(tb,mat("#222222",{metalness:.6,roughness:.4})); m.position.copy(V(b.x,b.y,0)); groups.ties.add(m);
+    for(const sg of[1,-1]){const k=new THREE.Mesh(cone,mat("#555555",{metalness:.4})); k.position.copy(V(b.x,b.y,sg*(t/2-10))); if(sg<0)k.rotation.y=Math.PI; groups.ties.add(k);}
+  }
+  // gutter, PFC fascia, ferrules, cleats
+  const steel=mat("#4a6278",{metalness:.55,roughness:.45});
+  const brass=mat("#d4a017",{metalness:.7,roughness:.3});
+  const gutMat=mat("#9fb3c8",{metalness:.5,roughness:.35,side:THREE.DoubleSide});
+  function box(g,x0,x1,y0,y1,z0,z1,m){const bg=new THREE.BoxGeometry(Math.abs(x1-x0)*S,Math.abs(y1-y0)*S,Math.abs(z1-z0)*S);const me=new THREE.Mesh(bg,m);me.position.copy(V((x0+x1)/2,(y0+y1)/2,(z0+z1)/2));g.add(me);}
+  const gW=200,gD=200, pfcD=300, pfcB=90, pfcTop=p.Hs+gD+50;
+  const fer=new THREE.CylinderGeometry(10*S,10*S,100*S,12);
+  if(p.profile==="flat"){
+    // gutter along wall on seat; PFC on outer face (+z)
+    const z0=-gW/2;
+    box(groups.gutter,0,L,p.Hs,p.Hs+3,z0,z0+gW,gutMat); box(groups.gutter,0,L,p.Hs,p.Hs+gD,z0,z0+3,gutMat); box(groups.gutter,0,L,p.Hs,p.Hs+gD,z0+gW-3,z0+gW,gutMat);
+    const zf=t/2+12;
+    box(groups.gutter,0,L,pfcTop-pfcD,pfcTop,zf,zf+8,steel);
+    box(groups.gutter,0,L,pfcTop-13,pfcTop,zf,zf+pfcB,steel); box(groups.gutter,0,L,pfcTop-pfcD,pfcTop-pfcD+13,zf,zf+pfcB,steel);
+    for(const f of lo.ferr){ const m=new THREE.Mesh(fer,brass); m.rotation.x=Math.PI/2; m.position.copy(V(f.x,f.y,t/2-50)); groups.gutter.add(m); }
+    const xs=[...new Set(lo.ferr.map(f=>Math.round(f.x)))];
+    const yLo=Math.min(...lo.ferr.map(f=>f.y))-60;
+    for(const x of xs) box(groups.gutter,x-60,x+60,yLo,pfcTop-pfcD+20,t/2,t/2+12,steel);
+  } else {
+    const ends = p.profile==="gable"?[0,L]:[0];
+    for(const xe of ends){ const sg=xe===0?1:-1; const gx0=xe===0?0:L-gW, gx1=gx0+gW;
+      // gutter crossing the wall in the seat (runs along z)
+      box(groups.gutter,gx0,gx1,p.Hs,p.Hs+3,-900,900,gutMat); box(groups.gutter,gx0,gx0+3,p.Hs,p.Hs+gD,-900,900,gutMat); box(groups.gutter,gx1-3,gx1,p.Hs,p.Hs+gD,-900,900,gutMat);
+      // PFC fascia beyond wall end, running along z
+      const xf=xe-sg*12;
+      const xw0=xf-sg*8; box(groups.gutter,Math.min(xf,xw0),Math.max(xf,xw0),pfcTop-pfcD,pfcTop,-900,900,steel);
+      const xfl=xf-sg*pfcB; box(groups.gutter,Math.min(xf,xfl),Math.max(xf,xfl),pfcTop-13,pfcTop,-900,900,steel); box(groups.gutter,Math.min(xf,xfl),Math.max(xf,xfl),pfcTop-pfcD,pfcTop-pfcD+13,-900,900,steel);
+      // cleat plate on wall end face and ferrules into end face
+      const fs=lo.ferr.filter(f=>(xe===0?f.face==="end0":f.face==="endL"));
+      for(const f of fs){ const m=new THREE.Mesh(fer,brass); m.rotation.z=Math.PI/2; m.position.copy(V(xe+sg*50,f.y,0)); groups.gutter.add(m); }
+      if(fs.length){ const yLo=Math.min(...fs.map(f=>f.y))-60; box(groups.gutter,Math.min(xe,xe-sg*12),Math.max(xe,xe-sg*12),yLo,pfcTop-pfcD+20,-70,70,steel); }
+    }
+  }
+  // piles (placeholder)
+  const pileXs=[]; if(p.on.pads) pileXs.push(0,L); else { const n=Math.max(1,Math.ceil(L/2500)); for(let i=0;i<=n;i++) pileXs.push(i*L/n); }
+  const topOfPile = p.on.pads? -pd.D : -fD;
+  for(const x of pileXs){ const h=p.pileToe+topOfPile; const g=new THREE.CylinderGeometry(p.pileD/2*S,p.pileD/2*S,Math.max(100,h)*S,20);
+    const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x7f8c8d,transparent:true,opacity:.35,depthWrite:false}));
+    m.position.copy(V(x,(topOfPile-p.pileToe)/2,0)); groups.piles.add(m);
+    const pe=new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:0x444,transparent:true,opacity:.6}));
+    pe.position.copy(m.position); groups.piles.add(pe);
+  }
+
+  // ground grid
+  if(grid) scene.remove(grid);
+  grid=new THREE.GridHelper(Math.ceil(L/1000)+8,(Math.ceil(L/1000)+8)*2,0x8a948f,0xb7beba); grid.position.y=-0.001; grid.material.transparent=true; grid.material.opacity=.35; scene.add(grid);
+  return len;
+}
+
+// ---------- camera ----------
+let curView="iso", P0=null;
+function setView(v,p){
+  curView=v; p=p||P0; const L=p.L*S, H=(layoutCache?layoutCache.maxH:3000)*S;
+  const tgt=new THREE.Vector3(0,H*0.4,0), d=Math.max(L,H)*1.45;
+  if(v==="iso") camera.position.set(L*0.75,H*1.1+1,d*0.85);
+  if(v==="front") camera.position.set(0,H*0.45,d*1.05);
+  if(v==="end") camera.position.set(d*0.9,H*0.45,0.001);
+  if(v==="plan") camera.position.set(0,d*1.2,0.001);
+  if(v==="seat"){ const xs=p.profile==="flat"? -L/2+0.6 : -L/2; tgt.set(xs,p.Hs*S,0); camera.position.set(xs-1.3,p.Hs*S+0.6,1.6); }
+  controls.target.copy(tgt); camera.lookAt(tgt); controls.update();
+  document.querySelectorAll(".views .btn").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+}
+document.querySelectorAll(".views .btn").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.v)));
+
+function resize(){ const r=canvas.parentElement.getBoundingClientRect(); renderer.setSize(r.width,r.height,false); camera.aspect=r.width/Math.max(1,r.height); camera.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(canvas.parentElement);
+(function loop(){ requestAnimationFrame(loop); controls.update(); renderer.render(scene,camera); })();
+
+// ---------- SVG: tie layout ----------
+const f0=n=>Math.round(n).toLocaleString("en-AU");
+function tieSVG(p,lo){
+  const W=1100, m=70, sc=(W-2*m)/p.L, Hh=lo.maxH*sc, Ht=Hh+2*m+40;
+  const X=x=>m+x*sc, Y=y=>m+20+Hh-y*sc;
+  const ink="var(--ink)", mut="var(--muted)";
+  let s=`<svg viewBox="0 0 ${W} ${Ht}" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace" font-size="11">`;
+  s+=`<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#d98c3a" stroke-width="1.2" opacity=".6"/></pattern></defs>`;
+  for(const sh of lo.sheets){
+    const pts=sh.poly.map(([x,y])=>`${X(x).toFixed(1)},${Y(y).toFixed(1)}`).join(" ");
+    s+=`<polygon points="${pts}" fill="${sh.full?"var(--ply)":"url(#hatch)"}" fill-opacity="${sh.full?0.28:1}" stroke="#8a6a2c" stroke-width="1"/>`;
+  }
+  s+=`<polygon points="${lo.poly.map(([x,y])=>`${X(x)},${Y(y)}`).join(" ")}" fill="none" stroke="${ink}" stroke-width="2"/>`;
+  for(const d of lo.dropped) s+=`<circle cx="${X(d.x)}" cy="${Y(d.y)}" r="3.5" fill="none" stroke="${mut}" stroke-dasharray="2 2"/>`;
+  const clashSet=new Set(lo.clashes.map(c=>c.b));
+  for(const b of lo.bolts) s+=`<circle cx="${X(b.x)}" cy="${Y(b.y)}" r="4.2" fill="${clashSet.has(b)?"var(--warn)":ink}"/>`;
+  for(const f of lo.ferr){ if(f.face!=="outer"){ s+=`<rect x="${X(f.x)-(f.face==="end0"?0:7)}" y="${Y(f.y)-3.5}" width="7" height="7" fill="#d4a017" stroke="${ink}" stroke-width=".6"/>`; continue;} s+=`<rect x="${X(f.x)-3.5}" y="${Y(f.y)-3.5}" width="7" height="7" fill="#d4a017" stroke="${ink}" stroke-width=".6"/>`; }
+  // dims
+  const dim=(x1,y1,x2,y2,txt,off=0,vert=false)=>{
+    if(!vert){ const y=y1+off; return `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${mut}"/><line x1="${x1}" y1="${y-5}" x2="${x1}" y2="${y+5}" stroke="${mut}"/><line x1="${x2}" y1="${y-5}" x2="${x2}" y2="${y+5}" stroke="${mut}"/><text x="${(x1+x2)/2}" y="${y-4}" text-anchor="middle" fill="${ink}">${txt}</text>`; }
+    const x=x1+off; return `<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="${mut}"/><line x1="${x-5}" y1="${y1}" x2="${x+5}" y2="${y1}" stroke="${mut}"/><line x1="${x-5}" y1="${y2}" x2="${x+5}" y2="${y2}" stroke="${mut}"/><text x="${x-6}" y="${(y1+y2)/2}" text-anchor="end" fill="${ink}" dominant-baseline="middle">${txt}</text>`; };
+  s+=dim(X(0),Y(0),X(p.L),Y(0),f0(p.L),24);
+  s+=dim(X(0),Y(0),X(0),Y(p.Hs),f0(p.Hs)+" seat",-10,true);
+  if(p.profile!=="flat"){ const xr=p.profile==="mono"?p.L:p.L/2; s+=dim(X(p.L),Y(0),X(p.L),Y(topY(p,xr)),f0(topY(p,xr))+(p.profile==="gable"?" apex":""),40,true).replace('text-anchor="end"','text-anchor="start"').replace(/x="(\d+\.?\d*)" y="([\d.]+)" text-anchor="start"/,(m0,a,b)=>`x="${+a+12}" y="${b}" text-anchor="start"`);
+    s+=dim(X(0),Y(p.Hs),X(p.seat),Y(p.Hs),f0(p.seat)+" seat",-10); }
+  // sample sheet dims on first full sheet
+  const fs=lo.sheets.find(x=>x.full&&x.course===0);
+  if(fs){ const bx=lo.bx, by=lo.by;
+    s+=`<text x="${X(fs.x0+fs.w/2)}" y="${Y(fs.y0+fs.h)+14}" text-anchor="middle" fill="${ink}" font-weight="500">${lo.sw} × ${lo.sh} sheet · 6 ties</text>`;
+    const yb=Y(fs.y0)-8; let xs=[fs.x0,...bx.map(v=>fs.x0+v),fs.x0+fs.w];
+    for(let i=0;i<xs.length-1;i++) s+=`<text x="${X((xs[i]+xs[i+1])/2)}" y="${yb}" text-anchor="middle" fill="var(--accent)" font-size="10">${f0(xs[i+1]-xs[i])}</text>`;
+    let ys=[fs.y0,...by.map(v=>fs.y0+v)];
+    for(let i=0;i<ys.length-1;i++) s+=`<text x="${X(fs.x0)+4}" y="${Y((ys[i]+ys[i+1])/2)}" fill="var(--accent)" font-size="10" dominant-baseline="middle">${f0(ys[i+1]-ys[i])}</text>`;
+  }
+  if(p.stagger && lo.courses>1) s+=`<text x="${X(p.L)+6}" y="${Y(lo.sh)-6}" fill="${mut}" font-size="10">course 2 offset ${lo.sw/2}</text>`;
+  // legend
+  const ly=Ht-14;
+  s+=`<circle cx="${m}" cy="${ly-4}" r="4" fill="${ink}"/><text x="${m+10}" y="${ly}" fill="${ink}">tie bolt (${lo.bolts.length})</text>`;
+  s+=`<circle cx="${m+140}" cy="${ly-4}" r="4" fill="none" stroke="${mut}" stroke-dasharray="2 2"/><text x="${m+150}" y="${ly}" fill="${ink}">omitted — near top/end (${lo.dropped.length})</text>`;
+  s+=`<rect x="${m+370}" y="${ly-8}" width="8" height="8" fill="#d4a017"/><text x="${m+384}" y="${ly}" fill="${ink}">cast-in ferrule (${lo.ferr.length})</text>`;
+  s+=`<rect x="${m+530}" y="${ly-9}" width="14" height="10" fill="url(#hatch)" stroke="#8a6a2c"/><text x="${m+550}" y="${ly}" fill="${ink}">cut sheet</text>`;
+  s+=`<circle cx="${m+640}" cy="${ly-4}" r="4" fill="var(--warn)"/><text x="${m+650}" y="${ly}" fill="${ink}">tie within 150 of ferrule (${lo.clashes.length})</text>`;
+  return s+"</svg>";
+}
+
+// ---------- SVG: seat + arris detail ----------
+function detailSVG(p){
+  const flat=p.profile==="flat";
+  const seatW = flat? p.t : p.seat;        // horizontal extent of seat in section
+  const W=900,H=640, sc=0.9;               // 1 mm = 0.9 px (about 1:4 at A3)
+  const ox=420, oy=330;                    // seat outer arris position
+  const X=x=>ox+x*sc, Y=y=>oy-y*sc;        // local mm: x=0 outer face/end, y=0 seat level
+  const ink="var(--ink)", mut="var(--muted)", gW=200,gD=200;
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace" font-size="11">`;
+  s+=`<defs><pattern id="conc" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="var(--concrete)" opacity=".55"/><circle cx="3" cy="4" r=".9" fill="${mut}"/><circle cx="8" cy="8" r=".6" fill="${mut}"/></pattern></defs>`;
+  // concrete: from x=-seatW-? to 0 below seat; upstand left for rake
+  const depthShown=300;
+  let pts=[[0,0],[0,-depthShown],[-seatW-(flat?0:150),-depthShown]];
+  if(flat) pts.push([-seatW,0]); else { const uh=Math.min(p.up,200)+40; pts.push([-seatW-150,uh]); pts.push([-seatW,uh]); pts.push([-seatW,0]); }
+  s+=`<polygon points="${pts.map(([x,y])=>`${X(x)},${Y(y)}`).join(" ")}" fill="url(#conc)" stroke="${ink}" stroke-width="1.6"/>`;
+  s+=`<line x1="${X(-seatW-(flat?10:160))}" y1="${Y(-depthShown)+6}" x2="${X(10)}" y2="${Y(-depthShown)+6}" stroke="${mut}" stroke-dasharray="6 3"/><text x="${X(10)+4}" y="${Y(-depthShown)+10}" fill="${mut}">break</text>`;
+  // reo dots / bars
+  const c=p.cover;
+  if(flat){ const lays = p.type==="CW1"? [-c-6,-(p.t-c-6)] : [-p.t/2];
+    for(const x of lays){ s+=`<line x1="${X(x)}" y1="${Y(-depthShown+10)}" x2="${X(x)}" y2="${Y(-c-6)}" stroke="#c0392b" stroke-width="3"/>`; for(let y=-c-6-150;y>-depthShown;y-=200) s+=`<circle cx="${X(x+(x>-p.t/2?-9:9))}" cy="${Y(y)}" r="5" fill="#e67e22"/>`; s+=`<circle cx="${X(x+(x>-p.t/2?-9:9))}" cy="${Y(-c-6)}" r="5" fill="#8e44ad"/>`; }
+    s+=`<text x="${X(-p.t/2)}" y="${Y(-depthShown)+26}" text-anchor="middle" fill="${ink}">${p.type} · ${p.t} wall · ${p.cover} cover</text>`;
+  } else {
+    s+=`<line x1="${X(-c-6)}" y1="${Y(-depthShown+10)}" x2="${X(-c-6)}" y2="${Y(-c-6)}" stroke="#8e44ad" stroke-width="3"/><line x1="${X(-c-6)}" y1="${Y(-c-6)}" x2="${X(-seatW-c-6)}" y2="${Y(-c-6)}" stroke="#8e44ad" stroke-width="3"/>`;
+    s+=`<text x="${X(-seatW/2)}" y="${Y(-depthShown)+26}" text-anchor="middle" fill="${ink}">blade wall end · ${p.type} · ${p.cover} cover</text>`;
+  }
+  // gutter on seat
+  const gx0=flat? -p.t/2-gW/2 : -gW-20, gx1=gx0+gW;
+  s+=`<path d="M${X(gx0)},${Y(gD)} L${X(gx0)},${Y(0)} L${X(gx1)},${Y(0)} L${X(gx1)},${Y(gD)}" fill="none" stroke="#5b7da0" stroke-width="2.4"/>`;
+  s+=`<text x="${X((gx0+gx1)/2)}" y="${Y(gD/2)}" text-anchor="middle" fill="${ink}">gutter</text><text x="${X((gx0+gx1)/2)}" y="${Y(gD/2)+13}" text-anchor="middle" fill="${mut}">200×200 nom.</text>`;
+  // PFC fascia
+  const pfcTop=gD+50, pfcBot=pfcTop-300, xw=12;
+  s+=`<path d="M${X(xw+90)},${Y(pfcTop)} L${X(xw)},${Y(pfcTop)} L${X(xw)},${Y(pfcBot)} L${X(xw+90)},${Y(pfcBot)}" fill="none" stroke="#4a6278" stroke-width="5"/>`;
+  s+=`<text x="${X(xw+100)}" y="${Y(pfcTop)+4}" fill="${ink}">300 PFC fascia</text>`;
+  // roof line
+  s+=`<line x1="${X(-seatW-200)}" y1="${Y(pfcTop+40+(seatW+200)*0.15)}" x2="${X(xw+60)}" y2="${Y(pfcTop+30)}" stroke="${mut}" stroke-width="1.5" stroke-dasharray="8 4"/><text x="${X(-seatW-190)}" y="${Y(pfcTop+60+(seatW+200)*0.15)}" fill="${mut}">roof sheeting (by others)</text>`;
+  // ferrules + cleat
+  const rows=[p.fr1,p.fr2].filter(v=>v>0);
+  const yl=Math.min(...rows.map(r=>-r))-60;
+  if(rows.length){
+    s+=`<rect x="${X(0)}" y="${Y(pfcBot+20)}" width="${xw*sc}" height="${(pfcBot+20-yl)*sc}" fill="#4a6278"/>`;
+    for(const r of rows){ s+=`<rect x="${X(-100)}" y="${Y(-r)-9}" width="${100*sc}" height="18" fill="#d4a017" stroke="${ink}" stroke-width=".6"/><line x1="${X(0)}" y1="${Y(-r)}" x2="${X(xw+30)}" y2="${Y(-r)}" stroke="${ink}" stroke-width="3"/>`;
+      s+=`<text x="${X(xw+40)}" y="${Y(-r)+4}" fill="${r<p.fEdge?"var(--warn)":ink}">ferrule ${r} below seat${r<p.fEdge?" ✕ edge":""}</text>`; }
+    s+=`<text x="${X(xw+40)}" y="${Y(yl)+12}" fill="${mut}">cleat plate, bolted to ferrules</text>`;
+  }
+  // seat level dim
+  s+=`<line x1="${X(-seatW-40)}" y1="${Y(0)}" x2="${X(-seatW-5)}" y2="${Y(0)}" stroke="${mut}"/><text x="${X(-seatW-44)}" y="${Y(0)+4}" text-anchor="end" fill="${ink}">seat RL +${f0(p.Hs)}</text>`;
+  s+=`<text x="${X(-seatW/2)}" y="${Y(0)+14}" text-anchor="middle" fill="var(--accent)">${f0(seatW)}</text>`;
+  // arris callout
+  const ax=X(0), ay=Y(0), bx=W-110, by=H-120, R=85;
+  s+=`<circle cx="${ax}" cy="${ay}" r="11" fill="none" stroke="var(--accent)" stroke-width="1.6"/><line x1="${ax+8}" y1="${ay+8}" x2="${bx-R*0.7}" y2="${by-R*0.7}" stroke="var(--accent)" stroke-width="1.2"/>`;
+  s+=`<circle cx="${bx}" cy="${by}" r="${R}" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/>`;
+  // magnified corner: 3 mm radius drawn at 10 px/mm
+  const k=10, cx0=bx+10, cy0=by-10, rr=3*k;
+  s+=`<path d="M${cx0-60},${cy0} L${cx0-rr},${cy0} A${rr},${rr} 0 0 1 ${cx0},${cy0+rr} L${cx0},${cy0+60}" fill="none" stroke="${ink}" stroke-width="2"/>`;
+  s+=`<path d="M${cx0-60},${cy0} L${cx0-rr},${cy0} A${rr},${rr} 0 0 1 ${cx0},${cy0+rr} L${cx0},${cy0+60} L${cx0-60},${cy0+60} Z" fill="url(#conc)" stroke="none"/>`;
+  s+=`<line x1="${cx0-rr}" y1="${cy0+rr}" x2="${cx0-rr*0.29}" y2="${cy0+rr*0.29}" stroke="var(--accent)"/><text x="${bx-R+12}" y="${by-R+30}" fill="${ink}" font-weight="500">R3 pencil round</text><text x="${bx-R+12}" y="${by-R+44}" fill="${mut}">all exposed arrises</text><text x="${bx-R+18}" y="${by+R-10}" fill="${mut}">scale 10:1</text>`;
+  s+=`<text x="16" y="22" fill="${ink}" font-weight="500" font-size="12">${flat?"SECTION — eave wall at concealed gutter":"ELEVATION — blade wall end at gutter seat"}</text><text x="16" y="38" fill="${mut}">Schematic, approx. 1:4. Gutter/PFC sizes nominal (Rev D concept).</text>`;
+  return s+"</svg>";
+}
+
+// ---------- quantities ----------
+function quantities(p,lo,len){
+  const A=area(lo.poly);
+  const vol=A*p.t/1e9;
+  const pd=PADS[p.pad];
+  const fVol=(p.L+400)*p.fW*p.fD/1e9;
+  const padVol=2*pd.L*pd.W*pd.D/1e9;
+  const full=lo.sheets.filter(s=>s.full).length, cut=lo.sheets.length-full;
+  const endsArea = (p.profile==="flat"?2*p.Hs:(p.profile==="mono"?p.Hs+topY(p,p.L):2*p.Hs))*p.t/1e6;
+  const kg = len.N12/1000*0.888 + len.N16/1000*1.58 + len.L12/1000*0.888 + len.R10/1000*0.617;
+  const rows=[
+    ["Concrete — wall ("+p.type+", N32)",vol.toFixed(2),"m³"],
+    ["Concrete — strip footing (assumed size, N25)",fVol.toFixed(2),"m³"],
+    ["Concrete — 2 × "+p.pad+" pads (N25)",padVol.toFixed(2),"m³"],
+    ["Off-form face area, per face",(A/1e6).toFixed(2),"m²"],
+    ["Off-form face area, both faces + stop ends",(2*A/1e6+endsArea).toFixed(2),"m²"],
+    ["Formply sheets per face — full",full,"no."],
+    ["Formply sheets per face — cut",cut,"no."],
+    ["Formply sheets — both faces",2*lo.sheets.length,"no."],
+    ["Through form-tie bolts",lo.bolts.length,"no."],
+    ["Tie positions omitted (near top/end)",lo.dropped.length,"no."],
+    ["Tie holes to fill (colour-matched mortar), both faces",2*lo.bolts.length,"no."],
+    ["Cast-in threaded ferrules",lo.ferr.length,"no."],
+    ["Gutter seat length",(p.profile==="flat"?p.L:(p.profile==="gable"?2:1)*p.t),"mm of seat"],
+    ["N12 bar (walls, starters, top bars)",(len.N12/1000).toFixed(1),"m"],
+    ["N16 bar (horizontals/U-bars/pads)",(len.N16/1000).toFixed(1),"m"],
+    ["L12TM trench mesh bars",(len.L12/1000).toFixed(1),"m"],
+    ["R10 ligatures",(len.R10/1000).toFixed(1),"m"],
+    ["Reinforcement mass (no laps/wastage)",Math.round(kg),"kg"],
+  ];
+  return `<thead><tr><th>Item</th><th style="text-align:right">Qty</th><th>Unit</th></tr></thead><tbody>`+rows.map(r=>`<tr><td>${r[0]}</td><td class="n">${r[1]}</td><td>${r[2]}</td></tr>`).join("")+`</tbody>`;
+}
+function checks(p,lo){
+  const out=[];
+  const add=(ok,txt)=>out.push(`<li class="${ok?"":"w"}">${ok?"✓":"⚠"} ${txt}</li>`);
+  add(lo.clashes.length===0, lo.clashes.length? `${lo.clashes.length} tie bolt(s) within 150 mm of a cast-in ferrule. Move the ferrules or the bolt rows.` : "No tie bolts within 150 mm of a ferrule.");
+  const minR=Math.min(...[p.fr1,p.fr2].filter(v=>v>0));
+  add(minR>=p.fEdge, `Top ferrule is ${minR} mm below the seat; minimum set at ${p.fEdge} mm. Confirm with the ferrule supplier and SIA.`);
+  if(p.profile!=="flat") add(p.t/2>=p.fEdge*0.75, `End-face ferrules sit ${p.t/2} mm from each wall face. That is tight for a ${p.t} wall. Check side edge distance and splitting.`);
+  add(lo.dropped.length===0, lo.dropped.length? `${lo.dropped.length} tie position(s) fall within ${p.topClr} mm of the top or within 100 mm of an end and are omitted. Add top clamps or edge ties at the seat step and rake.` : "All sheet tie positions are inside the wall.");
+  const tiesPerSheet=lo.sheets.filter(s=>s.full).every(s=>s.bolts===6);
+  add(tiesPerSheet,"Every full sheet carries 6 ties.");
+  const hasSeat = p.profile!=="flat";
+  if(hasSeat) add(p.seat>=220, `Seat length ${p.seat} mm against a 200 mm nominal gutter. Leave room for the gutter falls and movement.`);
+  add(p.up>=200||p.profile==="flat", `Upstand at the seat is ${p.up} mm. The gutter zone needs at least 200 mm plus freeboard.`);
+  add(p.cover>=40, `Cover is ${p.cover} mm. SIA requires 40 mm for formed, exposed walls.`);
+  add(p.t===190, `Wall thickness is ${p.t} mm. SIA schedules 190 mm for both CW1 and CW2.`);
+  add(true,"No construction joint in the off-form face (SIA S50 section A). Pour each wall in one lift or agree a joint with SIA and the architect.");
+  add(false,"Piles: Morgan’s drawings now govern and are not in the files I can reach. The model shows a placeholder only.");
+  add(false,"3 mm pencil round conflicts with SIA FW14 (25 mm fillet UNO). Get written acceptance.");
+  return out.join("");
+}
+
+// ---------- orchestrate ----------
+let layoutCache=null;
+function update(resetCam){
+  const p=P(); P0=p;
+  const lo=layout(p); layoutCache=lo;
+  const len=build(p,lo);
+  $("tieSvg").innerHTML=tieSVG(p,lo);
+  $("detSvg").innerHTML=detailSVG(p);
+  $("qtyTable").innerHTML=quantities(p,lo,len);
+  const ch=checks(p,lo); $("checks").innerHTML=ch; $("seatChecks").innerHTML=ch;
+  $("tieNote").textContent=`${lo.sw} × ${lo.sh} formply, ${p.stagger?"half-sheet brick stagger":"stack bond"}, 6 ties per full sheet (${lo.bx.length} × ${lo.by.length}). ${lo.sheets.length} sheet positions per face, ${lo.bolts.length} through-ties. Inner face mirrors this layout so every tie passes straight through.`;
+  const warn=lo.clashes.length+lo.dropped.length;
+  $("hud").innerHTML=`${p.type} · ${p.t} wall · L ${f0(p.L)} · seat +${f0(p.Hs)}${p.profile!=="flat"?" · top +"+f0(lo.maxH):""}<br>${lo.sheets.length*2} sheets · ${lo.bolts.length} ties · ${lo.ferr.length} ferrules`+(warn?`<br><span class="w">${lo.clashes.length} clash · ${lo.dropped.length} ties omitted</span>`:"");
+  if(resetCam) setView(curView,p);
+}
+document.querySelectorAll(".rail input, .rail select").forEach(el=>{
+  const geom=!["cut","opac"].includes(el.id) && !el.id.startsWith("ly_");
+  el.addEventListener(el.type==="range"?"input":"change",()=>update(geom && ["L","Hs","profile"].includes(el.id)));
+});
+// tabs
+document.querySelectorAll(".tabs .btn").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tabs .btn").forEach(x=>x.classList.toggle("on",x===b));
+  ["ties","detail","qty","src"].forEach(k=>$("tab-"+k).hidden = (k!==b.dataset.tab));
+}));
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{applyTheme();update(false);});
+new MutationObserver(()=>{applyTheme();update(false);}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+applyTheme(); resize(); update(true);
+})();
+</script>
