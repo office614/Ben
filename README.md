@@ -1,3 +1,9 @@
+# National Capital Cleaning website
+
+The public website is `index.html` (Home), `about.html`, `projects.html` and `contact.html`, styled by `css/site.css` with `js/site.js`. Photos and the hero video live in `assets/ncc/` (placeholders, see `assets/ncc/CREDITS.md`). `landing.html` now redirects to the home page. The phone number and email shown on the site are placeholders.
+
+---
+
 # EMC Contract Intake & Risk Review
 
 A browser-based contract risk desk for **Earth Moving Creations (EMC)** — civil / earthmoving, **NSW · ACT · VIC** — that checks every incoming contract, subcontract or purchase order against EMC's standard Terms & Conditions (the fixed benchmark) and runs the full 4-step review in one pass.
