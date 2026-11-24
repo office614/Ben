@@ -1,0 +1,785 @@
+<title>Tallebudgera Entry Walls</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@400;500;600&family=Jost:wght@600;700;800&family=Archivo:wght@700;800&family=Red+Hat+Display:wght@700;800&display=swap">
+<style>
+/* Layout: drafting-table split. Control rail left; four A3 drawing sheets stacked right (paper stays white in both themes); register and questions below. */
+:root{
+  --bg:#eef0ee; --panel:#f8f9f7; --ink:#1d2421; --muted:#5d6762; --line:#cfd5d1;
+  --accent:#d0661f; --accent-ink:#ffffff; --warn:#b3261e; --ok:#2f7a4a; --amber:#9a6a00;
+  --paper:#ffffff; --paper-edge:#c3c9c5;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-head:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151a18; --panel:#1d2321; --ink:#e3e8e5; --muted:#9aa5a0; --line:#323b37;
+  --accent:#f08a43; --accent-ink:#1a120c; --warn:#ff7b6e; --ok:#6fcf93; --amber:#e0b04a;
+  --paper:#ffffff; --paper-edge:#3a433f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151a18; --panel:#1d2321; --ink:#e3e8e5; --muted:#9aa5a0; --line:#323b37;
+  --accent:#f08a43; --accent-ink:#1a120c; --warn:#ff7b6e; --ok:#6fcf93; --amber:#e0b04a;
+  --paper:#ffffff; --paper-edge:#3a433f; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 48px}
+h1,h2,h3{font-family:var(--font-head);text-wrap:balance;margin:0}
+h1{font-size:1.55rem;font-weight:600;letter-spacing:.01em}
+h2{font-size:1.15rem;font-weight:600}
+h3{font-size:.76rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 24px;margin-bottom:14px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+header.top p{margin:4px 0 0;color:var(--muted);max-width:78ch}
+.tb{display:grid;grid-template-columns:auto auto;gap:0 14px;font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.tb b{color:var(--ink);font-weight:500}
+.wrap{display:grid;grid-template-columns:310px minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:980px){.wrap{grid-template-columns:minmax(0,1fr)}}
+.rail{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:14px;max-height:calc(100vh - 32px);overflow:auto;position:sticky;top:max(12px,env(safe-area-inset-top,0px))}
+@media (max-width:980px){.rail{position:static;max-height:none}}
+fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:8px;align-items:center}
+.row.wide{grid-template-columns:minmax(0,1fr)}
+label{font-size:13px}
+label small{color:var(--muted);font-size:11px}
+input,select{font:inherit;font-size:13px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:4px 6px;width:100%;min-width:0}
+input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.checks{display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.chk{display:grid;grid-template-columns:62px minmax(0,1fr);gap:8px;align-items:start}
+.pill{font-family:var(--font-mono);font-size:10.5px;font-weight:500;text-align:center;border-radius:3px;padding:1px 4px;border:1px solid currentColor}
+.pill.ok{color:var(--ok)} .pill.bad{color:var(--warn)} .pill.tbc{color:var(--amber)}
+main{display:flex;flex-direction:column;gap:18px;min-width:0}
+nav.sheets{display:flex;flex-wrap:wrap;gap:6px}
+nav.sheets a{font-family:var(--font-mono);font-size:12px;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:4px;padding:3px 8px;background:var(--panel)}
+nav.sheets a:hover{border-color:var(--accent)}
+figure.sheetbox{margin:0;overflow-x:auto;border:1px solid var(--paper-edge);border-radius:4px;background:var(--paper)}
+figure.sheetbox svg{display:block;width:100%;min-width:820px;height:auto}
+section.doc{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+section.doc p{margin:0;max-width:80ch}
+.tscroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{font-family:var(--font-head);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td:first-child{white-space:nowrap;font-weight:500}
+.flag{font-family:var(--font-mono);font-size:11px;padding:1px 5px;border-radius:3px;border:1px solid currentColor;white-space:nowrap}
+.flag.c{color:var(--ok)} .flag.a{color:var(--amber)} .flag.x{color:var(--warn)}
+ol.q{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;max-width:85ch}
+/* drawing sheet styles: fixed paper palette, independent of theme */
+.sheet text{font-family:"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif;fill:#151515}
+.sheet .k0{stroke:#151515;stroke-width:.13}
+.sheet .k1{stroke:#151515;stroke-width:.18}
+.sheet .k2{stroke:#151515;stroke-width:.25}
+.sheet .k3{stroke:#151515;stroke-width:.35}
+.sheet .k5{stroke:#151515;stroke-width:.5}
+.sheet .k7{stroke:#151515;stroke-width:.7}
+.sheet .dash{stroke-dasharray:1.6 .8}
+.sheet .cl{stroke-dasharray:4 .8 .8 .8}
+.sheet .bar{stroke:#b02a1f;fill:none}
+.sheet .bard{fill:#b02a1f;stroke:none}
+.sheet text.bartx{fill:#b02a1f}
+.sheet .flagbox{fill:#fff4e6;stroke:#c25a12;stroke-width:.3}
+.sheet text.flagtx{fill:#9c430a}
+.sheet .grey{fill:#e9ebe9;stroke:none}
+.sheet .letter{fill:#d9dcda;stroke:#151515;stroke-width:.12}
+@media print{
+  @page{size:A3 landscape;margin:0}
+  body{padding:0;background:#fff}
+  header.top,.rail,nav.sheets,section.doc{display:none}
+  .wrap{display:block}
+  figure.sheetbox{border:0;border-radius:0;page-break-after:always;break-after:page}
+  figure.sheetbox svg{min-width:0;width:420mm;height:297mm}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <div>
+    <h3>Front garden · off-form concrete · inset lettering</h3>
+    <h1>Tallebudgera Entry Walls</h1>
+    <p>Wall and footing drawings for the front garden concrete walls at 572 Tallebudgera Creek Road, using the shed's CW1/CW2 make-up from SIA's tender set. Edit any value on the left and all four A3 sheets redraw. Letter sizes and stroke widths are measured from the chosen font.</p>
+  </div>
+  <div class="tb">
+    <span>Status</span><b>Preliminary · not for construction</b>
+    <span>Basis</span><b>SIA 15579 Issue B · 30/09/26</b>
+    <span>Rev / date</span><b>P1 · 24/11/26</b>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside class="rail" aria-label="Drawing parameters">
+    <fieldset>
+      <h3>Lettering</h3>
+      <div class="row wide"><label for="name">Name line <small>(not yet confirmed)</small></label></div>
+      <div class="row wide"><input id="name" type="text" value="PROPERTY NAME"></div>
+      <div class="row wide"><label for="addr">Address line</label></div>
+      <div class="row wide"><input id="addr" type="text" value="572 TALLEBUDGERA CREEK ROAD"></div>
+      <div class="row"><label for="font">Typeface</label>
+        <select id="font"><option value="Jost">Jost (geometric)</option><option value="Archivo">Archivo (grotesque)</option><option value="Red Hat Display">Red Hat Display</option></select></div>
+      <div class="row"><label for="wt">Weight</label>
+        <select id="wt"><option value="600">SemiBold 600</option><option value="700" selected>Bold 700</option><option value="800">ExtraBold 800</option></select></div>
+      <div class="row"><label for="nameCap">Name cap height <small>mm</small></label><input id="nameCap" type="number" value="200" step="10" min="60"></div>
+      <div class="row"><label for="nameBase">Name baseline <small>mm above FGL</small></label><input id="nameBase" type="number" value="1480" step="10"></div>
+      <div class="row"><label for="addrCap">Address cap height <small>mm</small></label><input id="addrCap" type="number" value="120" step="10" min="50"></div>
+      <div class="row"><label for="addrBase">Address baseline <small>mm above FGL</small></label><input id="addrBase" type="number" value="1100" step="10"></div>
+      <div class="row"><label for="track">Tracking <small>em</small></label><input id="track" type="number" value="0.08" step="0.01" min="0"></div>
+      <div class="row"><label for="offX">Shift from wall centre <small>mm, + right</small></label><input id="offX" type="number" value="0" step="50"></div>
+      <div class="row"><label for="recess">Recess depth <small>mm</small></label><input id="recess" type="number" value="15" step="1" min="3" max="40"></div>
+      <div class="row"><label for="draft">Former draft <small>degrees per side</small></label><input id="draft" type="number" value="10" step="1" min="0" max="30"></div>
+    </fieldset>
+    <fieldset>
+      <h3>Wall &amp; footing <small>(assumed)</small></h3>
+      <div class="row"><label for="make">Reinforcement make-up</label>
+        <select id="make"><option value="CW2" selected>CW2 · central layer</option><option value="CW1">CW1 · each face</option></select></div>
+      <div class="row"><label for="L">Wall length <small>mm</small></label><input id="L" type="number" value="6000" step="100" min="1200"></div>
+      <div class="row"><label for="H">Height above FGL <small>mm</small></label><input id="H" type="number" value="1800" step="50" min="600"></div>
+      <div class="row"><label for="t">Thickness <small>mm</small></label><input id="t" type="number" value="190" step="10" min="150"></div>
+      <div class="row"><label for="R">Return each end <small>mm · 0 = none</small></label><input id="R" type="number" value="900" step="100" min="0"></div>
+      <div class="row"><label for="embed">Footing top below FGL <small>mm</small></label><input id="embed" type="number" value="150" step="25" min="0"></div>
+      <div class="row"><label for="fW">Footing width <small>mm</small></label><input id="fW" type="number" value="600" step="50" min="300"></div>
+      <div class="row"><label for="fD">Footing depth <small>mm</small></label><input id="fD" type="number" value="500" step="50" min="300"></div>
+      <div class="row"><label for="ret">Retained height <small>mm · 0 = free-standing</small></label><input id="ret" type="number" value="0" step="50" min="0"></div>
+      <div class="row"><label for="arris">Arris</label>
+        <select id="arris"><option value="r3">3 mm pencil round (Ben)</option><option value="c25">25 mm chamfer (SIA FW14)</option></select></div>
+      <div class="row"><label for="tieClr">Tie clear of letters <small>mm</small></label><input id="tieClr" type="number" value="100" step="25" min="25"></div>
+    </fieldset>
+    <fieldset>
+      <h3>Live checks</h3>
+      <div class="checks" id="checks"></div>
+    </fieldset>
+  </aside>
+
+  <main>
+    <nav class="sheets" aria-label="Sheets">
+      <a href="#fw-01">FW-01 Arrangement</a><a href="#fw-02">FW-02 Section &amp; details</a><a href="#fw-03">FW-03 Reo &amp; formwork</a><a href="#fw-04">FW-04 3D &amp; stability</a><a href="#register">Register</a><a href="#questions">Questions</a>
+    </nav>
+    <figure class="sheetbox" id="fw-01"></figure>
+    <figure class="sheetbox" id="fw-02"></figure>
+    <figure class="sheetbox" id="fw-03"></figure>
+    <figure class="sheetbox" id="fw-04"></figure>
+
+    <section class="doc" id="register">
+      <h2>Confirmed vs assumed</h2>
+      <p>Everything on the sheets falls into one of these rows. Anything marked Assumed is a placeholder until the designer, engineer or you confirm it.</p>
+      <div class="tscroll"><table>
+        <thead><tr><th>Item</th><th>Value used</th><th>Source</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Address</td><td>572 Tallebudgera Creek Road, Tallebudgera QLD</td><td>SIA tender set title block; SIA/SDM emails</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Address wording on wall</td><td>“572 TALLEBUDGERA CREEK ROAD”</td><td>Brief. Number only, or number + road?</td><td><span class="flag a">To confirm</span></td></tr>
+          <tr><td>Property name</td><td>“PROPERTY NAME” placeholder, flagged on the sheets</td><td>Not found in Gmail or Drive</td><td><span class="flag x">Missing</span></td></tr>
+          <tr><td>Reference photo / “the wall”</td><td>None found</td><td>Searched Gmail and Drive</td><td><span class="flag x">Missing</span></td></tr>
+          <tr><td>CW1 make-up</td><td>190 formed · vert N12-300 EF · horiz N12-200 EF · starters N12-200 EF, lap 600, cog 300 · N16 U-bars at ends</td><td>SIA S50 / S64, Issue B 30/09/26</td><td><span class="flag c">Confirmed (shed)</span></td></tr>
+          <tr><td>CW2 make-up</td><td>190 formed · vert N12-200 central · horiz N16-200 central · starters N12-200 central, lap 600, cog 300 · bars 50 max from end</td><td>SIA S50 / S64, Issue B</td><td><span class="flag c">Confirmed (shed)</span></td></tr>
+          <tr><td>Wall top</td><td>N12-200 “L” bars each side, 600 legs, 600 lap, 40 top cover; 4-N12 longitudinal; no construction joint for off-form finish</td><td>SIA S50 Section A (drawn as interpreted)</td><td><span class="flag a">Interpretation</span></td></tr>
+          <tr><td>Cover</td><td>Walls formed &amp; exposed 40 · footings 50</td><td>SIA S01</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Concrete</td><td>Walls N32 · footings N25</td><td>SIA S01</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Arris</td><td>3 mm pencil round, as you asked, vs 25 mm chamfer/fillet in SIA FW14</td><td>Your preference vs SIA FW14</td><td><span class="flag x">Conflict, RFI</span></td></tr>
+          <tr><td>Tie holes</td><td>Fill with colour-matched mortar</td><td>SIA FW16</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Formwork</td><td>2700 × 1200 formply laid landscape, 6 ties per sheet, half-sheet brick stagger, same layout both faces</td><td>Your instruction (shed model)</td><td><span class="flag c">As instructed</span></td></tr>
+          <tr><td>Wall length, height, returns, levels</td><td>6000 long × 1800 above FGL, 900 returns, level ground both sides</td><td>No drawing found</td><td><span class="flag a">Assumed</span></td></tr>
+          <tr><td>Strip footing</td><td>600 W × 500 D, 4-L12TM top &amp; bottom, R10-600 ligs, top 150 below FGL</td><td>Borrowed from SIA EB4 (S20) via the shed model. SIA scheduled no CW footing.</td><td><span class="flag a">Assumed</span></td></tr>
+          <tr><td>Site / wind</td><td>Site class H1/P · wind N3</td><td>SIA S01; GT Geotechnical GTGEO_26_P200.02 (15/09/26)</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Natural ground depth</td><td>~3.7 m average</td><td>Verbal, Anthony (GT Geotechnical), 13/10/26</td><td><span class="flag a">Unverified</span></td></tr>
+          <tr><td>Piles / foundations engineer</td><td>Morgan supersedes SIA for piles</td><td>Your instruction. Morgan's drawings not found.</td><td><span class="flag x">Missing</span></td></tr>
+          <tr><td>Typeface</td><td>Jost Bold (open-source geometric sans, even stroke weight)</td><td>Chosen for casting</td><td><span class="flag a">Proposed</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="doc" id="questions">
+      <h2>Questions for you</h2>
+      <ol class="q">
+        <li><b>Name.</b> What exact name goes on the wall, with spelling and capitals? Uppercase only is best for casting.</li>
+        <li><b>Address wording.</b> “572” alone, “572 TALLEBUDGERA CREEK ROAD”, or the full address with suburb? Same wall as the name, or a separate pier?</li>
+        <li><b>“As per the wall”.</b> Is there a photo or a designer sketch of the wall you mean? Nothing matching was found in Gmail or Drive.</li>
+        <li><b>Geometry.</b> Length, height, returns (if any), gate or driveway openings, and finished levels each side. Does the wall retain soil anywhere?</li>
+        <li><b>Engineer.</b> Who designs the footing and wall: SIA (Ryan) or Morgan? A free-standing wall is a different structural case from the shed walls (see FW-04).</li>
+        <li><b>Arris.</b> 3 mm pencil round or SIA's 25 mm chamfer? SIA FW14 says 25 mm unless noted otherwise.</li>
+      </ol>
+    </section>
+
+    <section class="doc" id="search">
+      <h2>Search record</h2>
+      <p><b>Gmail, searched:</b> front wall, entry wall, feature wall, garden wall, front fence, letterbox, signage, lettering, house name; Tallebudgera with landscape / wall / entry / gate / name / sign / front / garden; SDM Designs, Studio Workshop and absfacade traffic for the last 120 days. <b>Found:</b> only shed threads (SIA 15579), SIA fee proposal 15744 for the main house, and SDM's 1 September 2026 request to Seed Engineers and DGE. Those link to main-house DA plans via WeTransfer, a link that has likely expired. No front wall, landscape, lettering or name material.</p>
+      <p><b>Drive, searched:</b> Tallebudgera, SDM, 15579, landscape, entry, front wall, letterbox, signage, feature wall, and images/PDFs modified since 1 September 2026. <b>Found:</b> one Tallebudgera shed actions sheet. Nothing on the front walls.</p>
+    </section>
+  </main>
+</div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const IDS=["name","addr","font","wt","nameCap","nameBase","addrCap","addrBase","track","offX","recess","draft","make","L","H","t","R","embed","fW","fD","ret","arris","tieClr"];
+const NUM=new Set(["nameCap","nameBase","addrCap","addrBase","track","offX","recess","draft","L","H","t","R","embed","fW","fD","ret","tieClr"]);
+function readP(){const p={};for(const k of IDS){const v=$(k).value;p[k]=NUM.has(k)?(parseFloat(v)||0):v;}
+  p.L=Math.max(1200,p.L);p.H=Math.max(600,p.H);p.t=Math.max(150,p.t);p.fW=Math.max(p.t+100,p.fW);p.fD=Math.max(300,p.fD);
+  p.recess=Math.min(40,Math.max(3,p.recess));p.draft=Math.min(30,Math.max(0,p.draft));p.R=Math.max(0,p.R);p.ret=Math.min(Math.max(0,p.ret),p.H-300);return p;}
+const r0=n=>Math.round(n), f1=n=>(Math.round(n*10)/10).toString();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- font metrics, measured from the loaded face ---------- */
+const cv=document.createElement("canvas").getContext("2d");
+function metrics(fam,wt){
+  cv.font=`${wt} 1000px "${fam}", Arial, sans-serif`;
+  const H=cv.measureText("H"), I=cv.measureText("I");
+  let cap=H.actualBoundingBoxAscent/1000, stem=((I.actualBoundingBoxLeft||0)+(I.actualBoundingBoxRight||0))/1000;
+  if(!(cap>0.4&&cap<1)) cap=0.7; if(!(stem>0.03&&stem<0.4)) stem=0.13;
+  return {cap,stem,w:s=>cv.measureText(s).width/1000,asc:s=>(cv.measureText(s).actualBoundingBoxAscent||cap*1000)/1000,dsc:s=>Math.max(0,cv.measureText(s).actualBoundingBoxDescent||0)/1000};
+}
+function lineGeom(text,capH,base,p,m){
+  const fs=capH/m.cap, n=[...text].length;
+  const width=(m.w(text)+p.track*Math.max(0,n-1))*fs;
+  const cx=p.L/2+p.offX, desc=m.dsc(text)*fs, asc=m.asc(text)*fs;
+  return {text,cap:capH,fs,width,cx,base,x0:cx-width/2,x1:cx+width/2,top:base+Math.max(capH,asc),bot:base-desc,stem:m.stem*fs};
+}
+
+/* ---------- derived geometry, tie layout, checks ---------- */
+function derive(p){
+  const m=metrics(p.font,p.wt);
+  const lines=[];
+  if(p.name.trim()) lines.push(Object.assign(lineGeom(p.name,p.nameCap,p.nameBase,p,m),{key:"name"}));
+  if(p.addr.trim()) lines.push(Object.assign(lineGeom(p.addr,p.addrCap,p.addrBase,p,m),{key:"addr"}));
+  const zones=lines.map(l=>({x0:l.x0-p.tieClr,x1:l.x1+p.tieClr,y0:l.bot-p.tieClr,y1:l.top+p.tieClr}));
+  const inZone=(x,y)=>zones.some(z=>x>z.x0&&x<z.x1&&y>z.y0&&y<z.y1);
+  // formply, landscape 2700 x 1200, courses from footing top; y here = above FGL
+  const SW=2700,SH=1200,formH=p.H+p.embed,courses=Math.ceil(formH/SH);
+  const sheets=[],ties=[];
+  for(let c=0;c<courses;c++){
+    const yb=c*SH-p.embed, off=(c%2===1)?-SW/2:0;
+    for(let x0=off;x0<p.L;x0+=SW){
+      const sx0=Math.max(0,x0),sx1=Math.min(p.L,x0+SW),sy1=Math.min(p.H,yb+SH);
+      if(sx1-sx0<50) continue;
+      sheets.push({x0:sx0,x1:sx1,y0:yb,y1:sy1,cut:(sx1-sx0<SW-1)||(sy1-yb<SH-1)});
+      for(const dx of [450,1350,2250]) for(const dy of [300,900]){
+        const x=x0+dx,y=yb+dy;
+        if(x<100||x>p.L-100||y>p.H-150) continue;
+        const t={x,y,ox:x,oy:y,state:"ok",sx0:Math.max(sx0,x0),sx1,sy0:yb,sy1};
+        if(inZone(x,y)){
+          // nearest clear position inside the same sheet, 100 from sheet edges, 150 from wall top
+          let best=null;
+          for(let ddy=-300;ddy<=300;ddy+=50) for(let ddx=-450;ddx<=450;ddx+=50){
+            const nx=x+ddx,ny=y+ddy,d=Math.hypot(ddx,ddy);
+            if(nx<t.sx0+100||nx>t.sx1-100||ny<yb+100||ny>yb+SH-100||ny>p.H-150||nx<100||nx>p.L-100) continue;
+            if(inZone(nx,ny)) continue;
+            if(!best||d<best.d) best={nx,ny,d};
+          }
+          if(best){t.x=best.nx;t.y=best.ny;t.state="moved";} else t.state="clash";
+        }
+        ties.push(t);
+      }
+    }
+  }
+  // cover at letter base
+  const cw1=p.make==="CW1";
+  const faceToBar=cw1?40:(p.t/2-14);           // CW2: N16 + N12 central pair, 28 thick
+  const coverAtLetter=faceToBar-p.recess;
+  const setback=cw1?Math.max(0,40-coverAtLetter):0;
+  // stroke rules (rule of thumb, not a standard)
+  const minStem=lines.length?Math.min(...lines.map(l=>l.stem)):0;
+  const baseW=minStem-2*p.recess*Math.tan(p.draft*Math.PI/180);
+  const stemNeed=Math.max(15,p.recess);
+  // indicative stability screen, N3 per AS 4055: Vh,u = 50 m/s
+  const q=0.6*50*50/1000, Cpn=1.3, pw=q*Cpn;                     // kPa
+  const Hm=p.H/1000,em=p.embed/1000,dm=p.fD/1000,bm=p.fW/1000,tm=p.t/1000;
+  const F=pw*Hm, Mot=F*(Hm/2+em+dm);
+  const Gw=24*tm*(Hm+em), Gf=24*bm*dm, Gs=18*em*(bm-tm);
+  const Mres=0.9*(Gw+Gf+Gs)*bm/2, ratio=Mres/Mot;
+  const Mbase=F*(Hm/2+em);
+  // indicative wall base flexure (starters N12-200 per face / central)
+  const As=565, d=cw1?(p.t-40-12-6):(p.t/2), a=As*500/(0.85*32*1000);
+  const phiMu=0.85*As*500*(d-a/2)/1e6;
+  return {m,lines,zones,sheets,ties,courses,formH,cw1,faceToBar,coverAtLetter,setback,minStem,baseW,stemNeed,
+    stab:{q,Cpn,pw,F,Mot,Gw,Gf,Gs,Mres,ratio,Mbase,phiMu,d}};
+}
+
+/* ---------- SVG primitives (paper mm) ---------- */
+let PX="s";
+const ln=(x1,y1,x2,y2,c="k2")=>`<line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}" class="${c}"/>`;
+const ln2=(x1,y1,x2,y2,c="k2")=>`<line x1="${x1.toFixed(2)}" y1="${y1.toFixed(2)}" x2="${x2.toFixed(2)}" y2="${y2.toFixed(2)}" class="${c}"/>`;
+const nf=e=>/fill=/.test(e)?e:e+' fill="none"';
+const rc=(x,y,w,h,c="k2",extra="")=>`<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${Math.max(0,w).toFixed(2)}" height="${Math.max(0,h).toFixed(2)}" class="${c}" ${nf(extra)}/>`;
+const pg=(pts,c="k2",extra="")=>`<polygon points="${pts.map(q=>q[0].toFixed(2)+","+q[1].toFixed(2)).join(" ")}" class="${c}" ${nf(extra)}/>`;
+const pl=(pts,c="k2",extra="")=>`<polyline points="${pts.map(q=>q[0].toFixed(2)+","+q[1].toFixed(2)).join(" ")}" class="${c}" ${nf(extra)}/>`;
+function tx(x,y,s,o={}){const sz=o.size||2.2,a=o.anchor||"start",w=o.weight||400,rot=o.rot?` transform="rotate(${o.rot} ${x.toFixed(2)} ${y.toFixed(2)})"`:"",cls=o.cls?` class="${o.cls}"`:"",ls=o.ls?` letter-spacing="${o.ls}"`:"";
+  return `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" font-size="${sz}" text-anchor="${a}" font-weight="${w}"${cls}${rot}${ls}>${esc(s)}</text>`;}
+function wrap(s,width,size){const max=Math.max(8,Math.floor(width/(size*0.46)));const out=[];let cur="";for(const w of s.split(" ")){if((cur+" "+w).trim().length>max){out.push(cur.trim());cur=w;}else cur+=" "+w;}if(cur.trim())out.push(cur.trim());return out;}
+function para(x,y,s,width,o={}){const sz=o.size||2.1,lh=sz*1.32;let out="";wrap(s,width,sz).forEach((l,i)=>out+=tx(x,y+i*lh,l,Object.assign({},o,{size:sz})));return {svg:out,h:wrap(s,width,sz).length*lh};}
+function tick(x,y){return ln2(x-.7,y+.7,x+.7,y-.7,"k3");}
+function dimH(x1,x2,y,label,fy1,fy2,o={}){
+  let s=ln2(x1,y,x2,y,"k1")+tick(x1,y)+tick(x2,y);
+  if(fy1!=null) s+=ln2(x1,fy1+(fy1>y?-.8:.8),x1,y+(fy1>y?1.2:-1.2),"k0");
+  if(fy2!=null) s+=ln2(x2,fy2+(fy2>y?-.8:.8),x2,y+(fy2>y?1.2:-1.2),"k0");
+  const sz=o.size||2, w=String(label).length*sz*.5;
+  const xm=(Math.abs(x2-x1)>w+2)?(x1+x2)/2:Math.max(x1,x2)+1+w/2;
+  return s+tx(xm,y-.7,label,{size:sz,anchor:"middle"});
+}
+function dimV(y1,y2,x,label,fx1,fx2,o={}){
+  let s=ln2(x,y1,x,y2,"k1")+tick(x,y1)+tick(x,y2);
+  if(fx1!=null) s+=ln2(fx1+(fx1>x?-.8:.8),y1,x+(fx1>x?1.2:-1.2),y1,"k0");
+  if(fx2!=null) s+=ln2(fx2+(fx2>x?-.8:.8),y2,x+(fx2>x?1.2:-1.2),y2,"k0");
+  const sz=o.size||2, w=String(label).length*sz*.5;
+  const ym=(Math.abs(y2-y1)>w+2)?(y1+y2)/2:Math.min(y1,y2)-1-w/2;
+  return s+tx(x-.7,ym,label,{size:sz,anchor:"middle",rot:-90});
+}
+function leader(x1,y1,x2,y2,label,o={}){
+  const right=x2>=x1, sz=o.size||2;
+  let s=`<circle cx="${x1.toFixed(2)}" cy="${y1.toFixed(2)}" r=".35" fill="#151515"/>`+ln2(x1,y1,x2,y2,"k1")+ln2(x2,y2,x2+(right?2.5:-2.5),y2,"k1");
+  const lines=Array.isArray(label)?label:[label];
+  lines.forEach((l,i)=>s+=tx(x2+(right?3.2:-3.2),y2+sz*.35+i*sz*1.25,l,{size:sz,anchor:right?"start":"end",cls:o.cls}));
+  return s;
+}
+function key(x,y,n){return `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="1.9" fill="#fff" stroke="#151515" stroke-width=".25"/>`+tx(x,y+.75,String(n),{size:2.1,anchor:"middle",weight:600});}
+function viewTitle(x,y,tag,title,scale,sub){
+  let s=`<circle cx="${(x+4).toFixed(2)}" cy="${(y-1.6).toFixed(2)}" r="4" fill="#fff" stroke="#151515" stroke-width=".5"/>`+tx(x+4,y-.3,tag,{size:3.6,anchor:"middle",weight:600});
+  s+=tx(x+10,y-1.2,title,{size:3.4,weight:600})+ln2(x+10,y+.4,x+10+title.length*1.9,y+.4,"k5");
+  s+=tx(x+10,y+3.4,scale+(sub?"  ·  "+sub:""),{size:2.2});
+  return s;
+}
+function flag(x,y,w,lines){const h=lines.length*2.7+1.8;let s=rc(x,y,w,h,"flagbox");lines.forEach((l,i)=>s+=tx(x+1.4,y+2.9+i*2.7,l,{size:2,cls:"flagtx",weight:i===0?600:400}));return s;}
+function defs(){
+  return `<defs>
+  <pattern id="${PX}-conc" patternUnits="userSpaceOnUse" width="5" height="5"><circle cx="1" cy="1.2" r=".18" fill="#555"/><circle cx="3.4" cy="3.1" r=".14" fill="#555"/><circle cx="4.2" cy=".6" r=".1" fill="#555"/><path d="M2 4.3 l.7 -.9 l.5 .9z" fill="none" stroke="#555" stroke-width=".1"/><circle cx=".7" cy="3.9" r=".1" fill="#555"/></pattern>
+  <pattern id="${PX}-earth" patternUnits="userSpaceOnUse" width="3" height="3" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3" stroke="#777" stroke-width=".12"/></pattern>
+  <pattern id="${PX}-zone" patternUnits="userSpaceOnUse" width="1.6" height="1.6" patternTransform="rotate(-45)"><line x1="0" y1="0" x2="0" y2="1.6" stroke="#c25a12" stroke-width=".12"/></pattern>
+  <pattern id="${PX}-agg" patternUnits="userSpaceOnUse" width="3" height="3"><circle cx="1" cy="1" r=".55" fill="none" stroke="#666" stroke-width=".1"/><circle cx="2.4" cy="2.3" r=".4" fill="none" stroke="#666" stroke-width=".1"/></pattern>
+  </defs>`;
+}
+const fillC=()=>`fill="url(#${PX}-conc)"`, fillE=()=>`fill="url(#${PX}-earth)"`;
+
+/* ---------- sheet frame + title block ---------- */
+const SHEETS={"FW-01":"General arrangement — elevation & plan","FW-02":"Section through wall & footing, lettering details","FW-03":"Reinforcement & formwork tie layout","FW-04":"3D view, stability screen & open items"};
+function frame(no,scaleTxt,body,notes){
+  let s=`<rect x="0" y="0" width="420" height="297" fill="#fff"/>`+rc(12,8,400,281,"k7");
+  // notes column + title block
+  s+=ln(282,8,282,289,"k5")+ln(282,226,412,226,"k5");
+  s+=notes||"";
+  const tb=226;
+  s+=tx(285,tb+4.4,"PROJECT",{size:1.7,weight:600})+tx(285,tb+8.2,"PROPOSED RESIDENCE & SHED — FRONT GARDEN WALLS",{size:2.4,weight:600})+tx(285,tb+11.2,"572 TALLEBUDGERA CREEK ROAD, TALLEBUDGERA QLD",{size:2.2});
+  s+=ln(282,tb+13,412,tb+13,"k2");
+  s+=tx(285,tb+16.6,"DRAWING",{size:1.7,weight:600})+tx(285,tb+20.6,SHEETS[no].toUpperCase(),{size:2.4,weight:600});
+  s+=ln(282,tb+23,412,tb+23,"k2");
+  // status band
+  s+=rc(282,tb+23,130,8,"flagbox")+tx(347,tb+28.3,"PRELIMINARY — FOR ENGINEER REVIEW — NOT FOR CONSTRUCTION",{size:2.3,anchor:"middle",weight:600,cls:"flagtx"});
+  s+=ln(282,tb+31,412,tb+31,"k2");
+  const cells=[["DWG No.",no],["REV","P1"],["DATE","24.11.26"],["SCALE @ A3",scaleTxt]];
+  const cw=[34,18,26,52];let x=282;
+  cells.forEach((c,i)=>{s+=tx(x+2,tb+34.6,c[0],{size:1.7,weight:600})+tx(x+2,tb+40.2,c[1],{size:i===0?4.2:3,weight:600});x+=cw[i];if(i<3)s+=ln(x,tb+31,x,tb+43,"k2");});
+  s+=ln(282,tb+43,412,tb+43,"k2");
+  s+=tx(285,tb+46.6,"BASIS: SIA 15579 TENDER ISSUE B 30.09.26 (S01, S50, S64). FOOTING & GEOMETRY ASSUMED.",{size:1.8});
+  s+=tx(285,tb+49.8,"PREPARED BY: IDEAL GROUP (BUILDER) · DESIGN INTENT ONLY · ENGINEER TO DESIGN & CERTIFY",{size:1.8});
+  s+=tx(285,tb+53,"DO NOT SCALE. ALL DIMENSIONS IN MILLIMETRES. VERIFY ON SITE.",{size:1.8});
+  return `<svg viewBox="0 0 420 297" xmlns="http://www.w3.org/2000/svg" class="sheet" role="img" aria-label="${no} ${esc(SHEETS[no])}">${defs()}${s}${body}</svg>`;
+}
+function noteCol(title,items,y0=14){
+  let s=tx(285,y0,title,{size:2.8,weight:600})+ln(285,y0+1.2,409,y0+1.2,"k3");let y=y0+5.4;
+  for(const it of items){
+    if(it.h){s+=tx(285,y+1,it.h.toUpperCase(),{size:2.1,weight:600});y+=4;continue;}
+    const n=it.n!=null?it.n:null;
+    if(n!=null) s+=key(287.2,y-.6,n);
+    const r=para(n!=null?291:285,y,it.t,n!=null?118:124,{size:2,cls:it.flag?"flagtx":undefined});
+    s+=r.svg;y+=r.h+1.3;
+  }
+  return s;
+}
+function pickScale(len,avail,list=[20,25,30,40,50,75,100]){for(const s of list) if(len/s<=avail) return s;return list[list.length-1];}
+
+/* ---------- FW-01: elevation + plan ---------- */
+function sheet1(p,d){
+  PX="a";
+  const s=pickScale(p.L+(p.R>0?0:0),232);
+  const ox=12+(270-p.L/s)/2+4, gy=118;          // FGL on paper
+  const X=x=>ox+x/s, Y=z=>gy-z/s;
+  let b="";
+  // ground
+  b+=rc(X(-600),gy,(p.L+1200)/s,2.2,"",`fill="url(#${PX}-earth)"`)+ln2(X(-600),gy,X(p.L+600),gy,"k3");
+  b+=tx(X(-600),gy-1,"FGL (ASSUMED LEVEL)",{size:1.8});
+  // footing & buried wall (hidden)
+  b+=rc(X(-(p.fW-p.t)/2>0?0:0),Y(-p.embed),p.L/s,p.embed/s,"k2 dash");
+  b+=rc(X(0)-((p.fW-p.t)/2)/s*0,Y(-p.embed),p.L/s,p.fD/s,"k2 dash");
+  b+=tx(X(p.L/2),Y(-p.embed-p.fD/2)+.8,`STRIP FOOTING ${p.fW} W × ${p.fD} D (ASSUMED — ENGINEER TO DESIGN)`,{size:1.9,anchor:"middle"});
+  // wall face
+  b+=rc(X(0),Y(p.H),p.L/s,p.H/s,"k5","fill=\"#f6f7f6\"");
+  // letters
+  for(const l of d.lines){
+    const fs=l.fs/s, ls=p.track*fs;
+    b+=`<text x="${(X(l.cx)+ls/2).toFixed(2)}" y="${Y(l.base).toFixed(2)}" font-family="'${p.font}',Arial,sans-serif" font-weight="${p.wt}" font-size="${fs.toFixed(3)}" letter-spacing="${ls.toFixed(3)}" text-anchor="middle" class="letter" style="fill:#d6d9d7;stroke:#151515;stroke-width:.12">${esc(l.text)}</text>`;
+  }
+  if(/PROPERTY NAME/i.test(p.name)) b+=flag(X(0)+2,Y(p.H)+2,44,["PLACEHOLDER — NAME NOT YET CONFIRMED","Letter count and length will change."]);
+  // tie holes (final positions)
+  for(const t of d.ties){ if(t.state==="clash") continue; b+=`<circle cx="${X(t.x).toFixed(2)}" cy="${Y(t.y).toFixed(2)}" r=".45" fill="#fff" stroke="#151515" stroke-width=".15"/>`; }
+  // centreline
+  b+=ln2(X(p.L/2),Y(p.H)-6,X(p.L/2),gy+4,"k0 cl")+tx(X(p.L/2),Y(p.H)-6.6,"℄ WALL",{size:1.8,anchor:"middle"});
+  // section mark A
+  const sx=X(Math.min(600,p.L*0.1)), smTop=Y(p.H)-4-5*(d.lines.length+1)-3;
+  b+=ln2(sx,smTop+2.4,sx,gy+5,"k3 cl");
+  for(const yy of [smTop,gy+7.5]){b+=`<circle cx="${sx.toFixed(2)}" cy="${yy.toFixed(2)}" r="2.4" fill="#fff" stroke="#151515" stroke-width=".35"/>`+tx(sx,yy+.4,"A",{size:2,anchor:"middle",weight:600})+tx(sx,yy+1.9,"FW-02",{size:.9,anchor:"middle"});}
+  // dims — horizontal above
+  const top=Y(p.H);
+  const ln_=d.lines;
+  let row=top-4;
+  for(const l of ln_){
+    b+=dimH(X(0),X(l.x0),row,r0(l.x0),top,Y(l.top))+dimH(X(l.x0),X(l.x1),row,`${r0(l.width)} ${l.key==="name"?"NAME":"ADDRESS"} (MEASURED)`,null,Y(l.top))+dimH(X(l.x1),X(p.L),row,r0(p.L-l.x1),null,top);
+    row-=5;
+  }
+  b+=dimH(X(0),X(p.L),row,`${p.L} OVERALL (ASSUMED)`,top,top);
+  // vertical dims right
+  ln_.forEach((l,i)=>{const vx=X(p.L)+5+i*6;
+    b+=dimV(Y(l.base),gy,vx,`${l.base}`,X(l.x1),null)+dimV(Y(l.base+l.cap),Y(l.base),vx,`${l.cap}`,X(l.x1),null);});
+  const vH=X(p.L)+5+ln_.length*6+2;
+  b+=dimV(Y(p.H),gy,vH,`${p.H} ABOVE FGL`,X(p.L),X(p.L));
+  b+=dimV(gy,Y(-p.embed),vH,`${p.embed}`,null,null)+dimV(Y(-p.embed),Y(-p.embed-p.fD),vH,`${p.fD}`,X(p.L),X(p.L));
+  b+=viewTitle(18,Y(-p.embed-p.fD)+10,"1","FRONT ELEVATION — LETTERED FACE",`1:${s}`,"tie holes shown at final positions");
+  // plan
+  const ps=s, py=gy+56;                     // front face line on paper
+  const PXx=x=>ox+x/ps, PY=y=>py+y/ps;
+  const ext=(p.fW-p.t)/2;
+  // footing hidden
+  b+=pg([[PXx(-ext),PY(-ext)],[PXx(p.L+ext),PY(-ext)],[PXx(p.L+ext),PY(p.R>0?p.R:p.t+ext)],[PXx(p.L-p.t-ext),PY(p.R>0?p.R:p.t+ext)],[PXx(p.L-p.t-ext),PY(p.t+ext)],[PXx(p.t+ext),PY(p.t+ext)],[PXx(p.t+ext),PY(p.R>0?p.R:p.t+ext)],[PXx(-ext),PY(p.R>0?p.R:p.t+ext)]],"k1 dash");
+  // walls cut
+  const wallPoly=p.R>0?[[0,0],[p.L,0],[p.L,p.R],[p.L-p.t,p.R],[p.L-p.t,p.t],[p.t,p.t],[p.t,p.R],[0,p.R]]:[[0,0],[p.L,0],[p.L,p.t],[0,p.t]];
+  b+=pg(wallPoly.map(q=>[PXx(q[0]),PY(q[1])]),"k5",fillC());
+  // lettering zone on front face
+  d.lines.forEach((l,i)=>b+=ln2(PXx(l.x0),PY(0)-.9-i*1.6,PXx(l.x1),PY(0)-.9-i*1.6,"k3")+tx(PXx(l.x1)+1,PY(0)-.6-i*1.6,l.key==="name"?"NAME ZONE":"ADDRESS ZONE",{size:1.4}));
+  b+=tx(PXx(p.L/2),PY(0)-4.6,"LETTERED FACE (STREET SIDE)",{size:1.9,anchor:"middle",weight:600});
+  // section A in plan
+  const sax=PXx(Math.min(600,p.L*0.1));
+  b+=ln2(sax,PY(-ext)-4,sax,PY(p.t+ext)+3,"k3 cl")+tx(sax+1,PY(-ext)-4.4,"A",{size:2,weight:600});
+  // plan dims
+  b+=dimH(PXx(0),PXx(p.L),PY(Math.max(p.R,p.t+ext))+5,`${p.L}`,PY(Math.max(p.R,p.t)),PY(Math.max(p.R,p.t)));
+  if(p.R>0) b+=dimV(PY(0),PY(p.R),PXx(p.L)+6,`${p.R} RETURN`,PXx(p.L),PXx(p.L));
+  b+=dimV(PY(0),PY(p.t),PXx(0)-5,`${p.t}`,PXx(0),PXx(0))+dimV(PY(-ext),PY(p.t+ext),PXx(0)-10,`${p.fW} FTG`,PXx(-ext),PXx(-ext));
+  b+=viewTitle(18,PY(Math.max(p.R,p.t+ext))+14,"2","PLAN",`1:${ps}`,"footing hidden (dashed), centred under wall");
+  if(p.L>8000) b+=flag(X(p.L/2)-25,py-16,50,["CONTROL JOINT NEEDED","L > 8 m: engineer to locate. Not in lettered zone."]);
+  const notes=noteCol("NOTES",[
+    {h:"Read with"},
+    {n:1,t:"FW-02 section & details, FW-03 reinforcement & ties, FW-04 stability screen. SIA 15579 Issue B S01, S50, S64."},
+    {h:"Status"},
+    {n:2,t:"Geometry, levels and footing are ASSUMED. No front-wall, landscape or lettering drawing was found. Confirm before pricing.",flag:true},
+    {n:3,t:"Free-standing wall: a cantilever from its footing, unlike the shed walls, which the roof restrains. Wall and footing must be designed and certified by the engineer (SIA or Morgan).",flag:true},
+    {h:"Concrete & finish"},
+    {n:4,t:"Wall N32, footing N25 (SIA S01). Class 2 off-form face to street side; no construction joints in the face (SIA S50)."},
+    {n:5,t:`Arris: ${p.arris==="r3"?"3 mm pencil round as instructed. CONFLICTS with SIA FW14 (25 mm chamfer/fillet UNO). RFI before ordering formwork.":"25 mm chamfer to SIA FW14."}`,flag:p.arris==="r3"},
+    {n:6,t:"Tie holes: fill with colour-matched mortar (SIA FW16). No ties within the lettering exclusion zones (FW-03)."},
+    {h:"Lettering"},
+    {n:7,t:`Inset (recessed) ${p.recess} mm, ${p.font} ${p.wt}, tracking ${p.track} em, centred ${p.offX?("+"+p.offX+" mm from"):"on"} wall ℄. Lengths are measured from the font. Final artwork to be approved before formers are cut.`},
+    {n:8,t:"Name line is a PLACEHOLDER until confirmed. Address wording to be confirmed.",flag:true},
+    {h:"Set-out"},
+    {n:9,t:"Set-out to boundary, levels each side, openings and services (letterbox, lights, meter) to be confirmed. Check Gold Coast City Council and QLD Building Regulation limits for front walls/fences and retaining walls with the certifier."}
+  ]);
+  return frame("FW-01",`1:${s}`,b,notes);
+}
+
+/* ---------- FW-02: section + details ---------- */
+function sheet2(p,d){
+  PX="b";
+  let b="";
+  // ---- Section A, 1:20
+  const s=20, ox=40, gy=150;
+  const X=x=>ox+x/s, Y=z=>gy-z/s;
+  const fx0=-(p.fW-p.t)/2, fz0=-p.embed-p.fD;
+  // earth both sides
+  b+=rc(X(fx0-500),gy,(p.fW+1000)/s,(p.embed+p.fD+150)/s,"",fillE());
+  if(p.ret>0){ // retained side (back)
+    b+=pg([[X(p.t),Y(p.ret)],[X(p.t+900),Y(p.ret)],[X(p.t+900),gy],[X(p.t),gy]],"",fillE());
+    b+=ln2(X(p.t),Y(p.ret),X(p.t+900),Y(p.ret),"k3");
+    b+=pg([[X(p.t),Y(p.ret-100)],[X(p.t+300),Y(p.ret-100)],[X(p.t+300),Y(-p.embed)],[X(p.t),Y(-p.embed)]],"k1",`fill="url(#${PX}-agg)"`);
+    b+=`<circle cx="${X(p.t+150).toFixed(2)}" cy="${Y(-p.embed+60).toFixed(2)}" r="${(50/s).toFixed(2)}" fill="#fff" stroke="#151515" stroke-width=".25"/>`;
+  }
+  // footing + wall
+  b+=rc(X(fx0),Y(-p.embed),p.fW/s,p.fD/s,"k5",fillC());
+  b+=rc(X(0),Y(p.H),p.t/s,(p.H+p.embed)/s,"k5",fillC());
+  // white-out earth inside concrete done by fill; ground lines
+  b+=ln2(X(fx0-500),gy,X(0),gy,"k3")+(p.ret>0?"":ln2(X(p.t),gy,X(fx0+p.fW+500),gy,"k3"));
+  // recess notches on front face at letter heights
+  for(const l of d.lines){ b+=rc(X(0),Y(l.top),p.recess/s,l.cap/s,"k2","fill=\"#fff\""); }
+  // reinforcement
+  const cw1=d.cw1, c=40;
+  const vxs=cw1?[c+12+6, p.t-c-12-6]:[p.t/2];
+  for(const vx of vxs){
+    b+=ln2(X(vx),Y(p.H-c-12),X(vx),Y(-p.embed+ (0)),"k3 bar");
+  }
+  // starters with cog
+  const fb=-p.embed-p.fD+50+12;
+  for(const vx of vxs){
+    const sx=vx+(cw1?(vx<p.t/2?3:-3):3);
+    b+=pl([[X(sx),Y(-p.embed+600)],[X(sx),Y(fb)],[X(sx+(vx<=p.t/2?300:-300)),Y(fb)]],"k3 bar");
+  }
+  // horizontals as dots
+  for(let z=100;z<p.H-80;z+=200){ for(const vx of vxs){ const off=cw1?(vx<p.t/2?-9:9):(-11); b+=`<circle cx="${X(vx+off).toFixed(2)}" cy="${Y(z).toFixed(2)}" r="${((cw1?6:8)/s+0.1).toFixed(2)}" class="bard"/>`; } }
+  // top L bars
+  const tz=p.H-c;
+  b+=pl([[X(c+6),Y(tz-600)],[X(c+6),Y(tz)],[X(p.t-c-6),Y(tz)]],"k2 bar")+pl([[X(p.t-c-6),Y(tz-600)],[X(p.t-c-6),Y(tz)-.35],[X(c+6),Y(tz)-.35]],"k2 bar");
+  // footing trench mesh + lig
+  const fy1=-p.embed-50-6, fy2=-p.embed-p.fD+50+6;
+  for(const fy of [fy1,fy2]) for(let i=0;i<4;i++){ const xx=fx0+50+12+i*((p.fW-124)/3); b+=`<circle cx="${X(xx).toFixed(2)}" cy="${Y(fy).toFixed(2)}" r=".38" class="bard"/>`; }
+  b+=rc(X(fx0+50),Y(-p.embed-50),(p.fW-100)/s,(p.fD-100)/s,"k1 bar");
+  // pier ghost
+  b+=rc(X(p.t/2-225),Y(fz0),450/s,28,"k1 dash")+ln2(X(p.t/2-225),Y(fz0)+28,X(p.t/2+225),Y(fz0)+28,"k1 dash");
+  // dims
+  b+=dimV(Y(p.H),gy,X(fx0)-12,`${p.H}`,X(0),null)+dimV(gy,Y(-p.embed),X(fx0)-12,`${p.embed}`,null,X(fx0))+dimV(Y(-p.embed),Y(fz0),X(fx0)-12,`${p.fD}`,X(fx0),X(fx0));
+  b+=dimH(X(0),X(p.t),Y(p.H)-5,`${p.t}`,Y(p.H),Y(p.H))+dimH(X(fx0),X(fx0+p.fW),Y(fz0)+5,`${p.fW} (ASSUMED)`,Y(fz0),Y(fz0));
+  // leaders/keys
+  const lx=X(fx0+p.fW)+10;
+  b+=leader(X(p.t/2),Y(p.H-250),lx,Y(p.H-250),`${cw1?"CW1":"CW2"} WALL ${p.t} N32 — SEE KEY 1`)+
+     leader(X(0)+.2,Y(d.lines.length?d.lines[0].base+d.lines[0].cap/2:p.H/2),X(0)-8,Y(d.lines.length?d.lines[0].base+d.lines[0].cap/2:p.H/2),[`LETTER RECESS ${p.recess}`,"DETAIL B"])+
+     leader(X(cw1?p.t-c-18:p.t/2+3),Y(-p.embed+300),lx,Y(-p.embed+300),"STARTERS N12-200, LAP 600, COG 300 — KEY 2")+
+     leader(X(fx0+p.fW-80),Y(-p.embed-p.fD/2),lx,Y(-p.embed-p.fD/2),["4-L12TM T&B, R10-600 LIGS, N25","50 COVER — ASSUMED (KEY 3)"])+
+     leader(X(p.t/2),Y(fz0)+16,lx,Y(fz0)+16,["PIER / PILE IF ENGINEER REQUIRES","H1/P SITE — KEY 4"])+
+     leader(X(p.t/2),Y(p.H-c),lx,Y(p.H-c)-6,"TOP 'L' BARS — DETAIL C");
+  b+=viewTitle(16,272,"A","SECTION THROUGH WALL & FOOTING","1:20",`${cw1?"CW1 each face":"CW2 central"} make-up`);
+
+  // ---- Detail B: letter recess, horizontal section, 1:2
+  const bs=2, bx=225, by=30;           // face line at by, stroke centred at bx
+  const BX=x=>bx+x/bs, BY=y=>by+y/bs;
+  const w=Math.max(10,Math.min(80,d.minStem)), dr=p.recess, tan=Math.tan(p.draft*Math.PI/180);
+  const half=w/2, halfB=Math.max(1,half-dr*tan);
+  const depthShow=cw1?110:(p.t/2+30), span=110;
+  // concrete with recess
+  b+=pg([[BX(-span),BY(0)],[BX(-half),BY(0)],[BX(-halfB),BY(dr)],[BX(halfB),BY(dr)],[BX(half),BY(0)],[BX(span),BY(0)],[BX(span),BY(depthShow)],[BX(-span),BY(depthShow)]],"k5",fillC());
+  // break line
+  b+=pl([[BX(-span)-1,BY(depthShow)],[BX(-20),BY(depthShow)],[BX(-14),BY(depthShow)-3],[BX(-8),BY(depthShow)+3],[BX(-2),BY(depthShow)],[BX(span)+1,BY(depthShow)]],"k1","fill=\"#fff\"");
+  // ghost formply + former
+  b+=rc(BX(-span),BY(-17),span*2/bs,17/bs,"k1 dash","fill=\"none\"");
+  b+=pg([[BX(-half),BY(0)],[BX(-halfB),BY(dr)],[BX(halfB),BY(dr)],[BX(half),BY(0)]],"k1 dash","fill=\"#f3e7d6\"");
+  b+=ln2(BX(0),BY(-17),BX(0),BY(dr-3),"k1 dash");
+  // bars
+  if(cw1){
+    const hy=40+6, vy=40+12+6;
+    b+=ln2(BX(-span),BY(hy+d.setback),BX(span),BY(hy+d.setback),"k5 bar");
+    for(const xx of [-75,75]) b+=`<circle cx="${BX(xx).toFixed(2)}" cy="${BY(vy+d.setback).toFixed(2)}" r="${(6/bs).toFixed(2)}" class="bard"/>`;
+  } else {
+    const hy=p.t/2-6, vy=p.t/2+8;
+    b+=ln2(BX(-span),BY(hy),BX(span),BY(hy),"k7 bar");
+    for(const xx of [-100,100]) b+=`<circle cx="${BX(xx).toFixed(2)}" cy="${BY(vy).toFixed(2)}" r="${(6/bs).toFixed(2)}" class="bard"/>`;
+  }
+  const barFace=cw1?(40+d.setback):(p.t/2-14);
+  b+=dimV(BY(dr),BY(barFace),BX(-half-14),`${r0(barFace-dr)} COVER`,BX(-halfB),BX(-span+30));
+  b+=dimV(BY(0),BY(dr),BX(half+12),`${dr}`,BX(half),BX(halfB));
+  b+=dimH(BX(-half),BX(half),BY(-17)-4,`${r0(w)} STROKE`,BY(0),BY(0));
+  b+=dimH(BX(-halfB),BX(halfB),BY(dr)+5,`${f1(Math.max(0,d.baseW))}`,BY(dr),BY(dr));
+  b+=key(BX(-span)+4,BY(-17)-4,5)+tx(BX(-span)+7,BY(-17)-3.2,"17 FORMPLY (GHOST)",{size:1.8});
+  b+=key(BX(half)+4,BY(dr/2)+8,6)+tx(BX(half)+7,BY(dr/2)+8.8,`FORMER, ${p.draft}° DRAFT`,{size:1.8});
+  b+=tx(BX(span)-1,BY(barFace)-1,cw1?`FACE BARS${d.setback>0?" SET BACK "+r0(d.setback):""}`:"CW2 CENTRAL LAYER",{size:1.8,anchor:"end",cls:"bartx"});
+  b+=viewTitle(bx-span/bs,by+depthShow/bs+10,"B","LETTER RECESS — HORIZONTAL SECTION","1:2",`thinnest stroke in ${p.font} ${p.wt}`);
+
+  // ---- Detail C: wall top 1:5
+  const cs=5, cx0=135, cy0=150;
+  const CX=x=>cx0+x/cs, CY=z=>cy0-z/cs;
+  const ar=p.arris==="r3"?3:25;
+  const topPoly=p.arris==="r3"?[[0,-400],[0,0],[p.t,0],[p.t,-400]]:[[0,-400],[0,-ar],[ar,0],[p.t-ar,0],[p.t,-ar],[p.t,-400]];
+  b+=pg(topPoly.map(q=>[CX(q[0]),CY(q[1])]),"k5",fillC());
+  b+=pl([[CX(-5),CY(-400)+1],[CX(p.t/2),CY(-400)-1],[CX(p.t+5),CY(-400)+1]],"k1","fill=\"none\"");
+  const lc=40+6;
+  b+=pl([[CX(lc),CY(-400)],[CX(lc),CY(-lc)],[CX(p.t-lc),CY(-lc)]],"k3 bar")+pl([[CX(p.t-lc-1.5),CY(-400)],[CX(p.t-lc-1.5),CY(-lc-1.5)],[CX(lc+1.5),CY(-lc-1.5)]],"k3 bar");
+  for(const xx of [lc+12,p.t-lc-12]) for(const zz of [-lc-12,-lc-60]) b+=`<circle cx="${CX(xx).toFixed(2)}" cy="${CY(zz).toFixed(2)}" r="${(6/cs).toFixed(2)}" class="bard"/>`;
+  if(!cw1) b+=ln2(CX(p.t/2),CY(-400),CX(p.t/2),CY(-lc-25),"k3 bar");
+  else for(const xx of [lc+18,p.t-lc-18]) b+=ln2(CX(xx),CY(-400),CX(xx),CY(-lc-25),"k3 bar");
+  b+=dimV(CY(0),CY(-40),CX(p.t)+5,"40",CX(p.t),CX(p.t-lc));
+  b+=dimH(CX(0),CX(p.t),CY(0)-4,`${p.t}`,CY(0),CY(0));
+  b+=leader(CX(0)+.3,CY(-ar/2)+.2,CX(0)+12,CY(0)-10,p.arris==="r3"?"3 R PENCIL ROUND (RFI)":"25 CHAMFER (FW14)");
+  b+=tx(CX(p.t/2),CY(-400)+5,"N12-200 'L' EF, 600 LEGS LAP 600",{size:1.7,anchor:"middle",cls:"bartx"})+tx(CX(p.t/2),CY(-400)+7.3,"4-N12 LONGIT. (AS INTERPRETED)",{size:1.7,anchor:"middle",cls:"bartx"});
+  b+=viewTitle(122,CY(-400)+14,"C","WALL TOP","1:5","after SIA S50 Sect. A");
+
+  // ---- Detail D: free end, plan 1:5
+  const ds=5, dx0=200, dy0=176;
+  const DX=x=>dx0+x/ds, DY=y=>dy0+y/ds;
+  const endPoly=p.arris==="r3"?[[0,0],[300,0],[300,p.t],[0,p.t]]:[[ar,0],[300,0],[300,p.t],[ar,p.t],[0,p.t-ar],[0,ar]];
+  b+=pg(endPoly.map(q=>[DX(q[0]),DY(q[1])]),"k5",fillC());
+  b+=pl([[DX(300)+1,DY(-5)],[DX(300)-1,DY(p.t/2)],[DX(300)+1,DY(p.t+5)]],"k1","fill=\"none\"");
+  if(cw1){
+    const u=40+8;
+    b+=`<path d="M ${DX(300)} ${DY(u)} L ${DX(u+40)} ${DY(u)} A ${(p.t/2-u)/ds} ${(p.t/2-u)/ds} 0 0 0 ${DX(u+40)} ${DY(p.t-u)} L ${DX(300)} ${DY(p.t-u)}" class="k5 bar" fill="none"/>`;
+    for(const yy of [u+16,p.t-u-16]) b+=`<circle cx="${DX(u+50).toFixed(2)}" cy="${DY(yy).toFixed(2)}" r="${(6/ds).toFixed(2)}" class="bard"/>`;
+    b+=tx(DX(150),DY(p.t)+4,"N16 'U' BARS AT HORIZ. SPACING (SIA S64)",{size:1.7,anchor:"middle",cls:"bartx"});
+  } else {
+    b+=ln2(DX(50),DY(p.t/2-6),DX(300),DY(p.t/2-6),"k5 bar")+`<circle cx="${DX(50).toFixed(2)}" cy="${DY(p.t/2+6).toFixed(2)}" r="${(6/ds).toFixed(2)}" class="bard"/>`;
+    b+=dimH(DX(0),DX(50),DY(p.t)+4,"50 MAX",DY(p.t),null);
+    b+=tx(DX(150),DY(p.t)+8,"CW2: NO END U-BAR IN SIA SCHEDULE",{size:1.7,anchor:"middle",cls:"flagtx"});
+  }
+  b+=viewTitle(196,DY(p.t)+18,"D","FREE END (PLAN)","1:5");
+
+  const notes=noteCol("KEY NOTES",[
+    {n:1,t:cw1?`CW1 (SIA S50): vertical N12-300 each face, horizontal N12-200 each face, N16 'U' bars at ends. 40 cover. ${d.setback>0?"Face bars behind the lettering set back "+r0(d.setback)+" mm locally to keep 40 cover at the letter base.":""}`:`CW2 (SIA S50): vertical N12-200 central, horizontal N16-200 central, bars 50 max from end. Central layer sits ${r0(d.faceToBar)} mm from the face, so a ${p.recess} mm recess leaves ${r0(d.coverAtLetter)} mm cover with no bar set-back.`},
+    {n:2,t:"Starters N12-200 to match verticals, lap 600, cog 300, 200 max to first bar (SIA S64). The lap sits in the zone of highest cantilever moment; engineer to confirm lap location and length.",flag:true},
+    {n:3,t:"Footing size and bars borrowed from SIA EB4 (S20). SIA has no CW strip footing schedule. Indicative check on FW-04 suggests 600 wide may not be stable for a free-standing wall in N3 wind.",flag:true},
+    {n:4,t:"Site class H1/P. Natural ground reported verbally at ~3.7 m (GT Geotechnical, 13/10/26). A strip footing on fill is not acceptable under AS 2870 without engineering; piers or piles likely. Morgan or SIA to design.",flag:true},
+    {n:5,t:"Letter formers fix to the formply face, so artwork must be cut MIRROR-IMAGE. CNC-cut from closed-cell PVC foam board or HDPE (or sealed MDF), laminated to depth, edges sanded, release agent applied. Fix with countersunk screws from the back of the ply plus a thin bead of silicone at the face. Strip with the ply; remove remaining pieces with plastic tools."},
+    {n:6,t:`Former sides drafted ${p.draft}° each side for release and to reduce edge chipping. Letter edges: sharp (no added arris) unless the sample panel shows chipping.`},
+    {n:7,t:"Recommended rule for this job (a rule of thumb, not a code requirement): stroke width at the face ≥ recess depth and ≥ 15 mm; base width after draft ≥ 10 mm. See Live checks."},
+    {n:8,t:"Cast a 600 × 600 sample panel with 3 letters before committing: checks the font, depth, release and colour of tie-hole fill."},
+    {n:9,t:p.ret>0?`Retained height ${p.ret}: drainage aggregate, 100 slotted ag pipe in sock to outlet, geofabric, weepholes. Design to AS 4678. Approval needed in QLD if over 1.0 m; check with certifier.`:"Drawn as free-standing with level ground both sides. If any length retains soil, add drainage and design to AS 4678.",flag:p.ret>0}
+  ]);
+  return frame("FW-02","1:20, 1:5, 1:2",b,notes);
+}
+
+/* ---------- FW-03: reinforcement + tie layout ---------- */
+function sheet3(p,d){
+  PX="c";
+  const s=pickScale(p.L,236);
+  const ox=12+(270-p.L/s)/2+2;
+  let b="";
+  // reinforcement elevation
+  const gy=104, X=x=>ox+x/s, Y=z=>gy-z/s;
+  b+=ln2(X(-400),gy,X(p.L+400),gy,"k3")+rc(X(-400),gy,(p.L+800)/s,1.6,"",fillE());
+  b+=rc(X(0),Y(p.H),p.L/s,p.H/s,"k5","fill=\"#fff\"")+rc(X(0),Y(-p.embed),p.L/s,p.fD/s,"k2 dash");
+  for(const l of d.lines) b+=rc(X(l.x0),Y(l.top),l.width/s,l.cap/s,"k0","fill=\"#eef0ee\"")+tx(X(l.x1)-1,Y(l.top)+2.2,l.key==="name"?"NAME":"ADDRESS",{size:1.5,anchor:"end"});
+  const cw1=d.cw1, vs=cw1?300:200, e=cw1?60:50;
+  const nV=Math.floor((p.L-2*e)/vs)+1, gap=(p.L-2*e)/(nV-1);
+  for(let i=0;i<nV;i++){ const x=e+i*gap; b+=ln2(X(x),Y(p.H-40),X(x),Y(-p.embed),"k1 bar"); }
+  for(let z=100;z<p.H-60;z+=200) b+=ln2(X(cw1?40:50),Y(z),X(p.L-(cw1?40:50)),Y(z),"k1 bar");
+  // starters
+  for(let x=e;x<=p.L-e+1;x+=200) b+=ln2(X(x+20),Y(600-p.embed),X(x+20),Y(-p.embed-p.fD+60),"k0 bar");
+  if(cw1) for(let z=100;z<p.H-60;z+=200) b+=`<path d="M ${X(40)+6} ${Y(z)} h -6" class="k3 bar" fill="none"/><path d="M ${X(p.L-40)-6} ${Y(z)} h 6" class="k3 bar" fill="none"/>`;
+  b+=ln2(X(40),Y(p.H-46),X(p.L-40),Y(p.H-46),"k3 bar");
+  // bar marks
+  b+=leader(X(e+gap),Y(p.H*0.55),X(-2)-2,Y(p.H*0.55)-3,cw1?"V1 N12-300 EF":"V1 N12-200 CENTRAL",{cls:"bartx"});
+  b+=leader(X(e+gap*2.5),Y(300),X(-2)-2,Y(300)+3,cw1?"H1 N12-200 EF":"H1 N16-200 CENTRAL",{cls:"bartx"});
+  b+=leader(X(e+20+200*2),Y(-p.embed-200),X(-2)-2,Y(-p.embed-200)+3,"S1 N12-200 STARTERS",{cls:"bartx"});
+  b+=leader(X(p.L*0.7),Y(p.H-46),X(p.L)+3,Y(p.H)-4,"T1 TOP 'L' BARS (DET. C)",{cls:"bartx"});
+  if(cw1) b+=leader(X(p.L-40)+.5,Y(700),X(p.L)+3,Y(700),"U1 N16 'U' BARS",{cls:"bartx"});
+  b+=dimH(X(0),X(p.L),Y(p.H)-4,`${p.L}`,Y(p.H),Y(p.H));
+  b+=viewTitle(18,gy+(p.embed+p.fD)/s+8,"1","REINFORCEMENT ELEVATION",`1:${s}`,`${cw1?"CW1":"CW2"} after SIA S50/S64 · lettering zones shaded`);
+  // tie layout
+  const gy2=232, X2=x=>ox+x/s, Y2=z=>gy2-z/s;
+  b+=ln2(X2(-400),gy2,X2(p.L+400),gy2,"k3")+rc(X2(-400),gy2,(p.L+800)/s,1.6,"",fillE());
+  for(const sh of d.sheets){ b+=rc(X2(sh.x0),Y2(sh.y1),(sh.x1-sh.x0)/s,(sh.y1-sh.y0)/s,"k2",sh.cut?"fill=\"#f4efe4\"":"fill=\"#fbf7ee\""); }
+  b+=ln2(X2(0),gy2,X2(p.L),gy2,"k1 dash");
+  for(const z of d.zones) b+=rc(X2(Math.max(0,z.x0)),Y2(Math.min(p.H,z.y1)),(Math.min(p.L,z.x1)-Math.max(0,z.x0))/s,(Math.min(p.H,z.y1)-z.y0)/s,"",`fill="url(#${PX}-zone)" stroke="#c25a12" stroke-width=".2"`);
+  for(const l of d.lines) b+=`<text x="${(X2(l.cx)+p.track*l.fs/s/2).toFixed(2)}" y="${Y2(l.base).toFixed(2)}" font-family="'${p.font}',Arial,sans-serif" font-weight="${p.wt}" font-size="${(l.fs/s).toFixed(3)}" letter-spacing="${(p.track*l.fs/s).toFixed(3)}" text-anchor="middle" style="fill:#c8ccc9">${esc(l.text)}</text>`;
+  let nOk=0,nMv=0,nCl=0;
+  for(const t of d.ties){
+    if(t.state==="ok"){nOk++;b+=`<circle cx="${X2(t.x).toFixed(2)}" cy="${Y2(t.y).toFixed(2)}" r=".7" fill="#151515"/>`;}
+    else if(t.state==="moved"){nMv++;b+=ln2(X2(t.ox),Y2(t.oy),X2(t.x),Y2(t.y),"k1 dash")+`<circle cx="${X2(t.ox).toFixed(2)}" cy="${Y2(t.oy).toFixed(2)}" r=".7" fill="none" stroke="#c25a12" stroke-width=".2"/><circle cx="${X2(t.x).toFixed(2)}" cy="${Y2(t.y).toFixed(2)}" r=".8" fill="#c25a12"/>`;}
+    else {nCl++;const x=X2(t.x),y=Y2(t.y);b+=ln2(x-1,y-1,x+1,y+1,"k3")+ln2(x-1,y+1,x+1,y-1,"k3");}
+  }
+  b+=dimV(Y2(p.H),Y2(-p.embed),X2(p.L)+5,`${d.formH} FORMED`,X2(p.L),X2(p.L));
+  b+=tx(X2(p.L)+9,Y2(-p.embed)+3,`${d.courses} COURSE${d.courses>1?"S":""} · 2700×1200`,{size:1.7});
+  b+=viewTitle(18,gy2+12,"2","FORMWORK & TIE LAYOUT — BOTH FACES",`1:${s}`,"ties pass through; same layout each face");
+  // legend
+  const lgx=170, lgy=gy2+8;
+  b+=`<circle cx="${lgx}" cy="${lgy}" r=".7" fill="#151515"/>`+tx(lgx+2,lgy+.7,`tie, standard (${nOk})`,{size:1.8});
+  b+=`<circle cx="${lgx+30}" cy="${lgy}" r=".8" fill="#c25a12"/>`+tx(lgx+32,lgy+.7,`tie, moved (${nMv})`,{size:1.8});
+  b+=ln2(lgx+57,lgy-1,lgx+59,lgy+1,"k3")+ln2(lgx+57,lgy+1,lgx+59,lgy-1,"k3")+tx(lgx+61,lgy+.7,`unresolved (${nCl})`,{size:1.8});
+  b+=rc(lgx-1,lgy+2.6,3,2,"",`fill="url(#${PX}-zone)" stroke="#c25a12" stroke-width=".2"`)+tx(lgx+3,lgy+4.2,`no-tie zone = letters + ${p.tieClr}`,{size:1.8});
+  // quantities
+  const barLenV=nV*(p.H-40+p.embed)/1000*(cw1?2:1), nH=Math.floor((p.H-160)/200)+1, barLenH=nH*(p.L-80)/1000*(cw1?2:1);
+  const nS=(Math.floor((p.L-2*e)/200)+1)*(cw1?2:1);
+  const kgV=barLenV*(0.888), kgH=barLenH*(cw1?0.888:1.58), kgS=nS*(0.6+p.embed/1000+p.fD/1000-0.06+0.3)*0.888;
+  const notes=noteCol("SCHEDULES (MAIN WALL ONLY)",[
+    {h:"Bars, indicative, no laps or waste"},
+    {t:`V1 ${cw1?"N12-300 EF":"N12-200 CENTRAL"}: ${nV*(cw1?2:1)} bars, ${f1(barLenV)} m, ${r0(kgV)} kg`},
+    {t:`H1 ${cw1?"N12-200 EF":"N16-200 CENTRAL"}: ${nH*(cw1?2:1)} bars, ${f1(barLenH)} m, ${r0(kgH)} kg`},
+    {t:`S1 N12-200 starters: ${nS} bars, ${r0(kgS)} kg`},
+    {t:`T1 top 'L' bars and ${cw1?"U1 N16 end U-bars":"free-end detail"}: per FW-02 details C & D. Returns are not included.`},
+    {h:"Formwork"},
+    {t:`${d.sheets.length} sheet positions per face (${d.sheets.filter(x=>x.cut).length} cut), ${d.ties.length} tie positions, ${2*(nOk+nMv)} tie holes to fill (both faces).`},
+    {t:`Ties moved clear of lettering: ${nMv}. Unresolved: ${nCl}.${nCl?" Move the lettering or ask the formwork designer to add walers/strongbacks over the zone.":""}`,flag:nCl>0},
+    {t:"Moving ties changes local tie spacing. The formwork designer confirms tie capacity and ply/waler deflection for an off-form Class 2 face under AS 3610.1, with full liquid head over the formed height.",flag:nMv>0},
+    {t:"No tie, cone or spacer mark may land inside a lettering zone. Bar chairs on the lettered face: plastic, colour-matched, kept out of the letter zones."},
+    {h:"Pour"},
+    {t:"One continuous pour per wall with no construction joint in the face (SIA S50). Vibrate carefully around formers. Do not let pokers touch them."}
+  ]);
+  return frame("FW-03",`1:${s}`,b,notes);
+}
+
+/* ---------- FW-04: oblique 3D + stability ---------- */
+function sheet4(p,d){
+  PX="d";
+  const s=pickScale(p.L+p.R*0.36+600,232,[25,30,40,50,60,75,100]);
+  const k=0.5, c45=Math.SQRT1_2;
+  const ox=36, oy=124;
+  const P=(x,y,z)=>[ox+(x+y*k*c45)/s, oy-(z+y*k*c45)/s];
+  let b="";
+  // ground plane
+  const gx0=-300,gx1=p.L+300,gy0=-500,gy1=Math.max(p.R,p.t)+600;
+  b+=pg([P(gx0,gy0,0),P(gx1,gy0,0),P(gx1,gy1,0),P(gx0,gy1,0)],"","fill=\"#eef1ec\" stroke=\"#9aa39c\" stroke-width=\".15\"");
+  // footing hidden
+  const ex=(p.fW-p.t)/2, zt=-p.embed, zb=-p.embed-p.fD;
+  for(const z of [zt,zb]) b+=pg([P(-ex,-ex,z),P(p.L+ex,-ex,z),P(p.L+ex,p.t+ex,z),P(-ex,p.t+ex,z)],"k1 dash","fill=\"none\"");
+  for(const [x,y] of [[-ex,-ex],[p.L+ex,-ex],[p.L+ex,p.t+ex]]) b+=ln2(...P(x,y,zt),...P(x,y,zb),"k1 dash");
+  const H=p.H, t=p.t, L=p.L, R=p.R;
+  const face=(pts,fill)=>pg(pts,"k3",`fill="${fill}" stroke-linejoin="round"`);
+  if(R>0){
+    b+=face([P(t,t,0),P(t,R,0),P(t,R,H),P(t,t,H)],"#c9ccca");      // left return inner face
+    b+=face([P(0,t,H),P(t,t,H),P(t,R,H),P(0,R,H)],"#e6e8e6");      // left return top
+    b+=face([P(L-t,R,0),P(L,R,0),P(L,R,H),P(L-t,R,H)],"#d3d6d4");  // right return back end (hidden mostly)
+    b+=face([P(L,0,0),P(L,R,0),P(L,R,H),P(L,0,H)],"#bfc3c0");      // right return outer face
+    b+=face([P(L-t,t,H),P(L,t,H),P(L,R,H),P(L-t,R,H)],"#e6e8e6");
+  } else {
+    b+=face([P(L,0,0),P(L,t,0),P(L,t,H),P(L,0,H)],"#bfc3c0");
+  }
+  b+=face([P(0,0,H),P(L,0,H),P(L,t,H),P(0,t,H)],"#e6e8e6");        // main top
+  b+=face([P(0,0,0),P(L,0,0),P(L,0,H),P(0,0,H)],"#d9dcda");        // main front
+  // letters with recess shading
+  const dv=[(p.recess*k*c45)/s*3,-(p.recess*k*c45)/s*3];
+  for(const l of d.lines){
+    const [x,y]=P(l.cx,0,l.base), fs=l.fs/s, ls=p.track*fs;
+    const common=`font-family="'${p.font}',Arial,sans-serif" font-weight="${p.wt}" font-size="${fs.toFixed(3)}" letter-spacing="${ls.toFixed(3)}" text-anchor="middle"`;
+    b+=`<text x="${(x+ls/2).toFixed(2)}" y="${y.toFixed(2)}" ${common} style="fill:#8e938f">${esc(l.text)}</text>`;
+    b+=`<text x="${(x+ls/2+dv[0]).toFixed(2)}" y="${(y+dv[1]).toFixed(2)}" ${common} style="fill:#a9aeaa">${esc(l.text)}</text>`;
+  }
+  for(const tt of d.ties){ if(tt.state==="clash") continue; const [x,y]=P(tt.x,0,tt.y); b+=`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r=".35" fill="#9a9f9b"/>`; }
+  b+=tx(P(L/2,0,0)[0],P(L/2,-ex,-p.embed-p.fD)[1]+4,`FRONT FACE · ${L} × ${H} ABOVE FGL · RETURNS ${R||"NIL"} · FOOTING DASHED`,{size:2,anchor:"middle"});
+  b+=viewTitle(18,166,"1","3D VIEW — STREET SIDE",`oblique, 1:${s} on face`,"recess depth exaggerated ×3 for legibility");
+
+  // stability screen
+  const st=d.stab, y0=178;
+  b+=tx(18,y0,"INDICATIVE STABILITY SCREEN — NOT A DESIGN",{size:2.8,weight:600})+ln(18,y0+1.2,278,y0+1.2,"k3");
+  const rows=[
+    ["Wind, N3 (AS 4055)","Vh,u = 50 m/s → q = 0.6 V² = "+f1(st.q)+" kPa"],
+    ["Net pressure, free-standing wall","Cp,n = "+st.Cpn+" assumed (AS 1170.2 App. D; ends of walls are higher) → p = "+f1(st.pw)+" kPa"],
+    ["Wind force / overturning","F = "+f1(st.F)+" kN/m at "+f1(p.H/2000+p.embed/1000+p.fD/1000)+" m above underside → M = "+f1(st.Mot)+" kNm/m"],
+    ["Restoring (0.9 G, toe pivot)","wall "+f1(st.Gw)+" + footing "+f1(st.Gf)+" + soil "+f1(st.Gs)+" kN/m × "+f1(p.fW/2000)+" m → "+f1(st.Mres)+" kNm/m"],
+    ["Overturning ratio (≥ 1.0 needed)",f1(st.ratio)+(st.ratio>=1?"  — passes this screen":"  — FAILS this screen; footing needs to be wider, deeper, or piered")],
+    ["Wall base bending (indicative)","M* ≈ "+f1(st.Mbase)+" kNm/m vs φMu ≈ "+f1(st.phiMu)+" kNm/m (N12-200, d = "+r0(st.d)+")"],
+  ];
+  rows.forEach((r,i)=>{const yy=y0+6+i*5.6;b+=tx(18,yy,r[0],{size:2.1,weight:600})+tx(86,yy,r[1],{size:2.1,cls:(i===4&&st.ratio<1)?"flagtx":undefined});if(i<rows.length-1)b+=ln2(18,yy+1.9,278,yy+1.9,"k0");});
+  b+=para(18,y0+42,"Screen ignores passive soil resistance, soil bearing, sliding, Kc/Kp factors, end-zone pressures and any surcharge or retained soil. It is here to show why the CW1/CW2 bar make-up alone does not settle this wall. The footing is the real question. On an H1/P site with fill reported to ~3.7 m, expect piers or piles. Engineer to design and certify.",258,{size:2,cls:"flagtx"}).svg;
+  b+=para(18,y0+58,"Reinforcement note: the shed CW walls are restrained at the top by the roof. A free-standing wall has the most moment at the base, so starters, laps and the footing connection govern. Do not copy the shed details without engineer sign-off.",258,{size:2}).svg;
+
+  const notes=noteCol("OPEN ITEMS",[
+    {h:"Needed from you"},
+    {n:1,t:"Property NAME to letter: exact spelling and capitals.",flag:true},
+    {n:2,t:"Address wording: number only, number + road, or full address."},
+    {n:3,t:"Photo or sketch of 'the wall' it should match. None found in Gmail or Drive.",flag:true},
+    {n:4,t:"Wall length, height, returns, openings, levels each side; retained height if any."},
+    {n:5,t:"Engineer for this wall: SIA (Ryan de Leeuw) or Morgan. Morgan's pile drawings were not found.",flag:true},
+    {n:6,t:"Arris: 3 mm pencil round vs SIA FW14 25 mm chamfer."},
+    {h:"For the engineer"},
+    {n:7,t:"Footing type and size for H1/P with fill to ~3.7 m (verbal). Wall bar make-up, starter lap position, end detail of free ends, control joints."},
+    {n:8,t:"Acceptability of the local bar set-back or central layer behind the lettering (FW-02 B)."},
+    {h:"For the certifier"},
+    {n:9,t:"Approval triggers for a front wall of this height and any retaining, under the QLD Building Regulation and Gold Coast planning scheme."}
+  ]);
+  return frame("FW-04","AS SHOWN",b,notes);
+}
+
+/* ---------- checks panel ---------- */
+function checksHTML(p,d){
+  const out=[];
+  const add=(st,txt)=>out.push(`<div class="chk"><span class="pill ${st}">${st==="ok"?"OK":st==="bad"?"CHECK":"TBC"}</span><span>${txt}</span></div>`);
+  add(d.coverAtLetter>=40||d.setback>0?"ok":"bad", d.cw1?(d.setback>0?`CW1: face bars set back ${r0(d.setback)} mm behind letters to keep 40 cover.`:`CW1: 40 cover kept.`):`CW2: ${r0(d.coverAtLetter)} mm cover at letter base (40 required).`);
+  add(d.minStem>=d.stemNeed?"ok":"bad",`Thinnest stroke ${f1(d.minStem)} mm (need ≥ ${d.stemNeed}).`);
+  add(d.baseW>=10?"ok":"bad",`Letter base after ${p.draft}° draft: ${f1(d.baseW)} mm (need ≥ 10).`);
+  const fits=d.lines.every(l=>l.x0>=150&&l.x1<=p.L-150&&l.top<=p.H-100&&l.bot>=150);
+  add(fits?"ok":"bad",fits?"Lettering is ≥150 from the ends and ≥100 below the top.":"Lettering too close to a wall edge or top.");
+  const ov=d.lines.length===2&&!(d.lines[0].bot>d.lines[1].top+40||d.lines[1].bot>d.lines[0].top+40);
+  if(ov) add("bad","Name and address lines overlap or are under 40 apart.");
+  const cl=d.ties.filter(t=>t.state==="clash").length, mv=d.ties.filter(t=>t.state==="moved").length;
+  add(cl?"bad":"ok",cl?`${cl} tie(s) can't be moved clear of lettering.`:mv?`${mv} tie(s) moved clear of lettering.`:"No ties fall in the lettering zones.");
+  add(d.stab.ratio>=1?"tbc":"bad",`Overturning screen ${f1(d.stab.ratio)} (indicative only).`);
+  add("tbc","Footing and wall: engineer to design (free-standing, H1/P).");
+  if(p.arris==="r3") add("tbc","3 mm arris conflicts with SIA FW14.");
+  return out.join("");
+}
+
+function render(){
+  const p=readP(), d=derive(p);
+  $("fw-01").innerHTML=sheet1(p,d);
+  $("fw-02").innerHTML=sheet2(p,d);
+  $("fw-03").innerHTML=sheet3(p,d);
+  $("fw-04").innerHTML=sheet4(p,d);
+  $("checks").innerHTML=checksHTML(p,d);
+}
+for(const k of IDS){ $(k).addEventListener("input",render); $(k).addEventListener("change",render); }
+render();
+if(document.fonts){ Promise.all(["Jost","Archivo","Red Hat Display"].flatMap(f=>["600","700","800"].map(w=>document.fonts.load(`${w} 100px "${f}"`).catch(()=>{})))).then(render); document.fonts.ready.then(render); }
+</script>
