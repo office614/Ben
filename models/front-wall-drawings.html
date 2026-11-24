@@ -1,13 +1,13 @@
 <title>Tallebudgera Entry Walls</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@400;500;600&family=Jost:wght@600;700;800&family=Archivo:wght@700;800&family=Red+Hat+Display:wght@700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap">
 <style>
-/* Layout: drafting-table split. Control rail left; four A3 drawing sheets stacked right (paper stays white in both themes); register and questions below. */
+/* Layout: drafting-table split. Control rail left; combined 3D model, then six A3 sheets (paper stays white in both themes), then register and questions. */
 :root{
   --bg:#eef0ee; --panel:#f8f9f7; --ink:#1d2421; --muted:#5d6762; --line:#cfd5d1;
   --accent:#d0661f; --accent-ink:#ffffff; --warn:#b3261e; --ok:#2f7a4a; --amber:#9a6a00;
-  --paper:#ffffff; --paper-edge:#c3c9c5;
+  --paper:#ffffff; --paper-edge:#c3c9c5; --viewport:#dfe3e0;
   --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --font-head:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
   --font-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -15,11 +15,11 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#151a18; --panel:#1d2321; --ink:#e3e8e5; --muted:#9aa5a0; --line:#323b37;
   --accent:#f08a43; --accent-ink:#1a120c; --warn:#ff7b6e; --ok:#6fcf93; --amber:#e0b04a;
-  --paper:#ffffff; --paper-edge:#3a433f; color-scheme:dark}}
+  --paper:#ffffff; --paper-edge:#3a433f; --viewport:#232a27; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#151a18; --panel:#1d2321; --ink:#e3e8e5; --muted:#9aa5a0; --line:#323b37;
   --accent:#f08a43; --accent-ink:#1a120c; --warn:#ff7b6e; --ok:#6fcf93; --amber:#e0b04a;
-  --paper:#ffffff; --paper-edge:#3a433f; color-scheme:dark}
+  --paper:#ffffff; --paper-edge:#3a433f; --viewport:#232a27; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.45;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 48px}
@@ -27,34 +27,47 @@ h1,h2,h3{font-family:var(--font-head);text-wrap:balance;margin:0}
 h1{font-size:1.55rem;font-weight:600;letter-spacing:.01em}
 h2{font-size:1.15rem;font-weight:600}
 h3{font-size:.76rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
-.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
 header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 24px;margin-bottom:14px;border-bottom:2px solid var(--ink);padding-bottom:10px}
-header.top p{margin:4px 0 0;color:var(--muted);max-width:78ch}
+header.top p{margin:4px 0 0;color:var(--muted);max-width:80ch}
 .tb{display:grid;grid-template-columns:auto auto;gap:0 14px;font-family:var(--font-mono);font-size:12px;color:var(--muted)}
 .tb b{color:var(--ink);font-weight:500}
-.wrap{display:grid;grid-template-columns:310px minmax(0,1fr);gap:16px;align-items:start}
-@media (max-width:980px){.wrap{grid-template-columns:minmax(0,1fr)}}
+.wrap{display:grid;grid-template-columns:320px minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:1000px){.wrap{grid-template-columns:minmax(0,1fr)}}
 .rail{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:14px;max-height:calc(100vh - 32px);overflow:auto;position:sticky;top:max(12px,env(safe-area-inset-top,0px))}
-@media (max-width:980px){.rail{position:static;max-height:none}}
+@media (max-width:1000px){.rail{position:static;max-height:none}}
 fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
-.row{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:8px;align-items:center}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 118px;gap:8px;align-items:center}
 .row.wide{grid-template-columns:minmax(0,1fr)}
 label{font-size:13px}
 label small{color:var(--muted);font-size:11px}
 input,select{font:inherit;font-size:13px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:4px 6px;width:100%;min-width:0}
-input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+input[type=checkbox]{width:auto;justify-self:start}
+input:focus-visible,select:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.seg button,.tbtn{font:inherit;font-size:12.5px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 4px;cursor:pointer;line-height:1.2}
+.seg button[aria-pressed=true],.tbtn[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.optdesc{font-size:12.5px;color:var(--muted);margin:0}
 .checks{display:flex;flex-direction:column;gap:6px;font-size:12.5px}
-.chk{display:grid;grid-template-columns:62px minmax(0,1fr);gap:8px;align-items:start}
+.chk{display:grid;grid-template-columns:58px minmax(0,1fr);gap:8px;align-items:start}
 .pill{font-family:var(--font-mono);font-size:10.5px;font-weight:500;text-align:center;border-radius:3px;padding:1px 4px;border:1px solid currentColor}
 .pill.ok{color:var(--ok)} .pill.bad{color:var(--warn)} .pill.tbc{color:var(--amber)}
 main{display:flex;flex-direction:column;gap:18px;min-width:0}
+.viewer{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.vbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.vbar .sp{flex:1}
+#view3d{position:relative;width:100%;aspect-ratio:16/8;max-width:100%;background:var(--viewport);border-radius:4px;overflow:hidden}
+#view3d canvas{display:block;width:100%;height:100%}
+#view3d .msg{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:13px;padding:16px;text-align:center}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
 nav.sheets{display:flex;flex-wrap:wrap;gap:6px}
 nav.sheets a{font-family:var(--font-mono);font-size:12px;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:4px;padding:3px 8px;background:var(--panel)}
 nav.sheets a:hover{border-color:var(--accent)}
 figure.sheetbox{margin:0;overflow-x:auto;border:1px solid var(--paper-edge);border-radius:4px;background:var(--paper)}
 figure.sheetbox svg{display:block;width:100%;min-width:820px;height:auto}
 section.doc{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
-section.doc p{margin:0;max-width:80ch}
+section.doc p{margin:0;max-width:82ch}
 .tscroll{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:13px}
 th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
@@ -62,8 +75,7 @@ th{font-family:var(--font-head);font-weight:600;font-size:12px;text-transform:up
 td:first-child{white-space:nowrap;font-weight:500}
 .flag{font-family:var(--font-mono);font-size:11px;padding:1px 5px;border-radius:3px;border:1px solid currentColor;white-space:nowrap}
 .flag.c{color:var(--ok)} .flag.a{color:var(--amber)} .flag.x{color:var(--warn)}
-ol.q{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;max-width:85ch}
-/* drawing sheet styles: fixed paper palette, independent of theme */
+ol.q{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;max-width:88ch}
 .sheet text{font-family:"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif;fill:#151515}
 .sheet .k0{stroke:#151515;stroke-width:.13}
 .sheet .k1{stroke:#151515;stroke-width:.18}
@@ -75,15 +87,16 @@ ol.q{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;max-
 .sheet .cl{stroke-dasharray:4 .8 .8 .8}
 .sheet .bar{stroke:#b02a1f;fill:none}
 .sheet .bard{fill:#b02a1f;stroke:none}
+.sheet .svc{stroke:#1f5fa8;fill:none}
+.sheet text.svctx{fill:#1f5fa8}
+.sheet .gate{stroke:#3d4a57}
 .sheet text.bartx{fill:#b02a1f}
 .sheet .flagbox{fill:#fff4e6;stroke:#c25a12;stroke-width:.3}
 .sheet text.flagtx{fill:#9c430a}
-.sheet .grey{fill:#e9ebe9;stroke:none}
-.sheet .letter{fill:#d9dcda;stroke:#151515;stroke-width:.12}
 @media print{
   @page{size:A3 landscape;margin:0}
   body{padding:0;background:#fff}
-  header.top,.rail,nav.sheets,section.doc{display:none}
+  header.top,.rail,nav.sheets,section.doc,.viewer{display:none}
   .wrap{display:block}
   figure.sheetbox{border:0;border-radius:0;page-break-after:always;break-after:page}
   figure.sheetbox svg{min-width:0;width:420mm;height:297mm}
@@ -93,693 +106,935 @@ ol.q{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;max-
 
 <header class="top">
   <div>
-    <h3>Front garden · off-form concrete · inset lettering</h3>
+    <h3>Front entry · off-form concrete · Montserrat Light, recessed</h3>
     <h1>Tallebudgera Entry Walls</h1>
-    <p>Wall and footing drawings for the front garden concrete walls at 572 Tallebudgera Creek Road, using the shed's CW1/CW2 make-up from SIA's tender set. Edit any value on the left and all four A3 sheets redraw. Letter sizes and stroke widths are measured from the chosen font.</p>
+    <p>One combined model of the whole front entry at 572 Tallebudgera Creek Road. It holds the ARDEN wall, the address wall, returns, footings, reinforcement, the motorised sliding gate, lettering, lighting and conduits. Three design options switch inside the same model. The 3D view and all six A3 sheets are drawn from the same values.</p>
   </div>
   <div class="tb">
     <span>Status</span><b>Preliminary · not for construction</b>
     <span>Basis</span><b>SIA 15579 Issue B · 30/09/26</b>
-    <span>Rev / date</span><b>P1 · 24/11/26</b>
+    <span>Rev / date</span><b>P2 · 24/11/26</b>
   </div>
 </header>
 
 <div class="wrap">
-  <aside class="rail" aria-label="Drawing parameters">
+  <aside class="rail" aria-label="Model parameters">
+    <fieldset>
+      <h3>Design option</h3>
+      <div class="seg" role="group" aria-label="Design option">
+        <button type="button" data-opt="1" aria-pressed="true">1 · Raised panel</button>
+        <button type="button" data-opt="2" aria-pressed="false">2 · In wall + uplights</button>
+        <button type="button" data-opt="3" aria-pressed="false">3 · Split at gate</button>
+      </div>
+      <p class="optdesc" id="optdesc"></p>
+      <div class="row"><label for="opt3light">Option 3 lighting</label>
+        <select id="opt3light"><option value="uplight">Garden uplights</option><option value="panel">Raised panels + LED</option></select></div>
+    </fieldset>
     <fieldset>
       <h3>Lettering</h3>
-      <div class="row wide"><label for="name">Name line <small>(not yet confirmed)</small></label></div>
-      <div class="row wide"><input id="name" type="text" value="PROPERTY NAME"></div>
-      <div class="row wide"><label for="addr">Address line</label></div>
-      <div class="row wide"><input id="addr" type="text" value="572 TALLEBUDGERA CREEK ROAD"></div>
-      <div class="row"><label for="font">Typeface</label>
-        <select id="font"><option value="Jost">Jost (geometric)</option><option value="Archivo">Archivo (grotesque)</option><option value="Red Hat Display">Red Hat Display</option></select></div>
-      <div class="row"><label for="wt">Weight</label>
-        <select id="wt"><option value="600">SemiBold 600</option><option value="700" selected>Bold 700</option><option value="800">ExtraBold 800</option></select></div>
-      <div class="row"><label for="nameCap">Name cap height <small>mm</small></label><input id="nameCap" type="number" value="200" step="10" min="60"></div>
-      <div class="row"><label for="nameBase">Name baseline <small>mm above FGL</small></label><input id="nameBase" type="number" value="1480" step="10"></div>
-      <div class="row"><label for="addrCap">Address cap height <small>mm</small></label><input id="addrCap" type="number" value="120" step="10" min="50"></div>
-      <div class="row"><label for="addrBase">Address baseline <small>mm above FGL</small></label><input id="addrBase" type="number" value="1100" step="10"></div>
-      <div class="row"><label for="track">Tracking <small>em</small></label><input id="track" type="number" value="0.08" step="0.01" min="0"></div>
-      <div class="row"><label for="offX">Shift from wall centre <small>mm, + right</small></label><input id="offX" type="number" value="0" step="50"></div>
-      <div class="row"><label for="recess">Recess depth <small>mm</small></label><input id="recess" type="number" value="15" step="1" min="3" max="40"></div>
-      <div class="row"><label for="draft">Former draft <small>degrees per side</small></label><input id="draft" type="number" value="10" step="1" min="0" max="30"></div>
+      <div class="row"><label for="name">Name <small>(confirmed)</small></label><input id="name" type="text" value="ARDEN"></div>
+      <div class="row"><label for="addr12">Address on name wall <small>opt. 1 &amp; 2</small></label><input id="addr12" type="text" value="572"></div>
+      <div class="row"><label for="addrMain">Address main <small>opt. 3</small></label><input id="addrMain" type="text" value="572"></div>
+      <div class="row wide"><label for="addrSub">Address second line <small>opt. 3 · wording to confirm</small></label></div>
+      <div class="row wide"><input id="addrSub" type="text" value="TALLEBUDGERA CREEK ROAD"></div>
+      <div class="row"><label for="wt">Main weight</label>
+        <select id="wt"><option value="300" selected>Montserrat Light 300</option><option value="400">Montserrat Regular 400</option></select></div>
+      <div class="row"><label for="subWt">Second-line weight</label>
+        <select id="subWt"><option value="300">Light 300</option><option value="400" selected>Regular 400</option></select></div>
+      <div class="row"><label for="capRatio">Cap height ÷ wall height</label><input id="capRatio" type="number" value="0.15" step="0.01" min="0.05" max="0.4"></div>
+      <div class="row"><label for="datum">Cap centreline ÷ wall height</label><input id="datum" type="number" value="0.62" step="0.01" min="0.3" max="0.85"></div>
+      <div class="row"><label for="track">Tracking <small>em</small></label><input id="track" type="number" value="0.30" step="0.01" min="0"></div>
+      <div class="row"><label for="subRatio">Second line cap ÷ main cap</label><input id="subRatio" type="number" value="0.55" step="0.05" min="0.2" max="1"></div>
+      <div class="row"><label for="subTrack">Second line tracking <small>em</small></label><input id="subTrack" type="number" value="0.12" step="0.01" min="0"></div>
+      <div class="row"><label for="profile">Recess profile</label>
+        <select id="profile"><option value="V" selected>V-cut (bevelled)</option><option value="T">Tapered, flat base</option></select></div>
+      <div class="row"><label for="vAngle">V included angle <small>°</small></label><input id="vAngle" type="number" value="90" step="5" min="60" max="120"></div>
+      <div class="row"><label for="recess">Tapered depth <small>mm</small></label><input id="recess" type="number" value="12" step="1" min="4" max="30"></div>
+      <div class="row"><label for="draft">Tapered side angle <small>°</small></label><input id="draft" type="number" value="25" step="1" min="5" max="40"></div>
+      <div class="row"><label for="minStroke">Min. castable stroke <small>mm</small></label><input id="minStroke" type="number" value="15" step="1" min="8"></div>
     </fieldset>
     <fieldset>
-      <h3>Wall &amp; footing <small>(assumed)</small></h3>
+      <h3>Panel &amp; lighting</h3>
+      <div class="row"><label for="proj">Panel projection <small>mm</small></label><input id="proj" type="number" value="45" step="5" min="20" max="80"></div>
+      <div class="row"><label for="pMargin">Panel margin <small>× cap</small></label><input id="pMargin" type="number" value="0.9" step="0.1" min="0.3"></div>
+      <div class="row"><label for="ledW">LED channel W × D <small>mm</small></label><input id="ledW" type="number" value="30" step="5" min="15"></div>
+      <div class="row"><label for="ledD">&nbsp;<small>depth</small></label><input id="ledD" type="number" value="35" step="5" min="15"></div>
+      <div class="row"><label for="upOff">Uplight offset from wall <small>mm</small></label><input id="upOff" type="number" value="400" step="50" min="200" max="800"></div>
+      <div class="row"><label for="upSpace">Uplight max spacing <small>mm</small></label><input id="upSpace" type="number" value="900" step="100" min="400"></div>
+    </fieldset>
+    <fieldset>
+      <h3>Walls &amp; footing <small>(assumed)</small></h3>
       <div class="row"><label for="make">Reinforcement make-up</label>
         <select id="make"><option value="CW2" selected>CW2 · central layer</option><option value="CW1">CW1 · each face</option></select></div>
-      <div class="row"><label for="L">Wall length <small>mm</small></label><input id="L" type="number" value="6000" step="100" min="1200"></div>
-      <div class="row"><label for="H">Height above FGL <small>mm</small></label><input id="H" type="number" value="1800" step="50" min="600"></div>
+      <div class="row"><label for="H">Wall height above FGL <small>mm</small></label><input id="H" type="number" value="1800" step="50" min="900"></div>
       <div class="row"><label for="t">Thickness <small>mm</small></label><input id="t" type="number" value="190" step="10" min="150"></div>
-      <div class="row"><label for="R">Return each end <small>mm · 0 = none</small></label><input id="R" type="number" value="900" step="100" min="0"></div>
+      <div class="row"><label for="Ln">ARDEN wall length <small>mm</small></label><input id="Ln" type="number" value="5400" step="100" min="1500"></div>
+      <div class="row"><label for="La">Address wall length <small>mm</small></label><input id="La" type="number" value="4200" step="100" min="1000"></div>
+      <div class="row"><label for="Rn">Return, ARDEN outer end <small>mm</small></label><input id="Rn" type="number" value="0" step="100" min="0"></div>
+      <div class="row"><label for="Ra">Return, address outer end <small>mm</small></label><input id="Ra" type="number" value="900" step="100" min="0"></div>
+      <div class="row"><label for="setback">Wall face to boundary <small>mm</small></label><input id="setback" type="number" value="1500" step="100" min="0"></div>
       <div class="row"><label for="embed">Footing top below FGL <small>mm</small></label><input id="embed" type="number" value="150" step="25" min="0"></div>
-      <div class="row"><label for="fW">Footing width <small>mm</small></label><input id="fW" type="number" value="600" step="50" min="300"></div>
-      <div class="row"><label for="fD">Footing depth <small>mm</small></label><input id="fD" type="number" value="500" step="50" min="300"></div>
-      <div class="row"><label for="ret">Retained height <small>mm · 0 = free-standing</small></label><input id="ret" type="number" value="0" step="50" min="0"></div>
+      <div class="row"><label for="fW">Footing W × D <small>mm</small></label><input id="fW" type="number" value="600" step="50" min="300"></div>
+      <div class="row"><label for="fD">&nbsp;<small>depth</small></label><input id="fD" type="number" value="500" step="50" min="300"></div>
       <div class="row"><label for="arris">Arris</label>
         <select id="arris"><option value="r3">3 mm pencil round (Ben)</option><option value="c25">25 mm chamfer (SIA FW14)</option></select></div>
-      <div class="row"><label for="tieClr">Tie clear of letters <small>mm</small></label><input id="tieClr" type="number" value="100" step="25" min="25"></div>
+      <div class="row"><label for="tieClr">Ties clear of features <small>mm</small></label><input id="tieClr" type="number" value="100" step="25" min="50"></div>
     </fieldset>
     <fieldset>
-      <h3>Live checks</h3>
+      <h3>Sliding gate <small>(behind ARDEN wall, confirmed)</small></h3>
+      <div class="row"><label for="G">Clear opening <small>mm</small></label><input id="G" type="number" value="4500" step="100" min="2500"></div>
+      <div class="row"><label for="gH">Gate height <small>mm</small></label><input id="gH" type="number" value="1800" step="50" min="900"></div>
+      <div class="row"><label for="gT">Gate thickness <small>mm</small></label><input id="gT" type="number" value="60" step="10" min="30"></div>
+      <div class="row"><label for="gGap">Gap, wall back face to gate <small>mm</small></label><input id="gGap" type="number" value="100" step="10" min="20"></div>
+      <div class="row"><label for="gOv">Tail overlap behind wall <small>mm</small></label><input id="gOv" type="number" value="500" step="50" min="200"></div>
+      <div class="row"><label for="gRc">Lead overlap into receiver <small>mm</small></label><input id="gRc" type="number" value="50" step="10" min="0"></div>
+      <div class="row"><label for="ped">Gooseneck keypad pedestal</label><input id="ped" type="checkbox" checked></div>
+    </fieldset>
+    <fieldset>
+      <h3>Live checks · whole entry</h3>
       <div class="checks" id="checks"></div>
     </fieldset>
   </aside>
 
   <main>
+    <section class="viewer" aria-label="Combined 3D model">
+      <div class="vbar">
+        <h2>Combined 3D model</h2><span class="sp"></span>
+        <button type="button" class="tbtn" data-gate="closed" aria-pressed="false">Gate closed</button>
+        <button type="button" class="tbtn" data-gate="open" aria-pressed="false">Gate open</button>
+        <button type="button" class="tbtn" data-gate="both" aria-pressed="true">Both</button>
+        <button type="button" class="tbtn" id="night" aria-pressed="false">Night</button>
+      </div>
+      <div id="view3d"><div class="msg" id="v3msg">Loading 3D model…</div></div>
+      <div class="vbar" id="layers"></div>
+      <div class="legend">
+        <span><i style="background:#c9ccc8"></i>Concrete (walls)</span><span><i style="background:#9ea39e"></i>Footings (see-through)</span>
+        <span><i style="background:#b02a1f"></i>Reinforcement</span><span><i style="background:#1f5fa8"></i>Conduits</span>
+        <span><i style="background:#3d4a57"></i>Gate, track, motor</span><span><i style="background:#f0b429"></i>Lighting</span><span><i style="background:#222"></i>Tie bolts</span>
+      </div>
+    </section>
+
     <nav class="sheets" aria-label="Sheets">
-      <a href="#fw-01">FW-01 Arrangement</a><a href="#fw-02">FW-02 Section &amp; details</a><a href="#fw-03">FW-03 Reo &amp; formwork</a><a href="#fw-04">FW-04 3D &amp; stability</a><a href="#register">Register</a><a href="#questions">Questions</a>
+      <a href="#fe-01">FE-01 Plan</a><a href="#fe-02">FE-02 Elevations</a><a href="#fe-03">FE-03 Sections</a><a href="#fe-04">FE-04 Reo &amp; ties</a><a href="#fe-05">FE-05 Options</a><a href="#fe-06">FE-06 Checks</a><a href="#register">Register</a><a href="#questions">Questions</a>
     </nav>
-    <figure class="sheetbox" id="fw-01"></figure>
-    <figure class="sheetbox" id="fw-02"></figure>
-    <figure class="sheetbox" id="fw-03"></figure>
-    <figure class="sheetbox" id="fw-04"></figure>
+    <figure class="sheetbox" id="fe-01"></figure>
+    <figure class="sheetbox" id="fe-02"></figure>
+    <figure class="sheetbox" id="fe-03"></figure>
+    <figure class="sheetbox" id="fe-04"></figure>
+    <figure class="sheetbox" id="fe-05"></figure>
+    <figure class="sheetbox" id="fe-06"></figure>
 
     <section class="doc" id="register">
       <h2>Confirmed vs assumed</h2>
-      <p>Everything on the sheets falls into one of these rows. Anything marked Assumed is a placeholder until the designer, engineer or you confirm it.</p>
       <div class="tscroll"><table>
         <thead><tr><th>Item</th><th>Value used</th><th>Source</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td>Address</td><td>572 Tallebudgera Creek Road, Tallebudgera QLD</td><td>SIA tender set title block; SIA/SDM emails</td><td><span class="flag c">Confirmed</span></td></tr>
-          <tr><td>Address wording on wall</td><td>“572 TALLEBUDGERA CREEK ROAD”</td><td>Brief. Number only, or number + road?</td><td><span class="flag a">To confirm</span></td></tr>
-          <tr><td>Property name</td><td>“PROPERTY NAME” placeholder, flagged on the sheets</td><td>Not found in Gmail or Drive</td><td><span class="flag x">Missing</span></td></tr>
-          <tr><td>Reference photo / “the wall”</td><td>None found</td><td>Searched Gmail and Drive</td><td><span class="flag x">Missing</span></td></tr>
+          <tr><td>Name</td><td>ARDEN</td><td>Ben, relayed by parent session 24/11/26; matches Ben's font sheet</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Typeface</td><td>Montserrat Light (option 5), wide tracking</td><td>Ben's font sheet <code>models/reference/entry-font-options.png</code> (commit 38a1c7e); “No 5 font proportion to the wall”</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Stroke widths</td><td>Light 7.3 % of cap · Regular 10.6 % of cap</td><td>Measured here by rasterising Montserrat's “I” at 1000 px</td><td><span class="flag c">Measured</span></td></tr>
+          <tr><td>Gate</td><td>Motorised sliding gate, parks behind the ARDEN wall; address wall takes the catch and closed stop</td><td>Ben, relayed 24/11/26</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>“Gooseneck”</td><td>Modelled as a straight track set behind the wall line, plus an optional gooseneck keypad pedestal</td><td>Interpretation; see question 3</td><td><span class="flag x">Unclear</span></td></tr>
+          <tr><td>Address wording</td><td>“572” on the name wall (opt. 1, 2); “572” + “TALLEBUDGERA CREEK ROAD” on the address wall (opt. 3)</td><td>Default</td><td><span class="flag a">To confirm</span></td></tr>
           <tr><td>CW1 make-up</td><td>190 formed · vert N12-300 EF · horiz N12-200 EF · starters N12-200 EF, lap 600, cog 300 · N16 U-bars at ends</td><td>SIA S50 / S64, Issue B 30/09/26</td><td><span class="flag c">Confirmed (shed)</span></td></tr>
-          <tr><td>CW2 make-up</td><td>190 formed · vert N12-200 central · horiz N16-200 central · starters N12-200 central, lap 600, cog 300 · bars 50 max from end</td><td>SIA S50 / S64, Issue B</td><td><span class="flag c">Confirmed (shed)</span></td></tr>
-          <tr><td>Wall top</td><td>N12-200 “L” bars each side, 600 legs, 600 lap, 40 top cover; 4-N12 longitudinal; no construction joint for off-form finish</td><td>SIA S50 Section A (drawn as interpreted)</td><td><span class="flag a">Interpretation</span></td></tr>
-          <tr><td>Cover</td><td>Walls formed &amp; exposed 40 · footings 50</td><td>SIA S01</td><td><span class="flag c">Confirmed</span></td></tr>
-          <tr><td>Concrete</td><td>Walls N32 · footings N25</td><td>SIA S01</td><td><span class="flag c">Confirmed</span></td></tr>
-          <tr><td>Arris</td><td>3 mm pencil round, as you asked, vs 25 mm chamfer/fillet in SIA FW14</td><td>Your preference vs SIA FW14</td><td><span class="flag x">Conflict, RFI</span></td></tr>
-          <tr><td>Tie holes</td><td>Fill with colour-matched mortar</td><td>SIA FW16</td><td><span class="flag c">Confirmed</span></td></tr>
-          <tr><td>Formwork</td><td>2700 × 1200 formply laid landscape, 6 ties per sheet, half-sheet brick stagger, same layout both faces</td><td>Your instruction (shed model)</td><td><span class="flag c">As instructed</span></td></tr>
-          <tr><td>Wall length, height, returns, levels</td><td>6000 long × 1800 above FGL, 900 returns, level ground both sides</td><td>No drawing found</td><td><span class="flag a">Assumed</span></td></tr>
-          <tr><td>Strip footing</td><td>600 W × 500 D, 4-L12TM top &amp; bottom, R10-600 ligs, top 150 below FGL</td><td>Borrowed from SIA EB4 (S20) via the shed model. SIA scheduled no CW footing.</td><td><span class="flag a">Assumed</span></td></tr>
-          <tr><td>Site / wind</td><td>Site class H1/P · wind N3</td><td>SIA S01; GT Geotechnical GTGEO_26_P200.02 (15/09/26)</td><td><span class="flag c">Confirmed</span></td></tr>
-          <tr><td>Natural ground depth</td><td>~3.7 m average</td><td>Verbal, Anthony (GT Geotechnical), 13/10/26</td><td><span class="flag a">Unverified</span></td></tr>
-          <tr><td>Piles / foundations engineer</td><td>Morgan supersedes SIA for piles</td><td>Your instruction. Morgan's drawings not found.</td><td><span class="flag x">Missing</span></td></tr>
-          <tr><td>Typeface</td><td>Jost Bold (open-source geometric sans, even stroke weight)</td><td>Chosen for casting</td><td><span class="flag a">Proposed</span></td></tr>
+          <tr><td>CW2 make-up</td><td>190 formed · vert N12-200 central · horiz N16-200 central · starters N12-200 central · bars 50 max from end</td><td>SIA S50 / S64, Issue B</td><td><span class="flag c">Confirmed (shed)</span></td></tr>
+          <tr><td>Corners / returns</td><td>Continuous corner bars, drawn as typical</td><td>SIA S64 corner/intersection detail named in the relay; its content was not re-read in this session</td><td><span class="flag a">Check S64</span></td></tr>
+          <tr><td>Cover · concrete</td><td>Walls 40, footings 50 · walls N32, footings N25</td><td>SIA S01</td><td><span class="flag c">Confirmed</span></td></tr>
+          <tr><td>Arris</td><td>3 mm pencil round vs 25 mm chamfer in SIA FW14</td><td>Ben vs SIA FW14</td><td><span class="flag x">Conflict, RFI</span></td></tr>
+          <tr><td>Formwork</td><td>2700 × 1200 formply landscape, 6 ties/sheet, half-sheet stagger, both faces alike; tie holes mortar-filled (FW16)</td><td>Ben (shed model); SIA FW16</td><td><span class="flag c">As instructed</span></td></tr>
+          <tr><td>Wall lengths, heights, opening, setback</td><td>ARDEN 5400 · address 4200 · opening 4500 · height 1800 · face 1500 behind boundary</td><td>No drawing found</td><td><span class="flag a">Assumed</span></td></tr>
+          <tr><td>Strip footings</td><td>600 × 500, 4-L12TM T&amp;B, R10-600 ligs</td><td>Borrowed from SIA EB4 (S20). No CW footing in SIA's schedule.</td><td><span class="flag a">Assumed</span></td></tr>
+          <tr><td>Gate size / weight / motor</td><td>4500 opening, 1800 high, 60 thick, gate 100 off the wall</td><td>No information</td><td><span class="flag a">Assumed</span></td></tr>
+          <tr><td>Site / wind</td><td>H1/P · N3 · natural ground ~3.7 m (verbal, GT Geotechnical 13/10/26)</td><td>SIA S01; GTGEO_26_P200.02</td><td><span class="flag a">Depth unverified</span></td></tr>
         </tbody>
       </table></div>
     </section>
 
     <section class="doc" id="questions">
-      <h2>Questions for you</h2>
+      <h2>Questions still open</h2>
       <ol class="q">
-        <li><b>Name.</b> What exact name goes on the wall, with spelling and capitals? Uppercase only is best for casting.</li>
-        <li><b>Address wording.</b> “572” alone, “572 TALLEBUDGERA CREEK ROAD”, or the full address with suburb? Same wall as the name, or a separate pier?</li>
-        <li><b>“As per the wall”.</b> Is there a photo or a designer sketch of the wall you mean? Nothing matching was found in Gmail or Drive.</li>
-        <li><b>Geometry.</b> Length, height, returns (if any), gate or driveway openings, and finished levels each side. Does the wall retain soil anywhere?</li>
-        <li><b>Engineer.</b> Who designs the footing and wall: SIA (Ryan) or Morgan? A free-standing wall is a different structural case from the shed walls (see FW-04).</li>
-        <li><b>Arris.</b> 3 mm pencil round or SIA's 25 mm chamfer? SIA FW14 says 25 mm unless noted otherwise.</li>
+        <li><b>Address wording.</b> “572” only, or “572” with “TALLEBUDGERA CREEK ROAD” as a second line? On which wall?</li>
+        <li><b>Wall sizes.</b> ARDEN wall length, address wall length, height, returns, and the distance from the boundary.</li>
+        <li><b>“Gooseneck”.</b> Two possible meanings. (a) A cranked gate track: a rigid gate leaf can't follow one, so I've drawn a straight track behind the wall line. (b) A gooseneck keypad/intercom pedestal: shown as optional. Which did you mean?</li>
+        <li><b>Gate.</b> Clear opening, height, material and weight. Do you want a keypad, intercom or letterbox?</li>
+        <li><b>“Modelled as one”.</b> One combined model of all the front walls (built here), or the walls poured as one continuous monolithic wall? A continuous wall needs agreed control-joint positions, because SIA wants no construction joints in an off-form face.</li>
+        <li><b>Option 1 lighting.</b> Light grazing up the lettered panel from a groove at its base (drawn), or a downlight in the panel's underside washing the wall below?</li>
+        <li><b>Engineer.</b> SIA (Ryan) or Morgan for the free-standing walls, footings, gate track footing and motor plinth?</li>
+        <li><b>Arris.</b> 3 mm pencil round or SIA's 25 mm chamfer?</li>
       </ol>
     </section>
 
     <section class="doc" id="search">
       <h2>Search record</h2>
-      <p><b>Gmail, searched:</b> front wall, entry wall, feature wall, garden wall, front fence, letterbox, signage, lettering, house name; Tallebudgera with landscape / wall / entry / gate / name / sign / front / garden; SDM Designs, Studio Workshop and absfacade traffic for the last 120 days. <b>Found:</b> only shed threads (SIA 15579), SIA fee proposal 15744 for the main house, and SDM's 1 September 2026 request to Seed Engineers and DGE. Those link to main-house DA plans via WeTransfer, a link that has likely expired. No front wall, landscape, lettering or name material.</p>
-      <p><b>Drive, searched:</b> Tallebudgera, SDM, 15579, landscape, entry, front wall, letterbox, signage, feature wall, and images/PDFs modified since 1 September 2026. <b>Found:</b> one Tallebudgera shed actions sheet. Nothing on the front walls.</p>
+      <p><b>Gmail:</b> front/entry/feature/garden wall, fence, letterbox, signage, lettering, house name, Tallebudgera + landscape/entry/gate/name, SDM Designs, Studio Workshop. Found only shed threads (SIA 15579), SIA's fee proposal 15744 for the main house, and SDM's request to Seed Engineers and DGE linking main-house DA plans by WeTransfer. That link has likely expired and was not opened. <b>Drive:</b> Tallebudgera, SDM, 15579, landscape, entry, front wall, letterbox, signage, recent images/PDFs: nothing on the front walls. <b>Font sheet:</b> read from branch <code>claude/amazing-cannon-g3z6w6</code>, commit 38a1c7e.</p>
     </section>
   </main>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
 "use strict";
 const $=id=>document.getElementById(id);
-const IDS=["name","addr","font","wt","nameCap","nameBase","addrCap","addrBase","track","offX","recess","draft","make","L","H","t","R","embed","fW","fD","ret","arris","tieClr"];
-const NUM=new Set(["nameCap","nameBase","addrCap","addrBase","track","offX","recess","draft","L","H","t","R","embed","fW","fD","ret","tieClr"]);
-function readP(){const p={};for(const k of IDS){const v=$(k).value;p[k]=NUM.has(k)?(parseFloat(v)||0):v;}
-  p.L=Math.max(1200,p.L);p.H=Math.max(600,p.H);p.t=Math.max(150,p.t);p.fW=Math.max(p.t+100,p.fW);p.fD=Math.max(300,p.fD);
-  p.recess=Math.min(40,Math.max(3,p.recess));p.draft=Math.min(30,Math.max(0,p.draft));p.R=Math.max(0,p.R);p.ret=Math.min(Math.max(0,p.ret),p.H-300);return p;}
-const r0=n=>Math.round(n), f1=n=>(Math.round(n*10)/10).toString();
+const IDS=["opt3light","name","addr12","addrMain","addrSub","wt","subWt","capRatio","datum","track","subRatio","subTrack","profile","vAngle","recess","draft","minStroke","proj","pMargin","ledW","ledD","upOff","upSpace","make","H","t","Ln","La","Rn","Ra","setback","embed","fW","fD","arris","tieClr","G","gH","gT","gGap","gOv","gRc","ped"];
+const TXT=new Set(["opt3light","name","addr12","addrMain","addrSub","wt","subWt","profile","make","arris"]);
+let OPT="1", GATE="both", NIGHT=false;
+const OPTS={
+  "1":{t:"Raised panel with cast-in LED",d:"ARDEN (and 572) recessed into a panel cast proud of the ARDEN wall. A cast-in LED channel at the panel's base grazes light up the lettering."},
+  "2":{t:"Cast into the wall, garden uplights",d:"ARDEN and 572 recessed straight into the ARDEN wall face. In-ground uplights in the garden bed graze the wall so the letter shadows read at night."},
+  "3":{t:"Name and address split at the gate",d:"ARDEN on the gate-storage wall; 572 and the street name on the receiving wall across the driveway. Lighting as Option 1 or 2 (selector below)."}
+};
+function readP(){const p={};for(const k of IDS){const el=$(k);p[k]=el.type==="checkbox"?el.checked:TXT.has(k)?el.value:(parseFloat(el.value)||0);}
+  p.H=Math.max(900,p.H);p.t=Math.max(150,p.t);p.Ln=Math.max(1500,p.Ln);p.La=Math.max(1000,p.La);p.G=Math.max(2500,p.G);
+  p.fW=Math.max(p.t+100,p.fW);p.fD=Math.max(300,p.fD);p.opt=OPT;return p;}
+const r0=n=>Math.round(n), f1=n=>(Math.round(n*10)/10).toString(), f2=n=>(Math.round(n*100)/100).toString();
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const FONT="Montserrat";
 
-/* ---------- font metrics, measured from the loaded face ---------- */
-const cv=document.createElement("canvas").getContext("2d");
-function metrics(fam,wt){
-  cv.font=`${wt} 1000px "${fam}", Arial, sans-serif`;
-  const H=cv.measureText("H"), I=cv.measureText("I");
-  let cap=H.actualBoundingBoxAscent/1000, stem=((I.actualBoundingBoxLeft||0)+(I.actualBoundingBoxRight||0))/1000;
-  if(!(cap>0.4&&cap<1)) cap=0.7; if(!(stem>0.03&&stem<0.4)) stem=0.13;
-  return {cap,stem,w:s=>cv.measureText(s).width/1000,asc:s=>(cv.measureText(s).actualBoundingBoxAscent||cap*1000)/1000,dsc:s=>Math.max(0,cv.measureText(s).actualBoundingBoxDescent||0)/1000};
+/* ---------- font metrics: widths from canvas, stems and cap height by rasterising ---------- */
+const MC={};
+function metrics(wt){
+  if(MC[wt]) return MC[wt];
+  const cvs=document.createElement("canvas");cvs.width=1200;cvs.height=1100;const c=cvs.getContext("2d",{willReadFrequently:true});
+  c.fillStyle="#fff";c.fillRect(0,0,1200,1100);c.fillStyle="#000";c.font=`${wt} 1000px "${FONT}", Arial, sans-serif`;c.fillText("I",200,1000);
+  const row=c.getImageData(0,650,1200,1).data;let n=0;for(let i=0;i<1200;i++) if(row[i*4]<128) n++;
+  let top=null;for(let y=0;y<1100&&top===null;y+=1){const d=c.getImageData(150,y,400,1).data;for(let i=0;i<400;i++) if(d[i*4]<128){top=y;break;}}
+  let cap=top!=null?(1000-top)/1000:0.7, stem=n/1000;
+  if(!(cap>0.5&&cap<0.9)) cap=0.7; if(!(stem>0.02&&stem<0.3)) stem=0.075;
+  const ctx=document.createElement("canvas").getContext("2d");ctx.font=`${wt} 1000px "${FONT}", Arial, sans-serif`;
+  const m={cap,stem,stemCap:stem/cap,cw:ch=>ctx.measureText(ch).width/1000};
+  MC[wt]=m;return m;
 }
-function lineGeom(text,capH,base,p,m){
-  const fs=capH/m.cap, n=[...text].length;
-  const width=(m.w(text)+p.track*Math.max(0,n-1))*fs;
-  const cx=p.L/2+p.offX, desc=m.dsc(text)*fs, asc=m.asc(text)*fs;
-  return {text,cap:capH,fs,width,cx,base,x0:cx-width/2,x1:cx+width/2,top:base+Math.max(capH,asc),bot:base-desc,stem:m.stem*fs};
+function lineGeom(text,cap,base,wt,track,cx,key){
+  const m=metrics(wt),fs=cap/m.cap,chars=[...text];
+  const adv=chars.map(ch=>m.cw(ch)*fs), trk=track*fs;
+  const width=adv.reduce((a,b)=>a+b,0)+trk*Math.max(0,chars.length-1);
+  const x0=cx-width/2;const xs=[];let x=x0;chars.forEach((ch,i)=>{xs.push(x);x+=adv[i]+trk;});
+  return {text,chars,xs,adv,cap,fs,wt,track,width,cx,base,x0,x1:x0+width,top:base+cap,bot:base,stroke:m.stemCap*cap,stemCap:m.stemCap,key};
 }
 
-/* ---------- derived geometry, tie layout, checks ---------- */
+/* ---------- the combined model ---------- */
 function derive(p){
-  const m=metrics(p.font,p.wt);
-  const lines=[];
-  if(p.name.trim()) lines.push(Object.assign(lineGeom(p.name,p.nameCap,p.nameBase,p,m),{key:"name"}));
-  if(p.addr.trim()) lines.push(Object.assign(lineGeom(p.addr,p.addrCap,p.addrBase,p,m),{key:"addr"}));
-  const zones=lines.map(l=>({x0:l.x0-p.tieClr,x1:l.x1+p.tieClr,y0:l.bot-p.tieClr,y1:l.top+p.tieClr}));
-  const inZone=(x,y)=>zones.some(z=>x>z.x0&&x<z.x1&&y>z.y0&&y<z.y1);
-  // formply, landscape 2700 x 1200, courses from footing top; y here = above FGL
-  const SW=2700,SH=1200,formH=p.H+p.embed,courses=Math.ceil(formH/SH);
-  const sheets=[],ties=[];
-  for(let c=0;c<courses;c++){
-    const yb=c*SH-p.embed, off=(c%2===1)?-SW/2:0;
-    for(let x0=off;x0<p.L;x0+=SW){
-      const sx0=Math.max(0,x0),sx1=Math.min(p.L,x0+SW),sy1=Math.min(p.H,yb+SH);
-      if(sx1-sx0<50) continue;
-      sheets.push({x0:sx0,x1:sx1,y0:yb,y1:sy1,cut:(sx1-sx0<SW-1)||(sy1-yb<SH-1)});
-      for(const dx of [450,1350,2250]) for(const dy of [300,900]){
-        const x=x0+dx,y=yb+dy;
-        if(x<100||x>p.L-100||y>p.H-150) continue;
-        const t={x,y,ox:x,oy:y,state:"ok",sx0:Math.max(sx0,x0),sx1,sy0:yb,sy1};
-        if(inZone(x,y)){
-          // nearest clear position inside the same sheet, 100 from sheet edges, 150 from wall top
-          let best=null;
-          for(let ddy=-300;ddy<=300;ddy+=50) for(let ddx=-450;ddx<=450;ddx+=50){
-            const nx=x+ddx,ny=y+ddy,d=Math.hypot(ddx,ddy);
-            if(nx<t.sx0+100||nx>t.sx1-100||ny<yb+100||ny>yb+SH-100||ny>p.H-150||nx<100||nx>p.L-100) continue;
-            if(inZone(nx,ny)) continue;
-            if(!best||d<best.d) best={nx,ny,d};
+  const H=p.H,t=p.t,cap=p.capRatio*H,baseN=p.datum*H-cap/2,cap2=p.subRatio*cap,base2=baseN-0.6*cap-cap2;
+  const lit=(p.opt==="1")?"panel":(p.opt==="2")?"uplight":p.opt3light;
+  const walls=[];
+  const N={id:"N",label:"ARDEN wall",x0:-p.Ln,x1:0,lines:[]}, A={id:"A",label:"Address wall",x0:p.G,x1:p.G+p.La,lines:[]};
+  const cxN=-p.Ln/2, cxA=p.G+p.La/2;
+  if(p.name.trim()) N.lines.push(lineGeom(p.name.trim(),cap,baseN,p.wt,p.track,cxN,"name"));
+  if(p.opt!=="3"){ if(p.addr12.trim()) N.lines.push(lineGeom(p.addr12.trim(),cap2,base2,p.subWt,p.subTrack,cxN,"addr")); }
+  else { if(p.addrMain.trim()) A.lines.push(lineGeom(p.addrMain.trim(),cap,baseN,p.wt,p.track,cxA,"addr"));
+         if(p.addrSub.trim()) A.lines.push(lineGeom(p.addrSub.trim(),cap2,base2,p.subWt,p.subTrack,cxA,"addr2")); }
+  walls.push(N,A);
+  const segs=[{id:"N",x0:N.x0,x1:N.x1,y0:0,y1:t,ax:"x",wall:N},{id:"A",x0:A.x0,x1:A.x1,y0:0,y1:t,ax:"x",wall:A}];
+  if(p.Rn>0) segs.push({id:"Nr",x0:N.x0,x1:N.x0+t,y0:t,y1:p.Rn,ax:"y"});
+  if(p.Ra>0) segs.push({id:"Ar",x0:A.x1-t,x1:A.x1,y0:t,y1:p.Ra,ax:"y"});
+  const prof=l=>{const w=l.stroke;if(p.profile==="V"){const dep=(w/2)/Math.tan(p.vAngle*Math.PI/360);return {depth:dep,base:0,w};}
+    const base=w-2*p.recess*Math.tan(p.draft*Math.PI/180);return {depth:p.recess,base,w};};
+  const cw1=p.make==="CW1", faceToBar=cw1?40:(t/2-14);
+  for(const w of walls){
+    w.panel=null;w.lights=[];w.led=null;w.ferr=[];w.conduitX=null;
+    if(!w.lines.length) continue;
+    const bx0=Math.min(...w.lines.map(l=>l.x0)),bx1=Math.max(...w.lines.map(l=>l.x1)),bt=Math.max(...w.lines.map(l=>l.top)),bb=Math.min(...w.lines.map(l=>l.bot));
+    w.block={x0:bx0,x1:bx1,top:bt,bot:bb};
+    if(lit==="panel"){
+      const m=p.pMargin*cap, ledZone=p.ledW+0.35*m;
+      w.panel={x0:bx0-m,x1:bx1+m,y0:bb-m-ledZone,y1:bt+m,proj:p.proj,m};
+      w.led={x0:w.panel.x0+0.5*m,x1:w.panel.x1-0.5*m,z0:w.panel.y0+0.35*m,z1:w.panel.y0+0.35*m+p.ledW,d:p.ledD};
+      w.conduitX=w.panel.x0+0.5*m+150;
+    } else {
+      const span=bx1-bx0, n=Math.max(2,Math.ceil(span/p.upSpace)+1);
+      for(let i=0;i<n;i++) w.lights.push({x:bx0+span*(i/(n-1)),y:-p.upOff});
+    }
+    for(const l of w.lines){l.prof=prof(l);const proud=w.panel?p.proj:0;l.coverBase=faceToBar+proud-l.prof.depth;}
+  }
+  const gy0=t+p.gGap, gy1=gy0+p.gT, gyc=(gy0+gy1)/2;
+  const travel=p.G+p.gRc;
+  const gate={y0:gy0,y1:gy1,yc:gyc,closed:{x0:-p.gOv,x1:p.G+p.gRc},open:{x0:-p.gOv-travel,x1:0},L:p.G+p.gOv+p.gRc,H:p.gH,travel};
+  const storeNeed=p.gOv+travel+150, storeAvail=p.Ln-(p.Rn>0?(t+50):0);
+  const track={x0:gate.open.x0-150,x1:gate.closed.x1+100,y:gyc,fw:300,fd:300};
+  const motor={x0:-p.gOv+50,x1:-p.gOv+50+450,y0:gy1+40,y1:gy1+40+320,h:150};
+  if(motor.x1>-20){const sh=motor.x1+20;motor.x0-=sh;motor.x1-=sh;}
+  const guides=[{x:Math.max(-p.gOv+60,motor.x0-160),y:gy1+60},{x:gate.open.x0+200,y:gy1+60}];
+  const stops=[{x:gate.open.x0-60,y:gyc},{x:gate.closed.x1+60,y:gyc}];
+  const rcx0=p.G+100,rcx1=p.G+200,rcz=0.6*p.gH;
+  for(const x of [rcx0,rcx1]) for(const z of [rcz-150,rcz+150]) A.ferr.push({x,z,what:"receiver"});
+  for(const x of [rcx0,rcx1]) A.ferr.push({x,z:250,what:"stop"});
+  const ped=p.ped?{x:p.G-800,y:-Math.min(1200,Math.max(500,p.setback-300))}:null;
+  const svc=[],pits=[];const sbX=-p.Ln-400, sbY=2500;
+  for(const w of walls){
+    if(!w.lines.length) continue;
+    const pitX=(w.id==="N")?w.block.x0-300:w.block.x1+300, pitY=-Math.min(700,Math.max(400,p.setback-300));
+    pits.push({x:pitX,y:pitY,id:"P"+(pits.length+1)});
+    if(w.panel){const cx=w.conduitX, zc=w.led.z0+p.ledW/2;
+      svc.push({k:"led",pts:[[cx,t/2,zc],[cx,t/2,-p.embed+75],[cx,-200,-p.embed+75],[cx,pitY,-300],[pitX,pitY,-300]]});}
+    else {const pts=[[pitX,pitY,-300]];const ls=[...w.lights].sort((a,b)=>w.id==="N"?a.x-b.x:b.x-a.x);for(const L of ls) pts.push([L.x,L.y,-300]);svc.push({k:"up",pts});}
+  }
+  for(const pt of pits){
+    if(pt.x<0) svc.push({k:"feed",pts:[[pt.x,pt.y,-400],[sbX,pt.y,-400],[sbX,sbY,-400]]});
+    else svc.push({k:"feed",pts:[[pt.x,pt.y,-400],[p.G+p.La+400,pt.y,-400],[p.G+p.La+400,sbY,-400]]});
+  }
+  const mcx=(motor.x0+motor.x1)/2;
+  svc.push({k:"gate",pts:[[mcx,motor.y1,-400],[mcx,sbY,-400]]});
+  if(ped) svc.push({k:"comms",pts:[[motor.x1,motor.y0+80,-450],[250,motor.y0+80,-450],[250,ped.y,-450],[ped.x,ped.y,-450]]});
+  // ties
+  const SW=2700,SH=1200,formH=H+p.embed;
+  const zonesFor=w=>{const z=[];if(!w) return z;const c=p.tieClr;
+    for(const l of w.lines) z.push({x0:l.x0-c,x1:l.x1+c,y0:l.bot-c,y1:l.top+c});
+    if(w.panel){z.push({x0:w.panel.x0-c,x1:w.panel.x1+c,y0:w.panel.y0-c,y1:w.panel.y1+c});z.push({x0:w.conduitX-75,x1:w.conduitX+75,y0:-p.embed,y1:w.led.z1});}
+    for(const f of w.ferr) z.push({x0:f.x-c,x1:f.x+c,y0:f.z-c,y1:f.z+c});
+    return z;};
+  const ties=[],sheets=[];
+  for(const s of segs){
+    const len=s.ax==="x"?(s.x1-s.x0):(s.y1-s.y0), z=zonesFor(s.wall), off0=s.ax==="x"?s.x0:0;
+    const inZ=(x,y)=>z.some(q=>x>q.x0&&x<q.x1&&y>q.y0&&y<q.y1);
+    const courses=Math.ceil(formH/SH);
+    for(let c=0;c<courses;c++){
+      const yb=c*SH-p.embed, off=(c%2===1)?-SW/2:0;
+      for(let a=off;a<len;a+=SW){
+        const a0=Math.max(0,a),a1=Math.min(len,a+SW),yt=Math.min(H,yb+SH);
+        if(a1-a0<50) continue;
+        sheets.push({seg:s.id,a0:a0+off0,a1:a1+off0,y0:yb,y1:yt,cut:(a1-a0<SW-1)||(yt-yb<SH-1)});
+        for(const dx of [450,1350,2250]) for(const dy of [300,900]){
+          const u=a+dx,y=yb+dy; if(u<100||u>len-100||y>H-150) continue;
+          const X=u+off0, T={seg:s.id,x:X,y,ox:X,oy:y,state:"ok"};
+          if(s.ax==="x"&&inZ(X,y)){
+            let best=null;
+            for(let ddy=-600;ddy<=600;ddy+=50) for(let ddx=-1350;ddx<=1350;ddx+=50){
+              const nx=X+ddx,ny=y+ddy,dd=Math.hypot(ddx,ddy),u2=nx-off0;
+              if(u2<a0+100||u2>a1-100||ny<yb+100||ny>yb+SH-100||ny>H-150||u2<100||u2>len-100) continue;
+              if(inZ(nx,ny)) continue; if(ties.some(o=>o.seg===s.id&&o.state!=="clash"&&Math.hypot(o.x-nx,o.y-ny)<250)) continue; if(!best||dd<best.dd) best={nx,ny,dd};
+            }
+            if(best){T.x=best.nx;T.y=best.ny;T.state="moved";} else T.state="clash";
           }
-          if(best){t.x=best.nx;t.y=best.ny;t.state="moved";} else t.state="clash";
+          ties.push(T);
         }
-        ties.push(t);
       }
     }
   }
-  // cover at letter base
-  const cw1=p.make==="CW1";
-  const faceToBar=cw1?40:(p.t/2-14);           // CW2: N16 + N12 central pair, 28 thick
-  const coverAtLetter=faceToBar-p.recess;
-  const setback=cw1?Math.max(0,40-coverAtLetter):0;
-  // stroke rules (rule of thumb, not a standard)
-  const minStem=lines.length?Math.min(...lines.map(l=>l.stem)):0;
-  const baseW=minStem-2*p.recess*Math.tan(p.draft*Math.PI/180);
-  const stemNeed=Math.max(15,p.recess);
-  // indicative stability screen, N3 per AS 4055: Vh,u = 50 m/s
-  const q=0.6*50*50/1000, Cpn=1.3, pw=q*Cpn;                     // kPa
-  const Hm=p.H/1000,em=p.embed/1000,dm=p.fD/1000,bm=p.fW/1000,tm=p.t/1000;
-  const F=pw*Hm, Mot=F*(Hm/2+em+dm);
-  const Gw=24*tm*(Hm+em), Gf=24*bm*dm, Gs=18*em*(bm-tm);
-  const Mres=0.9*(Gw+Gf+Gs)*bm/2, ratio=Mres/Mot;
-  const Mbase=F*(Hm/2+em);
-  // indicative wall base flexure (starters N12-200 per face / central)
-  const As=565, d=cw1?(p.t-40-12-6):(p.t/2), a=As*500/(0.85*32*1000);
-  const phiMu=0.85*As*500*(d-a/2)/1e6;
-  return {m,lines,zones,sheets,ties,courses,formH,cw1,faceToBar,coverAtLetter,setback,minStem,baseW,stemNeed,
-    stab:{q,Cpn,pw,F,Mot,Gw,Gf,Gs,Mres,ratio,Mbase,phiMu,d}};
+  const capMinL=p.minStroke/metrics(300).stemCap, capMinR=p.minStroke/metrics(400).stemCap;
+  const q=0.6*50*50/1000,Cpn=1.3,pw=q*Cpn,Hm=H/1000,em=p.embed/1000,dm=p.fD/1000,bm=p.fW/1000,tm=t/1000;
+  const F=pw*Hm,Mot=F*(Hm/2+em+dm),Gw=24*tm*(Hm+em),Gf=24*bm*dm,Gs=18*em*(bm-tm),Mres=0.9*(Gw+Gf+Gs)*bm/2;
+  const As=565,dd=cw1?(t-40-12-6):t/2,aa=As*500/(0.85*32*1000),phiMu=0.85*As*500*(dd-aa/2)/1e6;
+  return {p,H,t,cap,cap2,baseN,base2,lit,walls,N,A,segs,gate,track,motor,guides,stops,ped,svc,pits,sbX,sbY,ties,sheets,formH,
+    storeNeed,storeAvail,cw1,faceToBar,capMinL,capMinR,
+    stab:{q,Cpn,pw,F,Mot,Gw,Gf,Gs,Mres,ratio:Mres/Mot,Mbase:F*(Hm/2+em),phiMu,d:dd}};
 }
 
 /* ---------- SVG primitives (paper mm) ---------- */
 let PX="s";
-const ln=(x1,y1,x2,y2,c="k2")=>`<line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}" class="${c}"/>`;
-const ln2=(x1,y1,x2,y2,c="k2")=>`<line x1="${x1.toFixed(2)}" y1="${y1.toFixed(2)}" x2="${x2.toFixed(2)}" y2="${y2.toFixed(2)}" class="${c}"/>`;
 const nf=e=>/fill=/.test(e)?e:e+' fill="none"';
-const rc=(x,y,w,h,c="k2",extra="")=>`<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${Math.max(0,w).toFixed(2)}" height="${Math.max(0,h).toFixed(2)}" class="${c}" ${nf(extra)}/>`;
+const ln2=(x1,y1,x2,y2,c="k2")=>`<line x1="${x1.toFixed(2)}" y1="${y1.toFixed(2)}" x2="${x2.toFixed(2)}" y2="${y2.toFixed(2)}" class="${c}"/>`;
+const rc=(x,y,w,h,c="k2",extra="")=>`<rect x="${(w<0?x+w:x).toFixed(2)}" y="${(h<0?y+h:y).toFixed(2)}" width="${Math.abs(w).toFixed(2)}" height="${Math.abs(h).toFixed(2)}" class="${c}" ${nf(extra)}/>`;
 const pg=(pts,c="k2",extra="")=>`<polygon points="${pts.map(q=>q[0].toFixed(2)+","+q[1].toFixed(2)).join(" ")}" class="${c}" ${nf(extra)}/>`;
 const pl=(pts,c="k2",extra="")=>`<polyline points="${pts.map(q=>q[0].toFixed(2)+","+q[1].toFixed(2)).join(" ")}" class="${c}" ${nf(extra)}/>`;
-function tx(x,y,s,o={}){const sz=o.size||2.2,a=o.anchor||"start",w=o.weight||400,rot=o.rot?` transform="rotate(${o.rot} ${x.toFixed(2)} ${y.toFixed(2)})"`:"",cls=o.cls?` class="${o.cls}"`:"",ls=o.ls?` letter-spacing="${o.ls}"`:"";
-  return `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" font-size="${sz}" text-anchor="${a}" font-weight="${w}"${cls}${rot}${ls}>${esc(s)}</text>`;}
-function wrap(s,width,size){const max=Math.max(8,Math.floor(width/(size*0.46)));const out=[];let cur="";for(const w of s.split(" ")){if((cur+" "+w).trim().length>max){out.push(cur.trim());cur=w;}else cur+=" "+w;}if(cur.trim())out.push(cur.trim());return out;}
-function para(x,y,s,width,o={}){const sz=o.size||2.1,lh=sz*1.32;let out="";wrap(s,width,sz).forEach((l,i)=>out+=tx(x,y+i*lh,l,Object.assign({},o,{size:sz})));return {svg:out,h:wrap(s,width,sz).length*lh};}
-function tick(x,y){return ln2(x-.7,y+.7,x+.7,y-.7,"k3");}
-function dimH(x1,x2,y,label,fy1,fy2,o={}){
-  let s=ln2(x1,y,x2,y,"k1")+tick(x1,y)+tick(x2,y);
+const circ=(x,y,r,c="k1",extra="")=>`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${r.toFixed(2)}" class="${c}" ${nf(extra)}/>`;
+function tx(x,y,s,o={}){const sz=o.size||2.2,a=o.anchor||"start",w=o.weight||400,rot=o.rot?` transform="rotate(${o.rot} ${x.toFixed(2)} ${y.toFixed(2)})"`:"",cls=o.cls?` class="${o.cls}"`:"";
+  return `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" font-size="${sz}" text-anchor="${a}" font-weight="${w}"${cls}${rot}>${esc(s)}</text>`;}
+function wrap(s,width,size){const max=Math.max(8,Math.floor(width/(size*0.46)));const out=[];let cur="";for(const w of String(s).split(" ")){if((cur+" "+w).trim().length>max){out.push(cur.trim());cur=w;}else cur+=" "+w;}if(cur.trim())out.push(cur.trim());return out;}
+function para(x,y,s,width,o={}){const sz=o.size||2.1,lh=sz*1.32,ls=wrap(s,width,sz);let out="";ls.forEach((l,i)=>out+=tx(x,y+i*lh,l,Object.assign({},o,{size:sz})));return {svg:out,h:ls.length*lh};}
+const tick=(x,y)=>ln2(x-.7,y+.7,x+.7,y-.7,"k3");
+function dimH(x1,x2,y,label,fy1,fy2,o={}){let s=ln2(x1,y,x2,y,"k1")+tick(x1,y)+tick(x2,y);
   if(fy1!=null) s+=ln2(x1,fy1+(fy1>y?-.8:.8),x1,y+(fy1>y?1.2:-1.2),"k0");
   if(fy2!=null) s+=ln2(x2,fy2+(fy2>y?-.8:.8),x2,y+(fy2>y?1.2:-1.2),"k0");
-  const sz=o.size||2, w=String(label).length*sz*.5;
-  const xm=(Math.abs(x2-x1)>w+2)?(x1+x2)/2:Math.max(x1,x2)+1+w/2;
-  return s+tx(xm,y-.7,label,{size:sz,anchor:"middle"});
-}
-function dimV(y1,y2,x,label,fx1,fx2,o={}){
-  let s=ln2(x,y1,x,y2,"k1")+tick(x,y1)+tick(x,y2);
+  const sz=o.size||2,w=String(label).length*sz*.5,xm=(Math.abs(x2-x1)>w+2)?(x1+x2)/2:Math.max(x1,x2)+1+w/2;
+  return s+tx(xm,y-.7,label,{size:sz,anchor:"middle",cls:o.cls});}
+function dimV(y1,y2,x,label,fx1,fx2,o={}){let s=ln2(x,y1,x,y2,"k1")+tick(x,y1)+tick(x,y2);
   if(fx1!=null) s+=ln2(fx1+(fx1>x?-.8:.8),y1,x+(fx1>x?1.2:-1.2),y1,"k0");
   if(fx2!=null) s+=ln2(fx2+(fx2>x?-.8:.8),y2,x+(fx2>x?1.2:-1.2),y2,"k0");
-  const sz=o.size||2, w=String(label).length*sz*.5;
-  const ym=(Math.abs(y2-y1)>w+2)?(y1+y2)/2:Math.min(y1,y2)-1-w/2;
-  return s+tx(x-.7,ym,label,{size:sz,anchor:"middle",rot:-90});
-}
-function leader(x1,y1,x2,y2,label,o={}){
-  const right=x2>=x1, sz=o.size||2;
+  const sz=o.size||2,w=String(label).length*sz*.5,ym=(Math.abs(y2-y1)>w+2)?(y1+y2)/2:Math.min(y1,y2)-1-w/2;
+  return s+tx(x-.7,ym,label,{size:sz,anchor:"middle",rot:-90,cls:o.cls});}
+function leader(x1,y1,x2,y2,label,o={}){const right=x2>=x1,sz=o.size||2;
   let s=`<circle cx="${x1.toFixed(2)}" cy="${y1.toFixed(2)}" r=".35" fill="#151515"/>`+ln2(x1,y1,x2,y2,"k1")+ln2(x2,y2,x2+(right?2.5:-2.5),y2,"k1");
-  const lines=Array.isArray(label)?label:[label];
-  lines.forEach((l,i)=>s+=tx(x2+(right?3.2:-3.2),y2+sz*.35+i*sz*1.25,l,{size:sz,anchor:right?"start":"end",cls:o.cls}));
-  return s;
-}
+  (Array.isArray(label)?label:[label]).forEach((l,i)=>s+=tx(x2+(right?3.2:-3.2),y2+sz*.35+i*sz*1.25,l,{size:sz,anchor:right?"start":"end",cls:o.cls}));return s;}
 function key(x,y,n){return `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="1.9" fill="#fff" stroke="#151515" stroke-width=".25"/>`+tx(x,y+.75,String(n),{size:2.1,anchor:"middle",weight:600});}
 function viewTitle(x,y,tag,title,scale,sub){
   let s=`<circle cx="${(x+4).toFixed(2)}" cy="${(y-1.6).toFixed(2)}" r="4" fill="#fff" stroke="#151515" stroke-width=".5"/>`+tx(x+4,y-.3,tag,{size:3.6,anchor:"middle",weight:600});
-  s+=tx(x+10,y-1.2,title,{size:3.4,weight:600})+ln2(x+10,y+.4,x+10+title.length*1.9,y+.4,"k5");
-  s+=tx(x+10,y+3.4,scale+(sub?"  ·  "+sub:""),{size:2.2});
-  return s;
-}
-function flag(x,y,w,lines){const h=lines.length*2.7+1.8;let s=rc(x,y,w,h,"flagbox");lines.forEach((l,i)=>s+=tx(x+1.4,y+2.9+i*2.7,l,{size:2,cls:"flagtx",weight:i===0?600:400}));return s;}
-function defs(){
-  return `<defs>
-  <pattern id="${PX}-conc" patternUnits="userSpaceOnUse" width="5" height="5"><circle cx="1" cy="1.2" r=".18" fill="#555"/><circle cx="3.4" cy="3.1" r=".14" fill="#555"/><circle cx="4.2" cy=".6" r=".1" fill="#555"/><path d="M2 4.3 l.7 -.9 l.5 .9z" fill="none" stroke="#555" stroke-width=".1"/><circle cx=".7" cy="3.9" r=".1" fill="#555"/></pattern>
+  s+=tx(x+10,y-1.2,title,{size:3.2,weight:600})+ln2(x+10,y+.4,x+10+title.length*1.8,y+.4,"k5");
+  return s+tx(x+10,y+3.4,scale+(sub?"  ·  "+sub:""),{size:2.1});}
+function flag(x,y,w,lines){const h=lines.length*2.7+1.8;let s=rc(x,y,w,h,"flagbox","fill=\"#fff4e6\"");lines.forEach((l,i)=>s+=tx(x+1.4,y+2.9+i*2.7,l,{size:2,cls:"flagtx",weight:i===0?600:400}));return s;}
+function defs(){return `<defs>
+  <pattern id="${PX}-conc" patternUnits="userSpaceOnUse" width="5" height="5"><circle cx="1" cy="1.2" r=".18" fill="#555"/><circle cx="3.4" cy="3.1" r=".14" fill="#555"/><circle cx="4.2" cy=".6" r=".1" fill="#555"/><path d="M2 4.3 l.7 -.9 l.5 .9z" fill="none" stroke="#555" stroke-width=".1"/></pattern>
   <pattern id="${PX}-earth" patternUnits="userSpaceOnUse" width="3" height="3" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3" stroke="#777" stroke-width=".12"/></pattern>
   <pattern id="${PX}-zone" patternUnits="userSpaceOnUse" width="1.6" height="1.6" patternTransform="rotate(-45)"><line x1="0" y1="0" x2="0" y2="1.6" stroke="#c25a12" stroke-width=".12"/></pattern>
-  <pattern id="${PX}-agg" patternUnits="userSpaceOnUse" width="3" height="3"><circle cx="1" cy="1" r=".55" fill="none" stroke="#666" stroke-width=".1"/><circle cx="2.4" cy="2.3" r=".4" fill="none" stroke="#666" stroke-width=".1"/></pattern>
-  </defs>`;
-}
-const fillC=()=>`fill="url(#${PX}-conc)"`, fillE=()=>`fill="url(#${PX}-earth)"`;
+  <pattern id="${PX}-slat" patternUnits="userSpaceOnUse" width="2" height="2"><line x1="1" y1="0" x2="1" y2="2" stroke="#3d4a57" stroke-width=".15"/></pattern>
+  </defs>`;}
+const fillC=()=>`fill="url(#${PX}-conc)"`, fillE=()=>`fill="url(#${PX}-earth)"`, fillZ=()=>`fill="url(#${PX}-zone)" stroke="#c25a12" stroke-width=".2"`;
+function svgLetters(l,X,Y,s,style){const fs=l.fs/s;let o="";
+  l.chars.forEach((ch,i)=>{if(ch===" ")return;o+=`<text x="${X(l.xs[i]).toFixed(3)}" y="${Y(l.base).toFixed(3)}" font-family="'${FONT}',Arial,sans-serif" font-weight="${l.wt}" font-size="${fs.toFixed(3)}" style="${style}">${esc(ch)}</text>`;});return o;}
 
-/* ---------- sheet frame + title block ---------- */
-const SHEETS={"FW-01":"General arrangement — elevation & plan","FW-02":"Section through wall & footing, lettering details","FW-03":"Reinforcement & formwork tie layout","FW-04":"3D view, stability screen & open items"};
-function frame(no,scaleTxt,body,notes){
+/* ---------- frame ---------- */
+const SHEETS={"FE-01":"Whole entry — plan, gate & services","FE-02":"Street elevation & lettering set-out","FE-03":"Sections & details — selected option","FE-04":"Reinforcement & tie layouts — whole entry","FE-05":"Design options 1, 2, 3 — comparison","FE-06":"Castability, gate safety & stability screen"};
+function frame(no,scaleTxt,body,notes,p){
   let s=`<rect x="0" y="0" width="420" height="297" fill="#fff"/>`+rc(12,8,400,281,"k7");
-  // notes column + title block
-  s+=ln(282,8,282,289,"k5")+ln(282,226,412,226,"k5");
-  s+=notes||"";
+  s+=ln2(282,8,282,289,"k5")+ln2(282,226,412,226,"k5")+(notes||"");
   const tb=226;
-  s+=tx(285,tb+4.4,"PROJECT",{size:1.7,weight:600})+tx(285,tb+8.2,"PROPOSED RESIDENCE & SHED — FRONT GARDEN WALLS",{size:2.4,weight:600})+tx(285,tb+11.2,"572 TALLEBUDGERA CREEK ROAD, TALLEBUDGERA QLD",{size:2.2});
-  s+=ln(282,tb+13,412,tb+13,"k2");
-  s+=tx(285,tb+16.6,"DRAWING",{size:1.7,weight:600})+tx(285,tb+20.6,SHEETS[no].toUpperCase(),{size:2.4,weight:600});
-  s+=ln(282,tb+23,412,tb+23,"k2");
-  // status band
-  s+=rc(282,tb+23,130,8,"flagbox")+tx(347,tb+28.3,"PRELIMINARY — FOR ENGINEER REVIEW — NOT FOR CONSTRUCTION",{size:2.3,anchor:"middle",weight:600,cls:"flagtx"});
-  s+=ln(282,tb+31,412,tb+31,"k2");
-  const cells=[["DWG No.",no],["REV","P1"],["DATE","24.11.26"],["SCALE @ A3",scaleTxt]];
-  const cw=[34,18,26,52];let x=282;
-  cells.forEach((c,i)=>{s+=tx(x+2,tb+34.6,c[0],{size:1.7,weight:600})+tx(x+2,tb+40.2,c[1],{size:i===0?4.2:3,weight:600});x+=cw[i];if(i<3)s+=ln(x,tb+31,x,tb+43,"k2");});
-  s+=ln(282,tb+43,412,tb+43,"k2");
-  s+=tx(285,tb+46.6,"BASIS: SIA 15579 TENDER ISSUE B 30.09.26 (S01, S50, S64). FOOTING & GEOMETRY ASSUMED.",{size:1.8});
-  s+=tx(285,tb+49.8,"PREPARED BY: IDEAL GROUP (BUILDER) · DESIGN INTENT ONLY · ENGINEER TO DESIGN & CERTIFY",{size:1.8});
-  s+=tx(285,tb+53,"DO NOT SCALE. ALL DIMENSIONS IN MILLIMETRES. VERIFY ON SITE.",{size:1.8});
+  s+=tx(285,tb+4.4,"PROJECT",{size:1.7,weight:600})+tx(285,tb+8.2,"FRONT ENTRY WALLS & SLIDING GATE — “ARDEN”",{size:2.4,weight:600})+tx(285,tb+11.2,"572 TALLEBUDGERA CREEK ROAD, TALLEBUDGERA QLD",{size:2.2});
+  s+=ln2(282,tb+13,412,tb+13);
+  s+=tx(285,tb+16.6,"DRAWING  ·  OPTION "+p.opt+(p.opt==="3"?" ("+(p.opt3light==="panel"?"panels":"uplights")+")":""),{size:1.7,weight:600})+tx(285,tb+20.6,SHEETS[no].toUpperCase(),{size:2.3,weight:600});
+  s+=ln2(282,tb+23,412,tb+23);
+  s+=rc(282,tb+23,130,8,"flagbox","fill=\"#fff4e6\"")+tx(347,tb+28.3,"PRELIMINARY — FOR ENGINEER REVIEW — NOT FOR CONSTRUCTION",{size:2.3,anchor:"middle",weight:600,cls:"flagtx"});
+  s+=ln2(282,tb+31,412,tb+31);
+  const cells=[["DWG No.",no],["REV","P2"],["DATE","24.11.26"],["SCALE @ A3",scaleTxt]],cw=[34,18,26,52];let x=282;
+  cells.forEach((c,i)=>{s+=tx(x+2,tb+34.6,c[0],{size:1.7,weight:600})+tx(x+2,tb+40.2,c[1],{size:i===0?4.2:(i===3&&c[1].length>12?2.2:3),weight:600});x+=cw[i];if(i<3)s+=ln2(x,tb+31,x,tb+43);});
+  s+=ln2(282,tb+43,412,tb+43);
+  s+=tx(285,tb+46.6,"BASIS: SIA 15579 ISSUE B 30.09.26 (S01, S50, S64) · FONT SHEET OPTION 5 · GEOMETRY ASSUMED",{size:1.75});
+  s+=tx(285,tb+49.8,"PREPARED BY: IDEAL GROUP (BUILDER) · DESIGN INTENT ONLY · ENGINEER TO DESIGN & CERTIFY",{size:1.75});
+  s+=tx(285,tb+53,"DO NOT SCALE. DIMENSIONS IN MILLIMETRES. VERIFY ON SITE.",{size:1.75});
   return `<svg viewBox="0 0 420 297" xmlns="http://www.w3.org/2000/svg" class="sheet" role="img" aria-label="${no} ${esc(SHEETS[no])}">${defs()}${s}${body}</svg>`;
 }
-function noteCol(title,items,y0=14){
-  let s=tx(285,y0,title,{size:2.8,weight:600})+ln(285,y0+1.2,409,y0+1.2,"k3");let y=y0+5.4;
-  for(const it of items){
-    if(it.h){s+=tx(285,y+1,it.h.toUpperCase(),{size:2.1,weight:600});y+=4;continue;}
-    const n=it.n!=null?it.n:null;
-    if(n!=null) s+=key(287.2,y-.6,n);
-    const r=para(n!=null?291:285,y,it.t,n!=null?118:124,{size:2,cls:it.flag?"flagtx":undefined});
-    s+=r.svg;y+=r.h+1.3;
-  }
-  return s;
-}
-function pickScale(len,avail,list=[20,25,30,40,50,75,100]){for(const s of list) if(len/s<=avail) return s;return list[list.length-1];}
+function noteCol(title,items,y0=14,maxY=223){
+  let s=tx(285,y0,title,{size:2.8,weight:600})+ln2(285,y0+1.2,409,y0+1.2,"k3");let y=y0+5.4;
+  for(const it of items){ if(y>maxY) break;
+    if(it.h){s+=tx(285,y+1,it.h.toUpperCase(),{size:2.05,weight:600});y+=3.9;continue;}
+    if(it.n!=null) s+=key(287.2,y-.6,it.n);
+    const r=para(it.n!=null?291:285,y,it.t,it.n!=null?118:124,{size:1.95,cls:it.flag?"flagtx":undefined});s+=r.svg;y+=r.h+1.1;}
+  return s;}
+function pickScale(len,avail,list=[20,25,30,40,50,75,100,125]){for(const s of list) if(len/s<=avail) return s;return list[list.length-1];}
 
-/* ---------- FW-01: elevation + plan ---------- */
-function sheet1(p,d){
-  PX="a";
-  const s=pickScale(p.L+(p.R>0?0:0),232);
-  const ox=12+(270-p.L/s)/2+4, gy=118;          // FGL on paper
-  const X=x=>ox+x/s, Y=z=>gy-z/s;
+/* ---------- FE-01 plan ---------- */
+function sheetPlan(d){
+  const p=d.p;PX="a";
+  const xmin=-p.Ln-600, xmax=p.G+p.La+600, s=pickScale(xmax-xmin,262,[20,25,30,40,50,60,75,100,125]);
+  const ox=12+(270-(xmax-xmin)/s)/2-xmin/s, oy=70+p.setback/s;
+  const X=x=>ox+x/s, Y=y=>oy+y/s;
   let b="";
-  // ground
-  b+=rc(X(-600),gy,(p.L+1200)/s,2.2,"",`fill="url(#${PX}-earth)"`)+ln2(X(-600),gy,X(p.L+600),gy,"k3");
-  b+=tx(X(-600),gy-1,"FGL (ASSUMED LEVEL)",{size:1.8});
-  // footing & buried wall (hidden)
-  b+=rc(X(-(p.fW-p.t)/2>0?0:0),Y(-p.embed),p.L/s,p.embed/s,"k2 dash");
-  b+=rc(X(0)-((p.fW-p.t)/2)/s*0,Y(-p.embed),p.L/s,p.fD/s,"k2 dash");
-  b+=tx(X(p.L/2),Y(-p.embed-p.fD/2)+.8,`STRIP FOOTING ${p.fW} W × ${p.fD} D (ASSUMED — ENGINEER TO DESIGN)`,{size:1.9,anchor:"middle"});
-  // wall face
-  b+=rc(X(0),Y(p.H),p.L/s,p.H/s,"k5","fill=\"#f6f7f6\"");
-  // letters
-  for(const l of d.lines){
-    const fs=l.fs/s, ls=p.track*fs;
-    b+=`<text x="${(X(l.cx)+ls/2).toFixed(2)}" y="${Y(l.base).toFixed(2)}" font-family="'${p.font}',Arial,sans-serif" font-weight="${p.wt}" font-size="${fs.toFixed(3)}" letter-spacing="${ls.toFixed(3)}" text-anchor="middle" class="letter" style="fill:#d6d9d7;stroke:#151515;stroke-width:.12">${esc(l.text)}</text>`;
-  }
-  if(/PROPERTY NAME/i.test(p.name)) b+=flag(X(0)+2,Y(p.H)+2,44,["PLACEHOLDER — NAME NOT YET CONFIRMED","Letter count and length will change."]);
-  // tie holes (final positions)
-  for(const t of d.ties){ if(t.state==="clash") continue; b+=`<circle cx="${X(t.x).toFixed(2)}" cy="${Y(t.y).toFixed(2)}" r=".45" fill="#fff" stroke="#151515" stroke-width=".15"/>`; }
-  // centreline
-  b+=ln2(X(p.L/2),Y(p.H)-6,X(p.L/2),gy+4,"k0 cl")+tx(X(p.L/2),Y(p.H)-6.6,"℄ WALL",{size:1.8,anchor:"middle"});
-  // section mark A
-  const sx=X(Math.min(600,p.L*0.1)), smTop=Y(p.H)-4-5*(d.lines.length+1)-3;
-  b+=ln2(sx,smTop+2.4,sx,gy+5,"k3 cl");
-  for(const yy of [smTop,gy+7.5]){b+=`<circle cx="${sx.toFixed(2)}" cy="${yy.toFixed(2)}" r="2.4" fill="#fff" stroke="#151515" stroke-width=".35"/>`+tx(sx,yy+.4,"A",{size:2,anchor:"middle",weight:600})+tx(sx,yy+1.9,"FW-02",{size:.9,anchor:"middle"});}
-  // dims — horizontal above
-  const top=Y(p.H);
-  const ln_=d.lines;
-  let row=top-4;
-  for(const l of ln_){
-    b+=dimH(X(0),X(l.x0),row,r0(l.x0),top,Y(l.top))+dimH(X(l.x0),X(l.x1),row,`${r0(l.width)} ${l.key==="name"?"NAME":"ADDRESS"} (MEASURED)`,null,Y(l.top))+dimH(X(l.x1),X(p.L),row,r0(p.L-l.x1),null,top);
-    row-=5;
-  }
-  b+=dimH(X(0),X(p.L),row,`${p.L} OVERALL (ASSUMED)`,top,top);
-  // vertical dims right
-  ln_.forEach((l,i)=>{const vx=X(p.L)+5+i*6;
-    b+=dimV(Y(l.base),gy,vx,`${l.base}`,X(l.x1),null)+dimV(Y(l.base+l.cap),Y(l.base),vx,`${l.cap}`,X(l.x1),null);});
-  const vH=X(p.L)+5+ln_.length*6+2;
-  b+=dimV(Y(p.H),gy,vH,`${p.H} ABOVE FGL`,X(p.L),X(p.L));
-  b+=dimV(gy,Y(-p.embed),vH,`${p.embed}`,null,null)+dimV(Y(-p.embed),Y(-p.embed-p.fD),vH,`${p.fD}`,X(p.L),X(p.L));
-  b+=viewTitle(18,Y(-p.embed-p.fD)+10,"1","FRONT ELEVATION — LETTERED FACE",`1:${s}`,"tie holes shown at final positions");
-  // plan
-  const ps=s, py=gy+56;                     // front face line on paper
-  const PXx=x=>ox+x/ps, PY=y=>py+y/ps;
-  const ext=(p.fW-p.t)/2;
-  // footing hidden
-  b+=pg([[PXx(-ext),PY(-ext)],[PXx(p.L+ext),PY(-ext)],[PXx(p.L+ext),PY(p.R>0?p.R:p.t+ext)],[PXx(p.L-p.t-ext),PY(p.R>0?p.R:p.t+ext)],[PXx(p.L-p.t-ext),PY(p.t+ext)],[PXx(p.t+ext),PY(p.t+ext)],[PXx(p.t+ext),PY(p.R>0?p.R:p.t+ext)],[PXx(-ext),PY(p.R>0?p.R:p.t+ext)]],"k1 dash");
-  // walls cut
-  const wallPoly=p.R>0?[[0,0],[p.L,0],[p.L,p.R],[p.L-p.t,p.R],[p.L-p.t,p.t],[p.t,p.t],[p.t,p.R],[0,p.R]]:[[0,0],[p.L,0],[p.L,p.t],[0,p.t]];
-  b+=pg(wallPoly.map(q=>[PXx(q[0]),PY(q[1])]),"k5",fillC());
-  // lettering zone on front face
-  d.lines.forEach((l,i)=>b+=ln2(PXx(l.x0),PY(0)-.9-i*1.6,PXx(l.x1),PY(0)-.9-i*1.6,"k3")+tx(PXx(l.x1)+1,PY(0)-.6-i*1.6,l.key==="name"?"NAME ZONE":"ADDRESS ZONE",{size:1.4}));
-  b+=tx(PXx(p.L/2),PY(0)-4.6,"LETTERED FACE (STREET SIDE)",{size:1.9,anchor:"middle",weight:600});
-  // section A in plan
-  const sax=PXx(Math.min(600,p.L*0.1));
-  b+=ln2(sax,PY(-ext)-4,sax,PY(p.t+ext)+3,"k3 cl")+tx(sax+1,PY(-ext)-4.4,"A",{size:2,weight:600});
-  // plan dims
-  b+=dimH(PXx(0),PXx(p.L),PY(Math.max(p.R,p.t+ext))+5,`${p.L}`,PY(Math.max(p.R,p.t)),PY(Math.max(p.R,p.t)));
-  if(p.R>0) b+=dimV(PY(0),PY(p.R),PXx(p.L)+6,`${p.R} RETURN`,PXx(p.L),PXx(p.L));
-  b+=dimV(PY(0),PY(p.t),PXx(0)-5,`${p.t}`,PXx(0),PXx(0))+dimV(PY(-ext),PY(p.t+ext),PXx(0)-10,`${p.fW} FTG`,PXx(-ext),PXx(-ext));
-  b+=viewTitle(18,PY(Math.max(p.R,p.t+ext))+14,"2","PLAN",`1:${ps}`,"footing hidden (dashed), centred under wall");
-  if(p.L>8000) b+=flag(X(p.L/2)-25,py-16,50,["CONTROL JOINT NEEDED","L > 8 m: engineer to locate. Not in lettered zone."]);
+  b+=ln2(X(xmin),Y(-p.setback),X(xmax),Y(-p.setback),"k3 cl")+tx(X(xmin)+1,Y(-p.setback)-1,"BOUNDARY (STREET) — SETBACK ASSUMED",{size:1.9,weight:600});
+  b+=rc(X(0),Y(-p.setback),p.G/s,(p.setback+3800)/s,"k0","fill=\"#f1f2f0\"")+tx(X(p.G/2),Y(2600),"DRIVEWAY",{size:2.2,anchor:"middle",weight:600});
+  const ex=(p.fW-p.t)/2;
+  for(const sg of d.segs) b+=rc(X(sg.x0-ex),Y(sg.y0-(sg.ax==="x"?ex:0)),(sg.x1-sg.x0+2*ex)/s,(sg.y1-sg.y0+(sg.ax==="x"?2*ex:ex))/s,"k1 dash");
+  b+=rc(X(d.track.x0),Y(d.track.y-d.track.fw/2),(d.track.x1-d.track.x0)/s,d.track.fw/s,"k1 dash","fill=\"#e9ecef\"");
+  for(const sg of d.segs) b+=rc(X(sg.x0),Y(sg.y0),(sg.x1-sg.x0)/s,(sg.y1-sg.y0)/s,"k5",fillC());
+  for(const w of d.walls) if(w.panel) b+=rc(X(w.panel.x0),Y(-w.panel.proj),(w.panel.x1-w.panel.x0)/s,w.panel.proj/s,"k3",fillC());
+  for(const w of d.walls) for(const l of w.lines) b+=ln2(X(l.x0),Y(w.panel?-w.panel.proj:0)-.8,X(l.x1),Y(w.panel?-w.panel.proj:0)-.8,"k3");
+  const g=d.gate;
+  b+=rc(X(g.closed.x0),Y(g.y0),(g.closed.x1-g.closed.x0)/s,(g.y1-g.y0)/s,"k3 gate","fill=\"#cfd6dd\"");
+  b+=rc(X(g.open.x0),Y(g.y0),(g.open.x1-g.open.x0)/s,(g.y1-g.y0)/s,"k1 gate dash");
+  b+=tx(X(g.closed.x1)-1,Y(g.y1)+3,"GATE CLOSED",{size:1.8,anchor:"end",weight:600})+tx(X(g.open.x0)+1,Y(g.y1)+3,"GATE OPEN (PARKED BEHIND ARDEN WALL)",{size:1.8});
+  const ax=X(p.G*0.7),ay=Y(g.y1)+6.5,aL=g.travel*0.35/s;
+  b+=ln2(ax,ay,ax-aL,ay,"k2")+pg([[ax-aL,ay],[ax-aL+1.6,ay-.7],[ax-aL+1.6,ay+.7]],"k1","fill=\"#151515\"")+tx(ax+1,ay+.7,`TRAVEL ${r0(g.travel)}`,{size:1.8});
+  b+=ln2(X(d.track.x0),Y(d.track.y),X(d.track.x1),Y(d.track.y),"k3 gate");
+  const mo=d.motor;b+=rc(X(mo.x0),Y(mo.y0),(mo.x1-mo.x0)/s,(mo.y1-mo.y0)/s,"k3",fillC())+rc(X(mo.x0+80),Y(mo.y0+60),(mo.x1-mo.x0-160)/s,(mo.y1-mo.y0-120)/s,"k2 gate","fill=\"#3d4a57\"");
+  for(const gd of d.guides) b+=rc(X(gd.x)-.9,Y(gd.y)-.2,1.8,1.8,"k2","fill=\"#3d4a57\"");
+  for(const st of d.stops) b+=rc(X(st.x)-.6,Y(st.y)-1.1,1.2,2.2,"k2","fill=\"#151515\"");
+  const fx=[...new Set(d.A.ferr.map(f=>f.x))];for(const x of fx) b+=circ(X(x),Y(p.t)-.25,.45,"k1","fill=\"#151515\"");
+  for(const sv of d.svc) b+=pl(sv.pts.map(q=>[X(q[0]),Y(q[1])]),"k2 svc dash");
+  for(const pt of d.pits) b+=rc(X(pt.x)-2,Y(pt.y)-2,4,4,"k2 svc","fill=\"#fff\"")+tx(X(pt.x),Y(pt.y)+.7,pt.id,{size:1.7,anchor:"middle",cls:"svctx"});
+  for(const w of d.walls) for(const L of w.lights) b+=circ(X(L.x),Y(L.y),1.1,"k2","fill=\"#f0b429\"");
+  b+=tx(X(d.sbX)+1,Y(d.sbY)-1,"TO SWITCHBOARD (ROUTE TBC)",{size:1.7,cls:"svctx"})+tx(X(p.G+p.La+400)-1,Y(d.sbY)-1,"TO SWITCHBOARD",{size:1.7,anchor:"end",cls:"svctx"});
+  if(d.ped) b+=circ(X(d.ped.x),Y(d.ped.y),1.4,"k3","fill=\"#3d4a57\"")+tx(X(d.ped.x)+2.4,Y(d.ped.y)+.7,"GOOSENECK KEYPAD (OPTIONAL)",{size:1.8});
+  b+=tx(X(-p.Ln/2),Y(-p.setback/2)+.8,"FRONT GARDEN BED",{size:1.9,anchor:"middle"})+tx(X(p.G+p.La/2),Y(-p.setback/2)+.8,"FRONT GARDEN BED",{size:1.9,anchor:"middle"});
+  b+=tx(X(-p.Ln/2),Y(g.y1)+10,"ARDEN WALL — GATE STORAGE SIDE",{size:2.1,anchor:"middle",weight:600});
+  b+=tx(X(p.G+p.La/2),Y(p.t)+6,"ADDRESS WALL — RECEIVING SIDE",{size:2.1,anchor:"middle",weight:600});
+  const dy=Y(Math.max(p.Ra,p.Rn,mo.y1,p.t))+16;
+  b+=dimH(X(-p.Ln),X(0),dy,`${p.Ln}`,Y(p.t),Y(p.t))+dimH(X(0),X(p.G),dy,`${p.G} CLEAR OPENING`,Y(p.t),Y(p.t))+dimH(X(p.G),X(p.G+p.La),dy,`${p.La}`,Y(p.t),Y(p.t));
+  b+=dimH(X(-d.storeNeed),X(0),Y(g.y1)+14,`${r0(d.storeNeed)} STORAGE NEEDED`,Y(g.y1),Y(g.y1),{cls:d.storeNeed>d.storeAvail?"flagtx":undefined});
+  b+=dimV(Y(-p.setback),Y(0),X(xmin)+6,`${p.setback}`,null,null);
+  if(p.Ra>0) b+=dimV(Y(0),Y(p.Ra),X(p.G+p.La)+5,`${p.Ra}`,X(p.G+p.La),X(p.G+p.La));
+  const ty=Math.max(dy,Y(d.sbY))+10;
+  b+=viewTitle(18,ty,"1","PLAN — WHOLE FRONT ENTRY",`1:${s}`,"walls, footings (dashed), gate closed & open, track, motor, services");
+  b+=flag(18,ty+8,128,["CHECKS: (a) GATE TO ARDEN WALL BACK FACE "+p.gGap+" CLEAR (ASSUMED)",
+    "(b) ARDEN WALL BACK FACE: NO CAST-IN ITEMS, OUTLETS OR TIE-BACKS",
+    "(c) STORAGE "+r0(d.storeNeed)+" NEEDED vs "+r0(d.storeAvail)+" AVAILABLE — "+(d.storeNeed<=d.storeAvail?"FITS":"DOES NOT FIT")]);
   const notes=noteCol("NOTES",[
-    {h:"Read with"},
-    {n:1,t:"FW-02 section & details, FW-03 reinforcement & ties, FW-04 stability screen. SIA 15579 Issue B S01, S50, S64."},
-    {h:"Status"},
-    {n:2,t:"Geometry, levels and footing are ASSUMED. No front-wall, landscape or lettering drawing was found. Confirm before pricing.",flag:true},
-    {n:3,t:"Free-standing wall: a cantilever from its footing, unlike the shed walls, which the roof restrains. Wall and footing must be designed and certified by the engineer (SIA or Morgan).",flag:true},
-    {h:"Concrete & finish"},
-    {n:4,t:"Wall N32, footing N25 (SIA S01). Class 2 off-form face to street side; no construction joints in the face (SIA S50)."},
-    {n:5,t:`Arris: ${p.arris==="r3"?"3 mm pencil round as instructed. CONFLICTS with SIA FW14 (25 mm chamfer/fillet UNO). RFI before ordering formwork.":"25 mm chamfer to SIA FW14."}`,flag:p.arris==="r3"},
-    {n:6,t:"Tie holes: fill with colour-matched mortar (SIA FW16). No ties within the lettering exclusion zones (FW-03)."},
-    {h:"Lettering"},
-    {n:7,t:`Inset (recessed) ${p.recess} mm, ${p.font} ${p.wt}, tracking ${p.track} em, centred ${p.offX?("+"+p.offX+" mm from"):"on"} wall ℄. Lengths are measured from the font. Final artwork to be approved before formers are cut.`},
-    {n:8,t:"Name line is a PLACEHOLDER until confirmed. Address wording to be confirmed.",flag:true},
-    {h:"Set-out"},
-    {n:9,t:"Set-out to boundary, levels each side, openings and services (letterbox, lights, meter) to be confirmed. Check Gold Coast City Council and QLD Building Regulation limits for front walls/fences and retaining walls with the certifier."}
+    {h:"Model"},
+    {n:1,t:"One combined model: every sheet and the 3D view come from the same values. Geometry is ASSUMED except where the register says confirmed.",flag:true},
+    {n:2,t:"Gate confirmed to park behind the ARDEN wall. Motor plinth, guide post, track run-back and open stop are on that side. The address wall takes the receiver and closed stop on its back face (FE-03 D)."},
+    {n:3,t:"“Gooseneck”: a rigid gate leaf cannot follow a cranked track, so a straight track is drawn behind the wall line. The optional gooseneck keypad pedestal covers the other meaning. Confirm with Ben.",flag:true},
+    {h:"Gate"},
+    {n:4,t:`Track footing ${d.track.fw} W × ${d.track.fd} D assumed in the driveway slab, with end stops. Size it for the gate weight once known (gate supplier / engineer).`},
+    {n:5,t:"Motor sits in the overlap zone where the rack engages in both positions. Plinth with cast-in hold-down bolts to the motor maker's template."},
+    {n:6,t:"Safety: drive and installation to AS/NZS 60335-2-103. The installer confirms force limits, photo-electric beams and safety edges, and guards or clears every crush and shear point. That includes the gate to the wall back face, the guide post, the receiver, and the wall end at the opening.",flag:true},
+    {h:"Services"},
+    {n:7,t:"All conduits schematic. 25 HD PVC with draw wire, pits accessible from the garden bed. Gate power and comms are separate from lighting. Electrical by a licensed electrician to AS/NZS 3000, including depth of cover for underground wiring."},
+    {n:8,t:"Nothing exits the ARDEN wall back face. Lighting conduits leave the walls below ground on the street side."},
+    {h:"Walls"},
+    {n:9,t:"Returns meet the main walls with continuous corner bars to SIA S64 (drawn typical; check S64). Each wall is one pour, with no construction joint in the off-form face."}
   ]);
-  return frame("FW-01",`1:${s}`,b,notes);
+  return frame("FE-01",`1:${s}`,b,notes,p);
 }
 
-/* ---------- FW-02: section + details ---------- */
-function sheet2(p,d){
-  PX="b";
-  let b="";
-  // ---- Section A, 1:20
-  const s=20, ox=40, gy=150;
+/* ---------- elevation helper ---------- */
+function elevWall(d,w,X,Y,s,o={}){
+  const p=d.p;let b="";
+  b+=rc(X(w.x0),Y(p.H),(w.x1-w.x0)/s,p.H/s,"k5","fill=\"#f6f7f6\"");
+  if(o.footing!==false) b+=rc(X(w.x0),Y(-p.embed),(w.x1-w.x0)/s,p.fD/s,"k1 dash");
+  if(w.panel){const P=w.panel;b+=rc(X(P.x0),Y(P.y1),(P.x1-P.x0)/s,(P.y1-P.y0)/s,"k5","fill=\"#eceeec\"");
+    b+=ln2(X(P.x0)+.25,Y(P.y0)+.25,X(P.x1)+.25,Y(P.y0)+.25,"k3")+ln2(X(P.x1)+.25,Y(P.y1)+.25,X(P.x1)+.25,Y(P.y0)+.25,"k3");
+    const L=w.led;b+=rc(X(L.x0),Y(L.z1),(L.x1-L.x0)/s,Math.max(.25,(L.z1-L.z0)/s),"k1","fill=\"#f0b429\"");}
+  for(const l of w.lines) b+=svgLetters(l,X,Y,s,"fill:#cfd3d0;stroke:#151515;stroke-width:.1");
+  if(o.ties) for(const t of d.ties) if(t.seg===w.id&&t.state!=="clash") b+=circ(X(t.x),Y(t.y),Math.max(.25,6/s),"k0","fill=\"#fff\"");
+  if(o.lights) for(const L of w.lights){b+=pg([[X(L.x)-1.2,Y(0)],[X(L.x)+1.2,Y(0)],[X(L.x),Y(0)-1.3]],"k1","fill=\"#f0b429\"");
+    b+=pl([[X(L.x)-3,Y(p.H*0.95)],[X(L.x),Y(0)-1.3],[X(L.x)+3,Y(p.H*0.95)]],"k0 dash");}
+  return b;
+}
+
+/* ---------- FE-02 street elevation + set-out ---------- */
+function sheetElev(d){
+  const p=d.p;PX="b";
+  const xmin=-p.Ln-300,xmax=p.G+p.La+300,s=pickScale(xmax-xmin,262);
+  const ox=12+(270-(xmax-xmin)/s)/2-xmin/s, gy=62;
   const X=x=>ox+x/s, Y=z=>gy-z/s;
-  const fx0=-(p.fW-p.t)/2, fz0=-p.embed-p.fD;
-  // earth both sides
-  b+=rc(X(fx0-500),gy,(p.fW+1000)/s,(p.embed+p.fD+150)/s,"",fillE());
-  if(p.ret>0){ // retained side (back)
-    b+=pg([[X(p.t),Y(p.ret)],[X(p.t+900),Y(p.ret)],[X(p.t+900),gy],[X(p.t),gy]],"",fillE());
-    b+=ln2(X(p.t),Y(p.ret),X(p.t+900),Y(p.ret),"k3");
-    b+=pg([[X(p.t),Y(p.ret-100)],[X(p.t+300),Y(p.ret-100)],[X(p.t+300),Y(-p.embed)],[X(p.t),Y(-p.embed)]],"k1",`fill="url(#${PX}-agg)"`);
-    b+=`<circle cx="${X(p.t+150).toFixed(2)}" cy="${Y(-p.embed+60).toFixed(2)}" r="${(50/s).toFixed(2)}" fill="#fff" stroke="#151515" stroke-width=".25"/>`;
+  let b="";
+  b+=rc(X(xmin),gy,(xmax-xmin)/s,1.6,"",fillE())+ln2(X(xmin),gy,X(xmax),gy,"k3")+tx(X(xmin),gy-1,"FGL (ASSUMED)",{size:1.7});
+  const g=d.gate;
+  b+=rc(X(0),Y(g.H),p.G/s,(g.H-50)/s,"k2 gate",`fill="url(#${PX}-slat)"`)+tx(X(p.G/2),Y(g.H/2),"SLIDING GATE (CLOSED) — BEHIND WALL LINE",{size:1.8,anchor:"middle",weight:600});
+  for(const w of d.walls) b+=elevWall(d,w,X,Y,s,{ties:true,lights:true});
+  b+=rc(X(g.open.x0),Y(g.H),(g.open.x1-g.open.x0)/s,(g.H-50)/s,"k1 gate dash");
+  if(d.ped){const x=X(d.ped.x);b+=pl([[x,gy],[x,Y(1000)],[x+2.4/(s/50),Y(1200)],[x+3.4/(s/50),Y(1150)]],"k3 gate");}
+  b+=dimH(X(-p.Ln),X(0),Y(p.H)-4,`${p.Ln}`,Y(p.H),Y(p.H))+dimH(X(0),X(p.G),Y(p.H)-4,`${p.G}`,Y(p.H),Y(p.H))+dimH(X(p.G),X(p.G+p.La),Y(p.H)-4,`${p.La}`,Y(p.H),Y(p.H));
+  b+=dimV(Y(p.H),gy,X(xmax)-2,`${p.H}`,X(p.G+p.La),null);
+  b+=viewTitle(18,gy+12,"1","STREET ELEVATION — WHOLE ENTRY",`1:${s}`,"gate open position dashed, tie holes shown");
+  const lw=d.walls.filter(w=>w.lines.length);
+  const span=lw.reduce((a,w)=>a+(w.x1-w.x0),0)+(lw.length>1?1200:0);
+  const s2=pickScale(span,250,[20,25,30,40,50,60,75]);
+  let cur=12+(270-span/s2)/2;const gy2=172;
+  for(const w of lw){
+    const ox2=cur-w.x0/s2,X2=x=>ox2+x/s2,Y2=z=>gy2-z/s2;
+    b+=rc(X2(w.x0)-3,gy2,(w.x1-w.x0)/s2+6,1.4,"",fillE())+ln2(X2(w.x0)-3,gy2,X2(w.x1)+3,gy2,"k3");
+    b+=elevWall(d,w,X2,Y2,s2,{ties:true,lights:true,footing:false});
+    const row=Y2(p.H)-4;
+    w.lines.forEach((l,i)=>{const ry=row-i*4.5;b+=dimH(X2(w.x0),X2(l.x0),ry,r0(l.x0-w.x0),Y2(p.H),Y2(l.top))+dimH(X2(l.x0),X2(l.x1),ry,`${r0(l.width)}`,null,Y2(l.top))+dimH(X2(l.x1),X2(w.x1),ry,r0(w.x1-l.x1),null,Y2(p.H));});
+    const vx0=X2(w.x1)+3;
+    w.lines.forEach((l,i)=>{const vx=vx0+i*5;b+=dimV(Y2(l.base),gy2,vx,`${r0(l.base)}`,X2(l.x1),null)+dimV(Y2(l.top),Y2(l.base),vx,`${r0(l.cap)}`,X2(l.x1),null);});
+    if(w.panel){const P=w.panel;b+=dimV(Y2(P.y1),Y2(P.y0),X2(w.x0)-3,`${r0(P.y1-P.y0)} PANEL`,X2(P.x0),X2(P.x0))+dimV(Y2(P.y0),gy2,X2(w.x0)-3,`${r0(P.y0)}`,null,null);}
+    b+=ln2(X2(w.x0)-2,Y2(p.datum*p.H),X2(w.x1)+2,Y2(p.datum*p.H),"k0 cl");
+    if(w===lw[0]) b+=tx(X2(w.x0)-(w.panel?8:2.5),Y2(p.datum*p.H)+.7,`DATUM ${p.datum}H`,{size:1.6,anchor:"end"});
+    b+=tx(X2((w.x0+w.x1)/2),gy2+5,w.label.toUpperCase(),{size:2,anchor:"middle",weight:600});
+    cur+=(w.x1-w.x0)/s2+1200/s2;
   }
-  // footing + wall
-  b+=rc(X(fx0),Y(-p.embed),p.fW/s,p.fD/s,"k5",fillC());
-  b+=rc(X(0),Y(p.H),p.t/s,(p.H+p.embed)/s,"k5",fillC());
-  // white-out earth inside concrete done by fill; ground lines
-  b+=ln2(X(fx0-500),gy,X(0),gy,"k3")+(p.ret>0?"":ln2(X(p.t),gy,X(fx0+p.fW+500),gy,"k3"));
-  // recess notches on front face at letter heights
-  for(const l of d.lines){ b+=rc(X(0),Y(l.top),p.recess/s,l.cap/s,"k2","fill=\"#fff\""); }
-  // reinforcement
-  const cw1=d.cw1, c=40;
-  const vxs=cw1?[c+12+6, p.t-c-12-6]:[p.t/2];
-  for(const vx of vxs){
-    b+=ln2(X(vx),Y(p.H-c-12),X(vx),Y(-p.embed+ (0)),"k3 bar");
-  }
-  // starters with cog
-  const fb=-p.embed-p.fD+50+12;
-  for(const vx of vxs){
-    const sx=vx+(cw1?(vx<p.t/2?3:-3):3);
-    b+=pl([[X(sx),Y(-p.embed+600)],[X(sx),Y(fb)],[X(sx+(vx<=p.t/2?300:-300)),Y(fb)]],"k3 bar");
-  }
-  // horizontals as dots
-  for(let z=100;z<p.H-80;z+=200){ for(const vx of vxs){ const off=cw1?(vx<p.t/2?-9:9):(-11); b+=`<circle cx="${X(vx+off).toFixed(2)}" cy="${Y(z).toFixed(2)}" r="${((cw1?6:8)/s+0.1).toFixed(2)}" class="bard"/>`; } }
-  // top L bars
-  const tz=p.H-c;
-  b+=pl([[X(c+6),Y(tz-600)],[X(c+6),Y(tz)],[X(p.t-c-6),Y(tz)]],"k2 bar")+pl([[X(p.t-c-6),Y(tz-600)],[X(p.t-c-6),Y(tz)-.35],[X(c+6),Y(tz)-.35]],"k2 bar");
-  // footing trench mesh + lig
-  const fy1=-p.embed-50-6, fy2=-p.embed-p.fD+50+6;
-  for(const fy of [fy1,fy2]) for(let i=0;i<4;i++){ const xx=fx0+50+12+i*((p.fW-124)/3); b+=`<circle cx="${X(xx).toFixed(2)}" cy="${Y(fy).toFixed(2)}" r=".38" class="bard"/>`; }
-  b+=rc(X(fx0+50),Y(-p.embed-50),(p.fW-100)/s,(p.fD-100)/s,"k1 bar");
-  // pier ghost
-  b+=rc(X(p.t/2-225),Y(fz0),450/s,28,"k1 dash")+ln2(X(p.t/2-225),Y(fz0)+28,X(p.t/2+225),Y(fz0)+28,"k1 dash");
-  // dims
-  b+=dimV(Y(p.H),gy,X(fx0)-12,`${p.H}`,X(0),null)+dimV(gy,Y(-p.embed),X(fx0)-12,`${p.embed}`,null,X(fx0))+dimV(Y(-p.embed),Y(fz0),X(fx0)-12,`${p.fD}`,X(fx0),X(fx0));
-  b+=dimH(X(0),X(p.t),Y(p.H)-5,`${p.t}`,Y(p.H),Y(p.H))+dimH(X(fx0),X(fx0+p.fW),Y(fz0)+5,`${p.fW} (ASSUMED)`,Y(fz0),Y(fz0));
-  // leaders/keys
-  const lx=X(fx0+p.fW)+10;
-  b+=leader(X(p.t/2),Y(p.H-250),lx,Y(p.H-250),`${cw1?"CW1":"CW2"} WALL ${p.t} N32 — SEE KEY 1`)+
-     leader(X(0)+.2,Y(d.lines.length?d.lines[0].base+d.lines[0].cap/2:p.H/2),X(0)-8,Y(d.lines.length?d.lines[0].base+d.lines[0].cap/2:p.H/2),[`LETTER RECESS ${p.recess}`,"DETAIL B"])+
-     leader(X(cw1?p.t-c-18:p.t/2+3),Y(-p.embed+300),lx,Y(-p.embed+300),"STARTERS N12-200, LAP 600, COG 300 — KEY 2")+
-     leader(X(fx0+p.fW-80),Y(-p.embed-p.fD/2),lx,Y(-p.embed-p.fD/2),["4-L12TM T&B, R10-600 LIGS, N25","50 COVER — ASSUMED (KEY 3)"])+
-     leader(X(p.t/2),Y(fz0)+16,lx,Y(fz0)+16,["PIER / PILE IF ENGINEER REQUIRES","H1/P SITE — KEY 4"])+
-     leader(X(p.t/2),Y(p.H-c),lx,Y(p.H-c)-6,"TOP 'L' BARS — DETAIL C");
-  b+=viewTitle(16,272,"A","SECTION THROUGH WALL & FOOTING","1:20",`${cw1?"CW1 each face":"CW2 central"} make-up`);
+  b+=viewTitle(18,gy2+13,"2","LETTERING SET-OUT — LETTERED WALLS",`1:${s2}`,"Montserrat, measured advance widths");
+  const r=[
+    `RULE (EDITABLE): MAIN CAP = ${p.capRatio} × WALL HEIGHT = ${r0(d.cap)} · CAP CENTRELINE ON DATUM ${p.datum} × H = ${r0(p.datum*p.H)} ABOVE FGL`,
+    `TRACKING ${p.track} EM (MAIN), ${p.subTrack} EM (SECOND LINE) · SECOND LINE CAP = ${p.subRatio} × MAIN = ${r0(d.cap2)}, TOP ${r0(0.6*d.cap)} BELOW MAIN BASELINE`,
+    `BLOCK CENTRED ON EACH WALL'S FACE LENGTH · MARGINS: ENDS ≥ 1.0 × CAP · TOP ≥ 0.75 × CAP · GROUND ≥ 2 × CAP (PANEL: HALF THESE)`];
+  b+=rc(18,gy2+20,258,r.length*3.2+2.4,"k2","fill=\"#f7f8f7\"");r.forEach((t,i)=>b+=tx(20,gy2+23.4+i*3.2,t,{size:1.95,weight:i===0?600:400}));
+  const notes=noteCol("NOTES",[
+    {h:"Lettering"},
+    {n:1,t:`Montserrat (OFL, Google Fonts), main ${p.wt==300?"Light 300":"Regular 400"}, second line ${p.subWt==300?"Light":"Regular"}. Ben chose option 5 for its proportion to the wall. Sizes follow the rule in the box, so they scale with the wall height.`},
+    {n:2,t:"Letter widths are measured from the font's own advance widths and tracking. Final artwork goes to the former maker as vector outlines, approved before cutting. Formers are cut MIRROR-IMAGE (they fix to the formply face)."},
+    {n:3,t:"Second line is in Regular because Light at that size would be too thin to cast (FE-06).",flag:p.subWt==300},
+    {h:"Concrete"},
+    {n:4,t:"Off-form Class 2 face, N32, no construction joint in any lettered face. Tie holes mortar-filled colour-matched (SIA FW16). No tie, cone or chair mark inside lettering, panels or box-outs (FE-04)."},
+    {n:5,t:p.arris==="r3"?"Arris 3 mm pencil round as instructed. CONFLICTS with SIA FW14 (25 mm UNO). RFI.":"Arris 25 mm to SIA FW14.",flag:p.arris==="r3"},
+    {h:"Gate"},
+    {n:6,t:"Gate shown closed in the opening and open (dashed) parked behind the ARDEN wall. The gate is set back behind the wall line and does not run on the boundary."}
+  ]);
+  return frame("FE-02",`1:${s} / 1:${s2}`,b,notes,p);
+}
 
-  // ---- Detail B: letter recess, horizontal section, 1:2
-  const bs=2, bx=225, by=30;           // face line at by, stroke centred at bx
-  const BX=x=>bx+x/bs, BY=y=>by+y/bs;
-  const w=Math.max(10,Math.min(80,d.minStem)), dr=p.recess, tan=Math.tan(p.draft*Math.PI/180);
-  const half=w/2, halfB=Math.max(1,half-dr*tan);
-  const depthShow=cw1?110:(p.t/2+30), span=110;
-  // concrete with recess
-  b+=pg([[BX(-span),BY(0)],[BX(-half),BY(0)],[BX(-halfB),BY(dr)],[BX(halfB),BY(dr)],[BX(half),BY(0)],[BX(span),BY(0)],[BX(span),BY(depthShow)],[BX(-span),BY(depthShow)]],"k5",fillC());
-  // break line
-  b+=pl([[BX(-span)-1,BY(depthShow)],[BX(-20),BY(depthShow)],[BX(-14),BY(depthShow)-3],[BX(-8),BY(depthShow)+3],[BX(-2),BY(depthShow)],[BX(span)+1,BY(depthShow)]],"k1","fill=\"#fff\"");
-  // ghost formply + former
-  b+=rc(BX(-span),BY(-17),span*2/bs,17/bs,"k1 dash","fill=\"none\"");
-  b+=pg([[BX(-half),BY(0)],[BX(-halfB),BY(dr)],[BX(halfB),BY(dr)],[BX(half),BY(0)]],"k1 dash","fill=\"#f3e7d6\"");
-  b+=ln2(BX(0),BY(-17),BX(0),BY(dr-3),"k1 dash");
-  // bars
-  if(cw1){
-    const hy=40+6, vy=40+12+6;
-    b+=ln2(BX(-span),BY(hy+d.setback),BX(span),BY(hy+d.setback),"k5 bar");
-    for(const xx of [-75,75]) b+=`<circle cx="${BX(xx).toFixed(2)}" cy="${BY(vy+d.setback).toFixed(2)}" r="${(6/bs).toFixed(2)}" class="bard"/>`;
+/* ---------- FE-03 sections & details ---------- */
+function sheetSections(d){
+  const p=d.p;PX="c";let b="";
+  const w=d.N, l0=w.lines[0]||lineGeom("I",d.cap,d.baseN,p.wt,p.track,-p.Ln/2,"name"), cw1=d.cw1, c=40;
+  if(!l0.prof) l0.prof={depth:0,base:0,w:l0.stroke},l0.coverBase=d.faceToBar;
+  const s=20, ox=55, gy=125, X=y=>ox+y/s, Y=z=>gy-z/s;
+  const fx0=-(p.fW-p.t)/2, lx=X(p.t+600);
+  b+=rc(X(-900),gy,(p.t+1700)/s,(p.embed+p.fD+120)/s,"",fillE());
+  b+=ln2(X(-900),gy,X(p.t+800),gy,"k3");
+  b+=rc(X(fx0),Y(-p.embed),p.fW/s,p.fD/s,"k5",fillC())+rc(X(0),Y(p.H),p.t/s,(p.H+p.embed)/s,"k5",fillC());
+  if(w.panel){const P=w.panel;b+=rc(X(-P.proj),Y(P.y1),P.proj/s,(P.y1-P.y0)/s,"k5",fillC());
+    b+=rc(X(-P.proj),Y(w.led.z1),p.ledD/s,(w.led.z1-w.led.z0)/s,"k2","fill=\"#f0b429\"");}
+  const faceY=w.panel?-w.panel.proj:0;
+  for(const l of w.lines) b+=rc(X(faceY),Y(l.top),Math.max(.3,l.prof.depth/s),l.cap/s,"k1","fill=\"#fff\"");
+  const vxs=cw1?[c+18,p.t-c-18]:[p.t/2];
+  for(const vx of vxs) b+=ln2(X(vx),Y(p.H-c-12),X(vx),Y(-p.embed),"k3 bar");
+  const fb=-p.embed-p.fD+62;
+  for(const vx of vxs) b+=pl([[X(vx+2),Y(-p.embed+600)],[X(vx+2),Y(fb)],[X(vx+2+(vx<=p.t/2?300:-300)),Y(fb)]],"k3 bar");
+  for(let z=100;z<p.H-80;z+=200) for(const vx of vxs) b+=circ(X(vx+(cw1?(vx<p.t/2?-9:9):-11)),Y(z),(cw1?6:8)/s+.1,"","fill=\"#b02a1f\"");
+  const g=d.gate;
+  b+=rc(X(g.y0),Y(g.H),(g.y1-g.y0)/s,(g.H-50)/s,"k3 gate","fill=\"#cfd6dd\"");
+  b+=rc(X(g.yc-d.track.fw/2),gy,d.track.fw/s,d.track.fd/s,"k3",fillC())+rc(X(g.yc)-.8,gy-.9,1.6,.9,"k2","fill=\"#3d4a57\"");
+  b+=dimH(X(p.t),X(g.y0),Y(g.H)-4,`${p.gGap} (a)`,Y(p.H),Y(g.H));
+  if(w.lights.length){const ux=-p.upOff;b+=rc(X(ux)-1.6,gy,3.2,4.5,"k2","fill=\"#f0b429\"")+pl([[X(ux),gy],[X(-2),Y(p.H*0.9)]],"k1 dash")+pl([[X(ux),gy],[X(-60),Y(p.H*0.5)]],"k0 dash");
+    b+=leader(X(ux),gy+2,lx,gy+21,["IN-GROUND UPLIGHT, IP67/68","NARROW BEAM, GRAZING THE FACE"]);
+    b+=dimH(X(ux),X(0),gy+12,`${p.upOff}`,gy,gy);}
+  else if(w.panel){b+=pl([[X(p.t/2+12),Y(w.led.z0)],[X(p.t/2+12),Y(-p.embed+75)],[X(-400),Y(-300)]],"k3 svc");
+    b+=leader(X(-300),Y(-290),lx,gy+21,["25 HD PVC CAST IN, TO PIT IN","FRONT BED (NOT BACK FACE)"],{cls:"svctx"});}
+  b+=dimV(Y(p.H),gy,X(fx0)-16,`${p.H}`,X(0),null)+dimV(gy,Y(-p.embed-p.fD),X(fx0)-16,`${p.embed+p.fD}`,null,X(fx0));
+  b+=dimV(Y(l0.top),Y(l0.base),X(faceY)-4,`${r0(l0.cap)}`,X(faceY),X(faceY))+dimV(Y(l0.base),gy,X(faceY)-9,`${r0(l0.base)}`,X(faceY),null);
+  b+=leader(X(g.yc),Y(g.H*0.6),lx,Y(p.H*0.85),["SLIDING GATE PARKED (OPEN)","NOTHING CAST ON WALL BACK FACE (b)"]);
+  b+=leader(X(g.yc),gy+d.track.fd/s/2,lx,gy+4,[`TRACK FOOTING ${d.track.fw}×${d.track.fd} (ASSUMED)`]);
+  b+=leader(X(p.t/2),Y(-p.embed-p.fD/2),lx,gy+12,[`STRIP FOOTING ${p.fW}×${p.fD} ASSUMED`,"ENGINEER TO DESIGN (H1/P)"],{cls:"flagtx"});
+  b+=leader(X(vxs[0]),Y(p.H*0.4),lx,Y(p.H*0.4),[cw1?"CW1 · N12-300 V / N12-200 H EF":"CW2 · N12-200 V / N16-200 H CENTRAL"],{cls:"bartx"});
+  b+=viewTitle(18,gy+46,"A","SECTION — ARDEN WALL THROUGH LETTERING","1:20","gate shown parked behind wall");
+
+  // Detail B: profile 1:1
+  const bs=2,bx=212,by=34,BX=x=>bx+x/bs,BY=y=>by+y/bs;
+  const pr=l0.prof, half=pr.w/2, hb=Math.max(0,pr.base/2), dep=pr.depth, proud=w.panel?p.proj:0;
+  const depthShow=Math.min(proud+d.faceToBar+14,150), span=45;
+  b+=pg([[BX(-span),BY(0)],[BX(-half),BY(0)],[BX(-hb),BY(dep)],[BX(hb),BY(dep)],[BX(half),BY(0)],[BX(span),BY(0)],[BX(span),BY(depthShow)],[BX(-span),BY(depthShow)]],"k5",fillC());
+  if(proud) b+=ln2(BX(-span),BY(proud),BX(span),BY(proud),"k1 dash")+tx(BX(span)+1,BY(proud)+.7,"MAIN WALL FACE",{size:1.7});
+  b+=pg([[BX(-half),BY(0)],[BX(-hb),BY(dep)],[BX(hb),BY(dep)],[BX(half),BY(0)]],"k1 dash","fill=\"#f3e7d6\"")+rc(BX(-span),BY(-17),span*2/bs,17/bs,"k1 dash");
+  const barY=proud+d.faceToBar;
+  if(barY<depthShow) b+=ln2(BX(-span),BY(barY),BX(span),BY(barY),"k5 bar");
+  b+=dimH(BX(-half),BX(half),BY(-17)-2.5,`${f1(pr.w)} STROKE (MEASURED)`,BY(0),BY(0));
+  b+=dimV(BY(0),BY(dep),BX(half)+6,`${f1(dep)}`,BX(half),BX(hb));
+  b+=dimV(BY(dep),BY(Math.min(barY,depthShow)),BX(-span)+4,`${r0(l0.coverBase)} COVER`,BX(-hb),null,{cls:l0.coverBase<40?"flagtx":undefined});
+  b+=tx(BX(-span)-8,BY(-17)-6.5,p.profile==="V"?`V-CUT ${p.vAngle}° INCLUDED — BEVELLED LOOK PER FONT SHEET`:`TAPERED ${p.draft}° SIDES, ${f1(Math.max(0,pr.base))} FLAT BASE`,{size:1.9,weight:600});
+  b+=tx(BX(span)+1,BY(-8),"FORMPLY + FORMER (GHOST)",{size:1.7});
+  b+=viewTitle(BX(-span)-8,BY(depthShow)+9,"B","LETTER RECESS PROFILE","1:2",`${l0.text}, ${l0.wt==300?"Light":"Regular"}`);
+
+  // Detail C
+  if(w.panel){
+    const P=w.panel,L=w.led,zt=L.z1+90,zb=P.y0-60,cs=5,cx=172,cy=182,CX=y=>cx+y/cs,CY=z=>cy-(z-zb)/cs;
+    b+=pg([[CX(0),CY(zt)],[CX(-P.proj),CY(zt)],[CX(-P.proj),CY(L.z1)],[CX(-P.proj+L.d),CY(L.z1)],[CX(-P.proj+L.d),CY(L.z0)],[CX(-P.proj),CY(L.z0)],[CX(-P.proj),CY(P.y0)],[CX(-P.proj+15),CY(P.y0)],[CX(-P.proj+15),CY(P.y0+10)],[CX(-P.proj+25),CY(P.y0+10)],[CX(-P.proj+25),CY(P.y0)],[CX(0),CY(P.y0)],[CX(0),CY(zb)],[CX(60),CY(zb)],[CX(60),CY(zt)]],"k5",fillC());
+    b+=rc(CX(-P.proj)+.3,CY(L.z1)+.3,(L.d-4)/cs,(L.z1-L.z0)/cs-.6,"k1","fill=\"#c9ced3\"")+rc(CX(-P.proj)+.1,CY(L.z1)+.5,.8,(L.z1-L.z0)/cs-1,"k0","fill=\"#f0b429\"");
+    b+=pl([[CX(-P.proj)+1,CY(L.z1)],[CX(-P.proj)-1,CY(zt)-3]],"k0 dash");
+    b+=dimH(CX(-P.proj),CX(0),CY(zt)-3,`${P.proj} PROJ.`,CY(zt),CY(zt))+dimV(CY(L.z1),CY(L.z0),CX(-P.proj)-4,`${p.ledW}`,CX(-P.proj),CX(-P.proj));
+    b+=dimH(CX(-P.proj),CX(-P.proj+L.d),CY(L.z0)+3,`${p.ledD}`,null,null);
+    b+=leader(CX(-P.proj+20),CY(P.y0+5),CX(-P.proj)-6,CY(P.y0)+8,["10×10 DRIP GROOVE"]);
+    b+=leader(CX(-P.proj+L.d-6),CY((L.z0+L.z1)/2),CX(60)+3,CY((L.z0+L.z1)/2)-8,["CAST-IN ALUMINIUM CHANNEL","CLIP-IN IP67 LED, ASYMMETRIC","GRAZE OPTIC AIMED UP THE FACE","REPLACEABLE FROM THE FRONT"]);
+    b+=tx(cx-14,CY(zt)-7,"PANEL CAST MONOLITHIC (BOX-OUT TRAY IN FORMPLY)",{size:1.8,weight:600});
+    b+=viewTitle(cx-14,CY(zb)+9,"C","PANEL BASE, LED CHANNEL & DRIP","1:5","options 1 / 3-panels");
   } else {
-    const hy=p.t/2-6, vy=p.t/2+8;
-    b+=ln2(BX(-span),BY(hy),BX(span),BY(hy),"k7 bar");
-    for(const xx of [-100,100]) b+=`<circle cx="${BX(xx).toFixed(2)}" cy="${BY(vy).toFixed(2)}" r="${(6/bs).toFixed(2)}" class="bard"/>`;
+    const cs=20,cx=205,cy=170,CX=y=>cx+y/cs,CY=z=>cy-z/cs;
+    b+=rc(CX(-900),cy,(900+p.t+100)/cs,6,"",fillE())+ln2(CX(-900),cy,CX(p.t+100),cy,"k3");
+    b+=rc(CX(0),CY(1000),p.t/cs,1000/cs+6,"k5",fillC());
+    const ux=-p.upOff;b+=rc(CX(ux-60),cy,120/cs,160/cs,"k2","fill=\"#f0b429\"")+rc(CX(ux-90),cy+160/cs,180/cs,1,"k1","fill=\"#e5e5e5\"");
+    b+=pl([[CX(ux),cy],[CX(-3),CY(1000)]],"k1 dash")+pl([[CX(ux),cy],[CX(-40),CY(1000)]],"k0 dash");
+    b+=pl([[CX(ux),cy+9],[CX(ux),cy+13],[CX(-900),cy+13]],"k3 svc");
+    b+=dimH(CX(ux),CX(0),cy-3,`${p.upOff}`,cy,cy);
+    b+=leader(CX(ux-30),cy+4,CX(p.t+300),cy+9,["IP67/68 IN-GROUND UPLIGHT, 10–15° BEAM","FLUSH WITH BED, DRAINED (GRAVEL) BASE","25 CONDUIT TO PIT"]);
+    b+=viewTitle(cx-45,cy+24,"C","UPLIGHT IN GARDEN BED","1:20","options 2 / 3-uplights");
   }
-  const barFace=cw1?(40+d.setback):(p.t/2-14);
-  b+=dimV(BY(dr),BY(barFace),BX(-half-14),`${r0(barFace-dr)} COVER`,BX(-halfB),BX(-span+30));
-  b+=dimV(BY(0),BY(dr),BX(half+12),`${dr}`,BX(half),BX(halfB));
-  b+=dimH(BX(-half),BX(half),BY(-17)-4,`${r0(w)} STROKE`,BY(0),BY(0));
-  b+=dimH(BX(-halfB),BX(halfB),BY(dr)+5,`${f1(Math.max(0,d.baseW))}`,BY(dr),BY(dr));
-  b+=key(BX(-span)+4,BY(-17)-4,5)+tx(BX(-span)+7,BY(-17)-3.2,"17 FORMPLY (GHOST)",{size:1.8});
-  b+=key(BX(half)+4,BY(dr/2)+8,6)+tx(BX(half)+7,BY(dr/2)+8.8,`FORMER, ${p.draft}° DRAFT`,{size:1.8});
-  b+=tx(BX(span)-1,BY(barFace)-1,cw1?`FACE BARS${d.setback>0?" SET BACK "+r0(d.setback):""}`:"CW2 CENTRAL LAYER",{size:1.8,anchor:"end",cls:"bartx"});
-  b+=viewTitle(bx-span/bs,by+depthShow/bs+10,"B","LETTER RECESS — HORIZONTAL SECTION","1:2",`thinnest stroke in ${p.font} ${p.wt}`);
 
-  // ---- Detail C: wall top 1:5
-  const cs=5, cx0=135, cy0=150;
-  const CX=x=>cx0+x/cs, CY=z=>cy0-z/cs;
-  const ar=p.arris==="r3"?3:25;
-  const topPoly=p.arris==="r3"?[[0,-400],[0,0],[p.t,0],[p.t,-400]]:[[0,-400],[0,-ar],[ar,0],[p.t-ar,0],[p.t,-ar],[p.t,-400]];
-  b+=pg(topPoly.map(q=>[CX(q[0]),CY(q[1])]),"k5",fillC());
-  b+=pl([[CX(-5),CY(-400)+1],[CX(p.t/2),CY(-400)-1],[CX(p.t+5),CY(-400)+1]],"k1","fill=\"none\"");
-  const lc=40+6;
-  b+=pl([[CX(lc),CY(-400)],[CX(lc),CY(-lc)],[CX(p.t-lc),CY(-lc)]],"k3 bar")+pl([[CX(p.t-lc-1.5),CY(-400)],[CX(p.t-lc-1.5),CY(-lc-1.5)],[CX(lc+1.5),CY(-lc-1.5)]],"k3 bar");
-  for(const xx of [lc+12,p.t-lc-12]) for(const zz of [-lc-12,-lc-60]) b+=`<circle cx="${CX(xx).toFixed(2)}" cy="${CY(zz).toFixed(2)}" r="${(6/cs).toFixed(2)}" class="bard"/>`;
-  if(!cw1) b+=ln2(CX(p.t/2),CY(-400),CX(p.t/2),CY(-lc-25),"k3 bar");
-  else for(const xx of [lc+18,p.t-lc-18]) b+=ln2(CX(xx),CY(-400),CX(xx),CY(-lc-25),"k3 bar");
-  b+=dimV(CY(0),CY(-40),CX(p.t)+5,"40",CX(p.t),CX(p.t-lc));
-  b+=dimH(CX(0),CX(p.t),CY(0)-4,`${p.t}`,CY(0),CY(0));
-  b+=leader(CX(0)+.3,CY(-ar/2)+.2,CX(0)+12,CY(0)-10,p.arris==="r3"?"3 R PENCIL ROUND (RFI)":"25 CHAMFER (FW14)");
-  b+=tx(CX(p.t/2),CY(-400)+5,"N12-200 'L' EF, 600 LEGS LAP 600",{size:1.7,anchor:"middle",cls:"bartx"})+tx(CX(p.t/2),CY(-400)+7.3,"4-N12 LONGIT. (AS INTERPRETED)",{size:1.7,anchor:"middle",cls:"bartx"});
-  b+=viewTitle(122,CY(-400)+14,"C","WALL TOP","1:5","after SIA S50 Sect. A");
+  // Detail D: receiver plan 1:5
+  const ds=10,dx=212,dy0=206,DX=x=>dx+(x-p.G)/ds,DY=y=>dy0+y/ds;
+  b+=rc(DX(p.G),DY(0),600/ds,p.t/ds,"k5",fillC());
+  b+=rc(DX(p.G-700),DY(g.y0),(700+p.gRc)/ds,p.gT/ds,"k3 gate","fill=\"#cfd6dd\"");
+  b+=rc(DX(p.G+80),DY(p.t),140/ds,(g.y0-p.t+p.gT+20)/ds,"k2 gate");
+  for(const x of [p.G+100,p.G+200]) b+=circ(DX(x),DY(p.t-20),1.2,"k1","fill=\"#151515\"");
+  b+=dimH(DX(p.G),DX(p.G+100),DY(-30),"100 MIN EDGE",DY(0),DY(0));
+  b+=leader(DX(p.G+150),DY(p.t+30),DX(p.G+250),DY(p.t+260),["RECEIVER / CATCH + CLOSED STOP","M12 CAST-IN FERRULES, BACK FACE (×6)","CLEAR OF TIES; EDGE DIST. BY SUPPLIER"]);
+  b+=leader(DX(p.G-300),DY(g.yc),DX(p.G-650),DY(-80),["GATE LEADING EDGE","CRUSH POINT: SAFETY EDGE / BEAMS"]);
+  b+=viewTitle(dx-70,dy0+62,"D","GATE RECEIVER — ADDRESS WALL END (PLAN)","1:10");
 
-  // ---- Detail D: free end, plan 1:5
-  const ds=5, dx0=200, dy0=176;
-  const DX=x=>dx0+x/ds, DY=y=>dy0+y/ds;
-  const endPoly=p.arris==="r3"?[[0,0],[300,0],[300,p.t],[0,p.t]]:[[ar,0],[300,0],[300,p.t],[ar,p.t],[0,p.t-ar],[0,ar]];
-  b+=pg(endPoly.map(q=>[DX(q[0]),DY(q[1])]),"k5",fillC());
-  b+=pl([[DX(300)+1,DY(-5)],[DX(300)-1,DY(p.t/2)],[DX(300)+1,DY(p.t+5)]],"k1","fill=\"none\"");
-  if(cw1){
-    const u=40+8;
-    b+=`<path d="M ${DX(300)} ${DY(u)} L ${DX(u+40)} ${DY(u)} A ${(p.t/2-u)/ds} ${(p.t/2-u)/ds} 0 0 0 ${DX(u+40)} ${DY(p.t-u)} L ${DX(300)} ${DY(p.t-u)}" class="k5 bar" fill="none"/>`;
-    for(const yy of [u+16,p.t-u-16]) b+=`<circle cx="${DX(u+50).toFixed(2)}" cy="${DY(yy).toFixed(2)}" r="${(6/ds).toFixed(2)}" class="bard"/>`;
-    b+=tx(DX(150),DY(p.t)+4,"N16 'U' BARS AT HORIZ. SPACING (SIA S64)",{size:1.7,anchor:"middle",cls:"bartx"});
-  } else {
-    b+=ln2(DX(50),DY(p.t/2-6),DX(300),DY(p.t/2-6),"k5 bar")+`<circle cx="${DX(50).toFixed(2)}" cy="${DY(p.t/2+6).toFixed(2)}" r="${(6/ds).toFixed(2)}" class="bard"/>`;
-    b+=dimH(DX(0),DX(50),DY(p.t)+4,"50 MAX",DY(p.t),null);
-    b+=tx(DX(150),DY(p.t)+8,"CW2: NO END U-BAR IN SIA SCHEDULE",{size:1.7,anchor:"middle",cls:"flagtx"});
-  }
-  b+=viewTitle(196,DY(p.t)+18,"D","FREE END (PLAN)","1:5");
+  // Detail E: motor plinth section 1:10
+  const es=20,ex0=40,ey0=248,EX=y=>ex0+y/es,EY=z=>ey0-z/es;const mo=d.motor;
+  b+=rc(EX(0),EY(700),p.t/es,700/es,"k5",fillC())+rc(EX(-100),ey0,(mo.y1+250)/es,4,"",fillE())+ln2(EX(-100),ey0,EX(mo.y1+150),ey0,"k3");
+  b+=rc(EX(g.y0),EY(700),p.gT/es,650/es,"k3 gate","fill=\"#cfd6dd\"");
+  b+=rc(EX(mo.y0),EY(mo.h),(mo.y1-mo.y0)/es,(mo.h+250)/es,"k5",fillC())+rc(EX(mo.y0+40),EY(mo.h+350),(mo.y1-mo.y0-80)/es,350/es,"k2 gate","fill=\"#8995a1\"");
+  for(const y of [mo.y0+60,mo.y1-60]) b+=ln2(EX(y),EY(mo.h+20),EX(y),EY(mo.h-160),"k3 bar");
+  b+=rc(EX(g.yc-150),ey0,300/es,300/es,"k3",fillC());
+  b+=leader(EX((mo.y0+mo.y1)/2),EY(mo.h+200),EX(mo.y1+250),EY(700),["GATE MOTOR (BY SUPPLIER)","PLINTH + CAST-IN HOLD-DOWNS","TO MAKER'S TEMPLATE"]);
+  b+=viewTitle(ex0-20,ey0+24,"E","MOTOR PLINTH & TRACK FOOTING","1:20","behind ARDEN wall, at the opening end");
 
   const notes=noteCol("KEY NOTES",[
-    {n:1,t:cw1?`CW1 (SIA S50): vertical N12-300 each face, horizontal N12-200 each face, N16 'U' bars at ends. 40 cover. ${d.setback>0?"Face bars behind the lettering set back "+r0(d.setback)+" mm locally to keep 40 cover at the letter base.":""}`:`CW2 (SIA S50): vertical N12-200 central, horizontal N16-200 central, bars 50 max from end. Central layer sits ${r0(d.faceToBar)} mm from the face, so a ${p.recess} mm recess leaves ${r0(d.coverAtLetter)} mm cover with no bar set-back.`},
-    {n:2,t:"Starters N12-200 to match verticals, lap 600, cog 300, 200 max to first bar (SIA S64). The lap sits in the zone of highest cantilever moment; engineer to confirm lap location and length.",flag:true},
-    {n:3,t:"Footing size and bars borrowed from SIA EB4 (S20). SIA has no CW strip footing schedule. Indicative check on FW-04 suggests 600 wide may not be stable for a free-standing wall in N3 wind.",flag:true},
-    {n:4,t:"Site class H1/P. Natural ground reported verbally at ~3.7 m (GT Geotechnical, 13/10/26). A strip footing on fill is not acceptable under AS 2870 without engineering; piers or piles likely. Morgan or SIA to design.",flag:true},
-    {n:5,t:"Letter formers fix to the formply face, so artwork must be cut MIRROR-IMAGE. CNC-cut from closed-cell PVC foam board or HDPE (or sealed MDF), laminated to depth, edges sanded, release agent applied. Fix with countersunk screws from the back of the ply plus a thin bead of silicone at the face. Strip with the ply; remove remaining pieces with plastic tools."},
-    {n:6,t:`Former sides drafted ${p.draft}° each side for release and to reduce edge chipping. Letter edges: sharp (no added arris) unless the sample panel shows chipping.`},
-    {n:7,t:"Recommended rule for this job (a rule of thumb, not a code requirement): stroke width at the face ≥ recess depth and ≥ 15 mm; base width after draft ≥ 10 mm. See Live checks."},
-    {n:8,t:"Cast a 600 × 600 sample panel with 3 letters before committing: checks the font, depth, release and colour of tie-hole fill."},
-    {n:9,t:p.ret>0?`Retained height ${p.ret}: drainage aggregate, 100 slotted ag pipe in sock to outlet, geofabric, weepholes. Design to AS 4678. Approval needed in QLD if over 1.0 m; check with certifier.`:"Drawn as free-standing with level ground both sides. If any length retains soil, add drainage and design to AS 4678.",flag:p.ret>0}
+    {n:1,t:`Recess: ${p.profile==="V"?`V-cut ${p.vAngle}° from a triangular-section former, depth set by the stroke (${f1(l0.prof.depth)} mm for ${l0.text}).`:`tapered former ${p.recess} deep, ${p.draft}° sides.`} Matches the bevelled look on Ben's font sheet (option 5).`},
+    {n:2,t:w.panel?`Panel ${p.proj} proud, cast monolithic. The formply gets a cut-out backed by a ${p.proj}-deep box-out tray, so no joint shows in the face. Letters sit in the panel, so cover from a letter base to the wall bars is ${r0(l0.coverBase)} mm. The projection itself is unreinforced; engineer to confirm whether it needs fibre or mesh.`:`Letters cast straight into the wall face: ${r0(l0.coverBase)} mm cover from the letter base to the ${cw1?"face bars":"central layer"} (40 required).`,flag:l0.coverBase<40},
+    {n:3,t:w.panel?"Option 1 lighting reading: an LED in the panel's underside can only shine down, washing the wall below. To graze light UP the letters, the channel sits as a groove across the base of the panel face with an asymmetric graze optic. Downwash is the alternative. Confirm with Ben.":"Uplights graze the face; the shadows in the V-cut letters do the work. Keep beams narrow and close to the wall so glare does not reach the street.",flag:!!w.panel},
+    {n:4,t:"Fittings IP67/68, replaceable without breaking concrete: clip-in LED in a cast-in aluminium channel (or uplight cans), draw-wire conduits, driver in an accessible pit or the house. Electrical by a licensed electrician to AS/NZS 3000."},
+    {n:5,t:`(a) The gate parks ${p.gGap} off the ARDEN wall back face. (b) That face carries no ferrules, conduit outlets or panel tie-backs. (c) Storage ${r0(d.storeNeed)} needed, ${r0(d.storeAvail)} available.`,flag:d.storeNeed>d.storeAvail},
+    {n:6,t:"Receiver and closed stop: cast-in M12 ferrules on the address wall back face, placed clear of ties (FE-04). Fixing supplier to confirm edge distance and capacity."},
+    {n:7,t:"Gate drive to AS/NZS 60335-2-103. Installer confirms gaps at every crush/shear point or provides guarding, safety edges and photo-electric beams.",flag:true},
+    {n:8,t:"Wall and strip footing ASSUMED from the shed (SIA S50/S64, EB4). A free-standing wall must be designed by the engineer (FE-06)."}
   ]);
-  return frame("FW-02","1:20, 1:5, 1:2",b,notes);
+  return frame("FE-03","1:20, 1:10, 1:5, 1:2",b,notes,p);
 }
 
-/* ---------- FW-03: reinforcement + tie layout ---------- */
-function sheet3(p,d){
-  PX="c";
-  const s=pickScale(p.L,236);
-  const ox=12+(270-p.L/s)/2+2;
-  let b="";
-  // reinforcement elevation
-  const gy=104, X=x=>ox+x/s, Y=z=>gy-z/s;
-  b+=ln2(X(-400),gy,X(p.L+400),gy,"k3")+rc(X(-400),gy,(p.L+800)/s,1.6,"",fillE());
-  b+=rc(X(0),Y(p.H),p.L/s,p.H/s,"k5","fill=\"#fff\"")+rc(X(0),Y(-p.embed),p.L/s,p.fD/s,"k2 dash");
-  for(const l of d.lines) b+=rc(X(l.x0),Y(l.top),l.width/s,l.cap/s,"k0","fill=\"#eef0ee\"")+tx(X(l.x1)-1,Y(l.top)+2.2,l.key==="name"?"NAME":"ADDRESS",{size:1.5,anchor:"end"});
-  const cw1=d.cw1, vs=cw1?300:200, e=cw1?60:50;
-  const nV=Math.floor((p.L-2*e)/vs)+1, gap=(p.L-2*e)/(nV-1);
-  for(let i=0;i<nV;i++){ const x=e+i*gap; b+=ln2(X(x),Y(p.H-40),X(x),Y(-p.embed),"k1 bar"); }
-  for(let z=100;z<p.H-60;z+=200) b+=ln2(X(cw1?40:50),Y(z),X(p.L-(cw1?40:50)),Y(z),"k1 bar");
-  // starters
-  for(let x=e;x<=p.L-e+1;x+=200) b+=ln2(X(x+20),Y(600-p.embed),X(x+20),Y(-p.embed-p.fD+60),"k0 bar");
-  if(cw1) for(let z=100;z<p.H-60;z+=200) b+=`<path d="M ${X(40)+6} ${Y(z)} h -6" class="k3 bar" fill="none"/><path d="M ${X(p.L-40)-6} ${Y(z)} h 6" class="k3 bar" fill="none"/>`;
-  b+=ln2(X(40),Y(p.H-46),X(p.L-40),Y(p.H-46),"k3 bar");
-  // bar marks
-  b+=leader(X(e+gap),Y(p.H*0.55),X(-2)-2,Y(p.H*0.55)-3,cw1?"V1 N12-300 EF":"V1 N12-200 CENTRAL",{cls:"bartx"});
-  b+=leader(X(e+gap*2.5),Y(300),X(-2)-2,Y(300)+3,cw1?"H1 N12-200 EF":"H1 N16-200 CENTRAL",{cls:"bartx"});
-  b+=leader(X(e+20+200*2),Y(-p.embed-200),X(-2)-2,Y(-p.embed-200)+3,"S1 N12-200 STARTERS",{cls:"bartx"});
-  b+=leader(X(p.L*0.7),Y(p.H-46),X(p.L)+3,Y(p.H)-4,"T1 TOP 'L' BARS (DET. C)",{cls:"bartx"});
-  if(cw1) b+=leader(X(p.L-40)+.5,Y(700),X(p.L)+3,Y(700),"U1 N16 'U' BARS",{cls:"bartx"});
-  b+=dimH(X(0),X(p.L),Y(p.H)-4,`${p.L}`,Y(p.H),Y(p.H));
-  b+=viewTitle(18,gy+(p.embed+p.fD)/s+8,"1","REINFORCEMENT ELEVATION",`1:${s}`,`${cw1?"CW1":"CW2"} after SIA S50/S64 · lettering zones shaded`);
-  // tie layout
-  const gy2=232, X2=x=>ox+x/s, Y2=z=>gy2-z/s;
-  b+=ln2(X2(-400),gy2,X2(p.L+400),gy2,"k3")+rc(X2(-400),gy2,(p.L+800)/s,1.6,"",fillE());
-  for(const sh of d.sheets){ b+=rc(X2(sh.x0),Y2(sh.y1),(sh.x1-sh.x0)/s,(sh.y1-sh.y0)/s,"k2",sh.cut?"fill=\"#f4efe4\"":"fill=\"#fbf7ee\""); }
-  b+=ln2(X2(0),gy2,X2(p.L),gy2,"k1 dash");
-  for(const z of d.zones) b+=rc(X2(Math.max(0,z.x0)),Y2(Math.min(p.H,z.y1)),(Math.min(p.L,z.x1)-Math.max(0,z.x0))/s,(Math.min(p.H,z.y1)-z.y0)/s,"",`fill="url(#${PX}-zone)" stroke="#c25a12" stroke-width=".2"`);
-  for(const l of d.lines) b+=`<text x="${(X2(l.cx)+p.track*l.fs/s/2).toFixed(2)}" y="${Y2(l.base).toFixed(2)}" font-family="'${p.font}',Arial,sans-serif" font-weight="${p.wt}" font-size="${(l.fs/s).toFixed(3)}" letter-spacing="${(p.track*l.fs/s).toFixed(3)}" text-anchor="middle" style="fill:#c8ccc9">${esc(l.text)}</text>`;
-  let nOk=0,nMv=0,nCl=0;
-  for(const t of d.ties){
-    if(t.state==="ok"){nOk++;b+=`<circle cx="${X2(t.x).toFixed(2)}" cy="${Y2(t.y).toFixed(2)}" r=".7" fill="#151515"/>`;}
-    else if(t.state==="moved"){nMv++;b+=ln2(X2(t.ox),Y2(t.oy),X2(t.x),Y2(t.y),"k1 dash")+`<circle cx="${X2(t.ox).toFixed(2)}" cy="${Y2(t.oy).toFixed(2)}" r=".7" fill="none" stroke="#c25a12" stroke-width=".2"/><circle cx="${X2(t.x).toFixed(2)}" cy="${Y2(t.y).toFixed(2)}" r=".8" fill="#c25a12"/>`;}
-    else {nCl++;const x=X2(t.x),y=Y2(t.y);b+=ln2(x-1,y-1,x+1,y+1,"k3")+ln2(x-1,y+1,x+1,y-1,"k3");}
-  }
-  b+=dimV(Y2(p.H),Y2(-p.embed),X2(p.L)+5,`${d.formH} FORMED`,X2(p.L),X2(p.L));
-  b+=tx(X2(p.L)+9,Y2(-p.embed)+3,`${d.courses} COURSE${d.courses>1?"S":""} · 2700×1200`,{size:1.7});
-  b+=viewTitle(18,gy2+12,"2","FORMWORK & TIE LAYOUT — BOTH FACES",`1:${s}`,"ties pass through; same layout each face");
-  // legend
-  const lgx=170, lgy=gy2+8;
-  b+=`<circle cx="${lgx}" cy="${lgy}" r=".7" fill="#151515"/>`+tx(lgx+2,lgy+.7,`tie, standard (${nOk})`,{size:1.8});
-  b+=`<circle cx="${lgx+30}" cy="${lgy}" r=".8" fill="#c25a12"/>`+tx(lgx+32,lgy+.7,`tie, moved (${nMv})`,{size:1.8});
-  b+=ln2(lgx+57,lgy-1,lgx+59,lgy+1,"k3")+ln2(lgx+57,lgy+1,lgx+59,lgy-1,"k3")+tx(lgx+61,lgy+.7,`unresolved (${nCl})`,{size:1.8});
-  b+=rc(lgx-1,lgy+2.6,3,2,"",`fill="url(#${PX}-zone)" stroke="#c25a12" stroke-width=".2"`)+tx(lgx+3,lgy+4.2,`no-tie zone = letters + ${p.tieClr}`,{size:1.8});
-  // quantities
-  const barLenV=nV*(p.H-40+p.embed)/1000*(cw1?2:1), nH=Math.floor((p.H-160)/200)+1, barLenH=nH*(p.L-80)/1000*(cw1?2:1);
-  const nS=(Math.floor((p.L-2*e)/200)+1)*(cw1?2:1);
-  const kgV=barLenV*(0.888), kgH=barLenH*(cw1?0.888:1.58), kgS=nS*(0.6+p.embed/1000+p.fD/1000-0.06+0.3)*0.888;
-  const notes=noteCol("SCHEDULES (MAIN WALL ONLY)",[
-    {h:"Bars, indicative, no laps or waste"},
-    {t:`V1 ${cw1?"N12-300 EF":"N12-200 CENTRAL"}: ${nV*(cw1?2:1)} bars, ${f1(barLenV)} m, ${r0(kgV)} kg`},
-    {t:`H1 ${cw1?"N12-200 EF":"N16-200 CENTRAL"}: ${nH*(cw1?2:1)} bars, ${f1(barLenH)} m, ${r0(kgH)} kg`},
-    {t:`S1 N12-200 starters: ${nS} bars, ${r0(kgS)} kg`},
-    {t:`T1 top 'L' bars and ${cw1?"U1 N16 end U-bars":"free-end detail"}: per FW-02 details C & D. Returns are not included.`},
+/* ---------- FE-04 reo + ties ---------- */
+function sheetReo(d){
+  const p=d.p;PX="d";let b="";
+  const ws=[d.N,d.A],span=p.Ln+p.La+800,s=pickScale(span,262,[25,30,40,50,60,75]);
+  const ox0=12+(270-span/s)/2;
+  const draw=(gy,mode)=>{let cur=ox0;
+    for(const w of ws){const ox=cur-w.x0/s,X=x=>ox+x/s,Y=z=>gy-z/s;
+      b+=ln2(X(w.x0)-2,gy,X(w.x1)+2,gy,"k3");
+      if(mode==="reo"){
+        b+=rc(X(w.x0),Y(p.H),(w.x1-w.x0)/s,p.H/s,"k5")+rc(X(w.x0),Y(-p.embed),(w.x1-w.x0)/s,p.fD/s,"k1 dash");
+        if(w.panel) b+=rc(X(w.panel.x0),Y(w.panel.y1),(w.panel.x1-w.panel.x0)/s,(w.panel.y1-w.panel.y0)/s,"k1","fill=\"#eef0ee\"");
+        for(const l of w.lines) b+=rc(X(l.x0),Y(l.top),l.width/s,l.cap/s,"k0","fill=\"#e4e7e5\"");
+        const vs=d.cw1?300:200,e=d.cw1?60:50,n=Math.floor((w.x1-w.x0-2*e)/vs)+1,gp=(w.x1-w.x0-2*e)/(n-1);
+        for(let i=0;i<n;i++){const x=w.x0+e+i*gp;b+=ln2(X(x),Y(p.H-40),X(x),Y(-p.embed),"k0 bar");}
+        for(let z=100;z<p.H-60;z+=200) b+=ln2(X(w.x0+45),Y(z),X(w.x1-45),Y(z),"k0 bar");
+        b+=ln2(X(w.x0+40),Y(p.H-46),X(w.x1-40),Y(p.H-46),"k2 bar");
+        if(w.panel) b+=ln2(X(w.conduitX),Y(w.led.z0),X(w.conduitX),Y(-p.embed+75),"k3 svc");
+      } else {
+        for(const sh of d.sheets) if(sh.seg===w.id) b+=rc(X(sh.a0),Y(sh.y1),(sh.a1-sh.a0)/s,(sh.y1-sh.y0)/s,"k1",sh.cut?"fill=\"#f4efe4\"":"fill=\"#fbf7ee\"");
+        const zs=[];const c=p.tieClr;
+        for(const l of w.lines) zs.push([l.x0-c,l.bot-c,l.x1+c,l.top+c]);
+        if(w.panel){zs.push([w.panel.x0-c,w.panel.y0-c,w.panel.x1+c,w.panel.y1+c]);zs.push([w.conduitX-75,-p.embed,w.conduitX+75,w.led.z1]);}
+        for(const f of w.ferr) zs.push([f.x-c,f.z-c,f.x+c,f.z+c]);
+        for(const z of zs) b+=rc(X(Math.max(w.x0,z[0])),Y(Math.min(p.H,z[3])),(Math.min(w.x1,z[2])-Math.max(w.x0,z[0]))/s,(Math.min(p.H,z[3])-Math.max(-p.embed,z[1]))/s,"",fillZ());
+        for(const l of w.lines) b+=svgLetters(l,X,Y,s,"fill:#c8ccc9");
+        for(const f of w.ferr) b+=circ(X(f.x),Y(f.z),.5,"k1","fill=\"#1f5fa8\"");
+        for(const t of d.ties) if(t.seg===w.id){
+          if(t.state==="ok") b+=circ(X(t.x),Y(t.y),.6,"","fill=\"#151515\"");
+          else if(t.state==="moved") b+=ln2(X(t.ox),Y(t.oy),X(t.x),Y(t.y),"k0 dash")+circ(X(t.ox),Y(t.oy),.6,"","fill=\"none\" stroke=\"#c25a12\" stroke-width=\".2\"")+circ(X(t.x),Y(t.y),.7,"","fill=\"#c25a12\"");
+          else {const x=X(t.x),y=Y(t.y);b+=ln2(x-1,y-1,x+1,y+1,"k3")+ln2(x-1,y+1,x+1,y-1,"k3");}
+        }
+      }
+      b+=tx(X((w.x0+w.x1)/2),gy+(mode==="reo"?(p.embed+p.fD)/s+3.5:3.5),w.label.toUpperCase()+(mode==="ties"?" — FRONT FACE (BACK FACE SAME TIES)":""),{size:1.9,anchor:"middle",weight:600});
+      cur+=(w.x1-w.x0)/s+800/s;}
+  };
+  draw(80,"reo");
+  b+=viewTitle(18,80+(p.embed+p.fD)/s+12,"1","REINFORCEMENT ELEVATIONS",`1:${s}`,`${d.cw1?"CW1 each face":"CW2 central"} after SIA S50/S64 · conduit in blue`);
+  draw(186,"ties");
+  const nOk=d.ties.filter(t=>t.state==="ok").length,nMv=d.ties.filter(t=>t.state==="moved").length,nCl=d.ties.filter(t=>t.state==="clash").length;
+  b+=viewTitle(18,200,"2","FORMWORK & TIE LAYOUT",`1:${s}`,`ties ${nOk} standard · ${nMv} moved · ${nCl} unresolved · hatched = no-tie zones · returns: ${d.ties.filter(t=>t.seg.endsWith("r")).length} ties`);
+  let vol=0,ftg=0;for(const sg of d.segs){const L=sg.ax==="x"?sg.x1-sg.x0:sg.y1-sg.y0;vol+=L*p.t*(p.H+p.embed)/1e9;ftg+=(sg.ax==="x"?L+p.fW-p.t:L)*p.fW*p.fD/1e9;}
+  let panelV=0;for(const w of d.walls) if(w.panel) panelV+=(w.panel.x1-w.panel.x0)*(w.panel.y1-w.panel.y0)*w.panel.proj/1e9;
+  const notes=noteCol("SCHEDULE — WHOLE ENTRY",[
+    {h:"Concrete (indicative)"},
+    {t:`Walls N32: ${f2(vol+panelV)} m³ (panels ${f2(panelV)} m³) · strip footings N25: ${f2(ftg)} m³ · track footing: ${f2((d.track.x1-d.track.x0)*d.track.fw*d.track.fd/1e9)} m³ · motor plinth: ${f2((d.motor.x1-d.motor.x0)*(d.motor.y1-d.motor.y0)*(d.motor.h+250)/1e9)} m³`},
     {h:"Formwork"},
-    {t:`${d.sheets.length} sheet positions per face (${d.sheets.filter(x=>x.cut).length} cut), ${d.ties.length} tie positions, ${2*(nOk+nMv)} tie holes to fill (both faces).`},
-    {t:`Ties moved clear of lettering: ${nMv}. Unresolved: ${nCl}.${nCl?" Move the lettering or ask the formwork designer to add walers/strongbacks over the zone.":""}`,flag:nCl>0},
-    {t:"Moving ties changes local tie spacing. The formwork designer confirms tie capacity and ply/waler deflection for an off-form Class 2 face under AS 3610.1, with full liquid head over the formed height.",flag:nMv>0},
-    {t:"No tie, cone or spacer mark may land inside a lettering zone. Bar chairs on the lettered face: plastic, colour-matched, kept out of the letter zones."},
-    {h:"Pour"},
-    {t:"One continuous pour per wall with no construction joint in the face (SIA S50). Vibrate carefully around formers. Do not let pokers touch them."}
+    {t:`${d.sheets.length} sheet positions per face (${d.sheets.filter(x=>x.cut).length} cut), all walls and returns · ${d.ties.length} tie positions · ${2*(nOk+nMv)} tie holes to fill.`},
+    {t:`Ties moved clear of lettering, panel, conduit and ferrules: ${nMv}. Unresolved: ${nCl}.`,flag:nCl>0},
+    {t:"Formwork designer confirms tie capacity and ply/waler deflection for a Class 2 off-form face to AS 3610.1 wherever ties are moved, with full liquid head over the formed height.",flag:nMv>0},
+    {t:"Box-outs (panel tray, LED channel, letter formers) are screwed from the back of the ply. Nothing passes through the back-face ply of the ARDEN wall."},
+    {h:"Reinforcement"},
+    {t:"Wall bars as SIA CW1/CW2 for the shed walls, used here as the starting make-up only. Starter laps sit at the base, where a free-standing wall has its highest moment. Engineer to confirm.",flag:true},
+    {t:"Corners and returns: continuous corner bars or lapped L-bars per SIA S64 (check the detail). Free ends per S64 (CW1 U-bars) or 50 max to end (CW2)."},
+    {t:"Conduits pass beside the bars, not through them; cover maintained. Keep conduits out of the starter lap zone where possible."}
   ]);
-  return frame("FW-03",`1:${s}`,b,notes);
+  return frame("FE-04",`1:${s}`,b,notes,p);
 }
 
-/* ---------- FW-04: oblique 3D + stability ---------- */
-function sheet4(p,d){
-  PX="d";
-  const s=pickScale(p.L+p.R*0.36+600,232,[25,30,40,50,60,75,100]);
-  const k=0.5, c45=Math.SQRT1_2;
-  const ox=36, oy=124;
-  const P=(x,y,z)=>[ox+(x+y*k*c45)/s, oy-(z+y*k*c45)/s];
-  let b="";
-  // ground plane
-  const gx0=-300,gx1=p.L+300,gy0=-500,gy1=Math.max(p.R,p.t)+600;
-  b+=pg([P(gx0,gy0,0),P(gx1,gy0,0),P(gx1,gy1,0),P(gx0,gy1,0)],"","fill=\"#eef1ec\" stroke=\"#9aa39c\" stroke-width=\".15\"");
-  // footing hidden
-  const ex=(p.fW-p.t)/2, zt=-p.embed, zb=-p.embed-p.fD;
-  for(const z of [zt,zb]) b+=pg([P(-ex,-ex,z),P(p.L+ex,-ex,z),P(p.L+ex,p.t+ex,z),P(-ex,p.t+ex,z)],"k1 dash","fill=\"none\"");
-  for(const [x,y] of [[-ex,-ex],[p.L+ex,-ex],[p.L+ex,p.t+ex]]) b+=ln2(...P(x,y,zt),...P(x,y,zb),"k1 dash");
-  const H=p.H, t=p.t, L=p.L, R=p.R;
-  const face=(pts,fill)=>pg(pts,"k3",`fill="${fill}" stroke-linejoin="round"`);
-  if(R>0){
-    b+=face([P(t,t,0),P(t,R,0),P(t,R,H),P(t,t,H)],"#c9ccca");      // left return inner face
-    b+=face([P(0,t,H),P(t,t,H),P(t,R,H),P(0,R,H)],"#e6e8e6");      // left return top
-    b+=face([P(L-t,R,0),P(L,R,0),P(L,R,H),P(L-t,R,H)],"#d3d6d4");  // right return back end (hidden mostly)
-    b+=face([P(L,0,0),P(L,R,0),P(L,R,H),P(L,0,H)],"#bfc3c0");      // right return outer face
-    b+=face([P(L-t,t,H),P(L,t,H),P(L,R,H),P(L-t,R,H)],"#e6e8e6");
-  } else {
-    b+=face([P(L,0,0),P(L,t,0),P(L,t,H),P(L,0,H)],"#bfc3c0");
-  }
-  b+=face([P(0,0,H),P(L,0,H),P(L,t,H),P(0,t,H)],"#e6e8e6");        // main top
-  b+=face([P(0,0,0),P(L,0,0),P(L,0,H),P(0,0,H)],"#d9dcda");        // main front
-  // letters with recess shading
-  const dv=[(p.recess*k*c45)/s*3,-(p.recess*k*c45)/s*3];
-  for(const l of d.lines){
-    const [x,y]=P(l.cx,0,l.base), fs=l.fs/s, ls=p.track*fs;
-    const common=`font-family="'${p.font}',Arial,sans-serif" font-weight="${p.wt}" font-size="${fs.toFixed(3)}" letter-spacing="${ls.toFixed(3)}" text-anchor="middle"`;
-    b+=`<text x="${(x+ls/2).toFixed(2)}" y="${y.toFixed(2)}" ${common} style="fill:#8e938f">${esc(l.text)}</text>`;
-    b+=`<text x="${(x+ls/2+dv[0]).toFixed(2)}" y="${(y+dv[1]).toFixed(2)}" ${common} style="fill:#a9aeaa">${esc(l.text)}</text>`;
-  }
-  for(const tt of d.ties){ if(tt.state==="clash") continue; const [x,y]=P(tt.x,0,tt.y); b+=`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r=".35" fill="#9a9f9b"/>`; }
-  b+=tx(P(L/2,0,0)[0],P(L/2,-ex,-p.embed-p.fD)[1]+4,`FRONT FACE · ${L} × ${H} ABOVE FGL · RETURNS ${R||"NIL"} · FOOTING DASHED`,{size:2,anchor:"middle"});
-  b+=viewTitle(18,166,"1","3D VIEW — STREET SIDE",`oblique, 1:${s} on face`,"recess depth exaggerated ×3 for legibility");
-
-  // stability screen
-  const st=d.stab, y0=178;
-  b+=tx(18,y0,"INDICATIVE STABILITY SCREEN — NOT A DESIGN",{size:2.8,weight:600})+ln(18,y0+1.2,278,y0+1.2,"k3");
-  const rows=[
-    ["Wind, N3 (AS 4055)","Vh,u = 50 m/s → q = 0.6 V² = "+f1(st.q)+" kPa"],
-    ["Net pressure, free-standing wall","Cp,n = "+st.Cpn+" assumed (AS 1170.2 App. D; ends of walls are higher) → p = "+f1(st.pw)+" kPa"],
-    ["Wind force / overturning","F = "+f1(st.F)+" kN/m at "+f1(p.H/2000+p.embed/1000+p.fD/1000)+" m above underside → M = "+f1(st.Mot)+" kNm/m"],
-    ["Restoring (0.9 G, toe pivot)","wall "+f1(st.Gw)+" + footing "+f1(st.Gf)+" + soil "+f1(st.Gs)+" kN/m × "+f1(p.fW/2000)+" m → "+f1(st.Mres)+" kNm/m"],
-    ["Overturning ratio (≥ 1.0 needed)",f1(st.ratio)+(st.ratio>=1?"  — passes this screen":"  — FAILS this screen; footing needs to be wider, deeper, or piered")],
-    ["Wall base bending (indicative)","M* ≈ "+f1(st.Mbase)+" kNm/m vs φMu ≈ "+f1(st.phiMu)+" kNm/m (N12-200, d = "+r0(st.d)+")"],
-  ];
-  rows.forEach((r,i)=>{const yy=y0+6+i*5.6;b+=tx(18,yy,r[0],{size:2.1,weight:600})+tx(86,yy,r[1],{size:2.1,cls:(i===4&&st.ratio<1)?"flagtx":undefined});if(i<rows.length-1)b+=ln2(18,yy+1.9,278,yy+1.9,"k0");});
-  b+=para(18,y0+42,"Screen ignores passive soil resistance, soil bearing, sliding, Kc/Kp factors, end-zone pressures and any surcharge or retained soil. It is here to show why the CW1/CW2 bar make-up alone does not settle this wall. The footing is the real question. On an H1/P site with fill reported to ~3.7 m, expect piers or piles. Engineer to design and certify.",258,{size:2,cls:"flagtx"}).svg;
-  b+=para(18,y0+58,"Reinforcement note: the shed CW walls are restrained at the top by the roof. A free-standing wall has the most moment at the base, so starters, laps and the footing connection govern. Do not copy the shed details without engineer sign-off.",258,{size:2}).svg;
-
-  const notes=noteCol("OPEN ITEMS",[
-    {h:"Needed from you"},
-    {n:1,t:"Property NAME to letter: exact spelling and capitals.",flag:true},
-    {n:2,t:"Address wording: number only, number + road, or full address."},
-    {n:3,t:"Photo or sketch of 'the wall' it should match. None found in Gmail or Drive.",flag:true},
-    {n:4,t:"Wall length, height, returns, openings, levels each side; retained height if any."},
-    {n:5,t:"Engineer for this wall: SIA (Ryan de Leeuw) or Morgan. Morgan's pile drawings were not found.",flag:true},
-    {n:6,t:"Arris: 3 mm pencil round vs SIA FW14 25 mm chamfer."},
-    {h:"For the engineer"},
-    {n:7,t:"Footing type and size for H1/P with fill to ~3.7 m (verbal). Wall bar make-up, starter lap position, end detail of free ends, control joints."},
-    {n:8,t:"Acceptability of the local bar set-back or central layer behind the lettering (FW-02 B)."},
-    {h:"For the certifier"},
-    {n:9,t:"Approval triggers for a front wall of this height and any retaining, under the QLD Building Regulation and Gold Coast planning scheme."}
+/* ---------- FE-05 options comparison ---------- */
+let SNAP={};
+function sheetOptions(d,all){
+  const p=d.p;PX="e";let b="";
+  const colW=88,x0s=[16,104,192];
+  ["1","2","3"].forEach((o,i)=>{
+    const dd=all[o],x0=x0s[i],iw=colW-6,ih=iw*0.5;
+    b+=tx(x0,15,`OPTION ${o}`,{size:3,weight:600})+tx(x0,19,OPTS[o].t.toUpperCase()+(o==="3"?" ("+(p.opt3light==="panel"?"PANELS":"UPLIGHTS")+")":""),{size:2,weight:600});
+    if(SNAP[o]) b+=`<image href="${SNAP[o]}" x="${x0}" y="22" width="${iw}" height="${ih}" preserveAspectRatio="xMidYMid slice"/>`+rc(x0,22,iw,ih,"k1");
+    else b+=rc(x0,22,iw,ih,"k1","fill=\"#eef0ee\"")+tx(x0+iw/2,22+ih/2,"3D VIEW RENDERS WHEN THE MODEL LOADS",{size:1.7,anchor:"middle"});
+    const lw=dd.walls.filter(w=>w.lines.length);const span=lw.reduce((a,w)=>a+(w.x1-w.x0),0)+(lw.length>1?600:0);
+    const s=Math.max(span/iw,p.H/24);let cur=x0;const gy=96;
+    for(const w of lw){const ox=cur-w.x0/s,X=x=>ox+x/s,Y=z=>gy-z/s;
+      b+=ln2(X(w.x0)-1,gy,X(w.x1)+1,gy,"k2")+elevWall(dd,w,X,Y,s,{footing:false,lights:true});cur+=(w.x1-w.x0)/s+600/s;}
+    b+=tx(x0,gy+4,`Elevation, lettered wall${lw.length>1?"s":""} · 1:${r0(s)}`,{size:1.7});
+    const w=dd.N,ss=45,sx=x0+40,sy=150,SX=y=>sx+y/ss,SY=z=>sy-z/ss;
+    b+=rc(SX(0),SY(p.H),p.t/ss,p.H/ss,"k3",fillC())+ln2(SX(-700),sy,SX(p.t+500),sy,"k2");
+    if(w.panel) b+=rc(SX(-w.panel.proj),SY(w.panel.y1),w.panel.proj/ss,(w.panel.y1-w.panel.y0)/ss,"k3",fillC())+rc(SX(-w.panel.proj),SY(w.led.z1),1,(w.led.z1-w.led.z0)/ss,"","fill=\"#f0b429\"");
+    for(const ll of w.lines) b+=rc(SX(w.panel?-w.panel.proj:0),SY(ll.top),ll.prof.depth/ss+.3,ll.cap/ss,"k0","fill=\"#fff\"");
+    if(w.lights.length) b+=rc(SX(-p.upOff)-1,sy,2,2.4,"k1","fill=\"#f0b429\"")+ln2(SX(-p.upOff),sy,SX(-5),SY(p.H*0.9),"k0 dash");
+    b+=rc(SX(dd.gate.y0),SY(p.gH),p.gT/ss,(p.gH-50)/ss,"k1 gate","fill=\"#cfd6dd\"");
+    b+=tx(x0,sy+4,"Section, ARDEN wall at lettering · 1:"+ss,{size:1.7});
+  });
+  const a3=all["3"].A.lines[1];
+  const rows=[["","Option 1 — raised panel + LED","Option 2 — in wall + uplights","Option 3 — split at gate"],
+    ["Look at night","Even graze across the panel; the panel edge reads as a shadow line","Strong shadows in the V-cuts; light spills onto the wall around the letters","Name and number lit on both walls; frames the driveway"],
+    ["Cast complexity / risk","High: box-out tray + letter formers + LED channel in one face, no joint","Low–medium: letter formers only","Medium: formers on two walls, plus ferrules"],
+    ["Lighting maintenance","LED clips into the channel from the front; driver in pit","Uplights at ground level, easy to reach; keep leaves and mulch clear","As chosen (1 or 2)"],
+    ["Relative cost","High","Low","Medium (uplights) / High (panels)"],
+    ["Still needs","Ben: up-graze or downwash? Engineer: projection fibre/mesh, conduit in wall","Ben: fitting style. Electrician: bed conduit depth","Ben: address wording."+(a3?" Address wall ≥ "+r0(a3.width+2*a3.cap)+" long if the street line stays.":"")]];
+  const cw=[36,76,76,76],ty0=160;let y=ty0;
+  rows.forEach((r,i)=>{let x=16;let hmax=0;const cells=r.map((cell,j)=>{const pr=para(x+1.2,y+3,cell,cw[j]-2.4,{size:1.85,weight:(i===0||j===0)?600:400});x+=cw[j];hmax=Math.max(hmax,pr.h);return pr.svg;});
+    b+=cells.join("");const h=hmax+2.2;b+=ln2(16,y+h,280,y+h,"k1");y+=h;});
+  b+=ln2(16,ty0,280,ty0,"k3");
+  const notes=noteCol("HOW TO CHOOSE",[
+    {t:"All three use the same walls, footing, gate and Montserrat Light lettering set to the wall's proportion. Only the lettering surface, the lighting and where the address sits change."},
+    {h:"Shared across all options"},
+    {t:"CW wall make-up and the assumed strip footing (engineer to design). Gate parks behind the ARDEN wall. No cast-in items on the ARDEN wall back face. Ties kept out of every lettering, panel and box-out zone."},
+    {h:"Picking one"},
+    {t:"Option 2 is the simplest to cast and the cheapest, with the letters doing the work."},
+    {t:"Option 1 gives the most finished, architectural look. It also carries the most casting risk, and the lighting reading must be confirmed.",flag:true},
+    {t:"Option 3 separates name and number and frames the driveway. With the street line kept, the address wall must be long enough (see table)."},
+    {h:"3D views"},
+    {t:"Rendered from the same combined model with the option switched, gate closed. Change the option on the left to explore it live."}
   ]);
-  return frame("FW-04","AS SHOWN",b,notes);
+  return frame("FE-05","AS SHOWN",b,notes,p);
+}
+
+/* ---------- FE-06 castability, safety, stability ---------- */
+function sheetChecks(d){
+  const p=d.p;PX="f";let b="";
+  b+=tx(18,16,"CASTABILITY — MONTSERRAT, MEASURED",{size:2.8,weight:600})+ln2(18,17.2,278,17.2,"k3");
+  const mL=metrics(300),mR=metrics(400);
+  const rows=[["Weight","Stroke ÷ cap (measured)","Min. cap for "+p.minStroke+" mm stroke"],["Light 300",f1(mL.stemCap*100)+" %",r0(d.capMinL)+" mm"],["Regular 400",f1(mR.stemCap*100)+" %",r0(d.capMinR)+" mm"]];
+  let y=22;rows.forEach((r,i)=>{const xs=[18,52,100];r.forEach((c,j)=>b+=tx(xs[j],y,c,{size:2.1,weight:i===0?600:400}));y+=4;});
+  y+=1;b+=tx(18,y,"Per line, option "+p.opt,{size:2.1,weight:600});y+=4;
+  for(const w of d.walls) for(const l of w.lines){const ok=l.stroke>=p.minStroke&&l.coverBase>=40&&(p.profile==="V"||l.prof.base>=6);
+    b+=tx(18,y,`${l.text} — ${l.wt==300?"Light":"Regular"}, cap ${r0(l.cap)}, stroke ${f1(l.stroke)}, ${p.profile==="V"?"V depth":"depth"} ${f1(l.prof.depth)}, cover at base ${r0(l.coverBase)} mm`,{size:2.05,cls:ok?undefined:"flagtx"});
+    b+=tx(255,y,ok?"OK":"CHECK",{size:2.1,weight:600,cls:ok?undefined:"flagtx"});y+=3.6;}
+  y+=2;const pr=para(18,y,`Rule (a rule of thumb, not a code requirement): stroke at the face ≥ ${p.minStroke} mm so the former strip is robust and strips cleanly; flat base ≥ 6 mm for the tapered profile; 40 mm cover at the letter base (SIA S01). Light is thin: ${f1(mL.stemCap*100)} % of cap height, below the 8–9 % estimate in the brief. Light needs ≥ ${r0(d.capMinL)} mm cap; under that, use Regular (≥ ${r0(d.capMinR)} mm). That is why the second line defaults to Regular.`,258,{size:2});b+=pr.svg;
+  const py=y+pr.h+5;
+  const sk=(x,lab,isV)=>{const w=24,dp=isV?12:10,base=isV?0:8;let s=pg([[x-14,py],[x-w/2,py],[x-base/2,py+dp],[x+base/2,py+dp],[x+w/2,py],[x+14,py],[x+14,py+16],[x-14,py+16]],"k3",fillC());
+    return s+tx(x,py+20,lab,{size:1.8,anchor:"middle"});};
+  b+=sk(40,"V-CUT (DEFAULT)",true)+sk(80,"TAPERED, FLAT BASE",false);
+  b+=tx(100,py+5,"Former: CNC-cut PVC foam or HDPE strip, MIRROR-IMAGE, screwed",{size:1.9})+tx(100,py+8,"from the back of the ply, edges sealed, release agent applied.",{size:1.9})+tx(100,py+11,"Cast a 600 × 600 sample panel with three letters first.",{size:1.9});
+  const gy=py+28;
+  b+=tx(18,gy,"GATE — LAYOUT CHECKS & SAFETY",{size:2.8,weight:600})+ln2(18,gy+1.2,278,gy+1.2,"k3");
+  const aClash=d.ties.some(t=>t.seg==="A"&&t.state==="clash");
+  const gl=[["(a) Gap, ARDEN wall back face to parked gate",`${p.gGap} mm (assumed)`,p.gGap>=20],
+    ["(b) Items on ARDEN wall back face","none: no ferrules, outlets or tie-backs",true],
+    ["(c) Storage run needed vs available",`${r0(d.storeNeed)} vs ${r0(d.storeAvail)} mm${p.Rn>0?" (return at outer end)":""}`,d.storeNeed<=d.storeAvail],
+    ["Motor within rack-engagement zone",`${r0(d.motor.x0)} to ${r0(d.motor.x1)} (zone ${-p.gOv} to 0)`,d.motor.x0>=-p.gOv-1],
+    ["Receiver ferrules clear of ties",aClash?"conflict":"clear",!aClash]];
+  let yy=gy+5.5;for(const r of gl){b+=tx(18,yy,r[0],{size:2.05})+tx(120,yy,r[1],{size:2.05,cls:r[2]?undefined:"flagtx"})+tx(255,yy,r[2]?"OK":"CHECK",{size:2.05,weight:600,cls:r[2]?undefined:"flagtx"});yy+=3.6;}
+  const sp=para(18,yy+1,"Drive and installation to AS/NZS 60335-2-103: force limits, safety edges and photo-electric beams. Crush and shear points to be guarded or held at compliant clearances: gate to wall back face, guide post, leading edge to receiver, gate to the wall end at the opening. Gate installer confirms. Electrical by a licensed electrician to AS/NZS 3000.",258,{size:2,cls:"flagtx"});b+=sp.svg;
+  const sy=yy+sp.h+6,st=d.stab;
+  b+=tx(18,sy,"INDICATIVE STABILITY SCREEN — FREE-STANDING WALL, NOT A DESIGN",{size:2.8,weight:600})+ln2(18,sy+1.2,278,sy+1.2,"k3");
+  const sr=[["Wind N3 (AS 4055)","Vh,u 50 m/s → q = "+f1(st.q)+" kPa; Cp,n "+st.Cpn+" assumed → p = "+f1(st.pw)+" kPa"],
+    ["Overturning / restoring","M = "+f1(st.Mot)+" kNm/m vs 0.9G × lever = "+f1(st.Mres)+" kNm/m"],
+    ["Ratio (≥ 1.0)",f1(st.ratio)+(st.ratio>=1?" — passes this screen":" — FAILS: wider, deeper or piered footing needed")],
+    ["Wall base bending","M* ≈ "+f1(st.Mbase)+" vs φMu ≈ "+f1(st.phiMu)+" kNm/m (N12-200, d "+r0(st.d)+")"]];
+  let y3=sy+5.5;for(const r of sr){b+=tx(18,y3,r[0],{size:2.05,weight:600})+tx(70,y3,r[1],{size:2.05,cls:(r[0].startsWith("Ratio")&&st.ratio<1)?"flagtx":undefined});y3+=3.6;}
+  b+=para(18,y3+1,"Ignores passive soil, bearing, sliding, end-zone pressures, gate loads on the address wall and any retained soil. Site H1/P with fill reported (verbally) to ~3.7 m: expect piers or piles. Engineer (SIA or Morgan) to design walls, footings, track footing and motor plinth.",258,{size:2,cls:"flagtx"}).svg;
+  const notes=noteCol("OPEN ITEMS",[
+    {h:"Ben"},
+    {n:1,t:"Address wording and which wall carries it."},
+    {n:2,t:"Wall lengths, height, returns, setback from the boundary."},
+    {n:3,t:"“Gooseneck”: cranked track (not workable with a rigid leaf; straight track drawn) or keypad pedestal?",flag:true},
+    {n:4,t:"Gate opening, height, material/weight; keypad, intercom or letterbox wanted?"},
+    {n:5,t:"“Modelled as one”: one combined model (done) or one continuous pour? A continuous pour needs agreed control-joint positions; SIA wants no construction joints in an off-form face.",flag:true},
+    {n:6,t:"Option 1: graze up from a groove at the panel base (drawn) or downwash from the underside?"},
+    {n:7,t:"Arris 3 mm vs SIA FW14 25 mm."},
+    {h:"Engineer"},
+    {n:8,t:"Free-standing walls and footings (H1/P, N3), gate track footing, motor plinth, receiver fixings, panel projection reinforcement, S64 corners."},
+    {h:"Installers"},
+    {n:9,t:"Gate supplier: track, motor, guides, safety devices to AS/NZS 60335-2-103. Electrician: AS/NZS 3000."}
+  ]);
+  return frame("FE-06","NTS",b,notes,p);
 }
 
 /* ---------- checks panel ---------- */
-function checksHTML(p,d){
-  const out=[];
+function checksHTML(d){const p=d.p,out=[];
   const add=(st,txt)=>out.push(`<div class="chk"><span class="pill ${st}">${st==="ok"?"OK":st==="bad"?"CHECK":"TBC"}</span><span>${txt}</span></div>`);
-  add(d.coverAtLetter>=40||d.setback>0?"ok":"bad", d.cw1?(d.setback>0?`CW1: face bars set back ${r0(d.setback)} mm behind letters to keep 40 cover.`:`CW1: 40 cover kept.`):`CW2: ${r0(d.coverAtLetter)} mm cover at letter base (40 required).`);
-  add(d.minStem>=d.stemNeed?"ok":"bad",`Thinnest stroke ${f1(d.minStem)} mm (need ≥ ${d.stemNeed}).`);
-  add(d.baseW>=10?"ok":"bad",`Letter base after ${p.draft}° draft: ${f1(d.baseW)} mm (need ≥ 10).`);
-  const fits=d.lines.every(l=>l.x0>=150&&l.x1<=p.L-150&&l.top<=p.H-100&&l.bot>=150);
-  add(fits?"ok":"bad",fits?"Lettering is ≥150 from the ends and ≥100 below the top.":"Lettering too close to a wall edge or top.");
-  const ov=d.lines.length===2&&!(d.lines[0].bot>d.lines[1].top+40||d.lines[1].bot>d.lines[0].top+40);
-  if(ov) add("bad","Name and address lines overlap or are under 40 apart.");
-  const cl=d.ties.filter(t=>t.state==="clash").length, mv=d.ties.filter(t=>t.state==="moved").length;
-  add(cl?"bad":"ok",cl?`${cl} tie(s) can't be moved clear of lettering.`:mv?`${mv} tie(s) moved clear of lettering.`:"No ties fall in the lettering zones.");
+  for(const w of d.walls) for(const l of w.lines){
+    add(l.stroke>=p.minStroke?"ok":"bad",`${esc(l.text)}: stroke ${f1(l.stroke)} mm at ${r0(l.cap)} cap (${l.wt==300?"Light":"Regular"}; need ≥ ${p.minStroke}).`);
+    if(l.coverBase<40) add("bad",`${esc(l.text)}: ${r0(l.coverBase)} mm cover at letter base (40 needed).`);
+    if(p.profile==="T"&&l.prof.base<6) add("bad",`${esc(l.text)}: tapered base ${f1(l.prof.base)} mm (need ≥ 6).`);
+  }
+  for(const w of d.walls){ if(!w.lines.length) continue;
+    const k=w.panel?0.5:1,bx=w.panel?{x0:w.panel.x0,x1:w.panel.x1,top:w.panel.y1,bot:w.panel.y0}:w.block;
+    const okE=Math.min(bx.x0-w.x0,w.x1-bx.x1)>=d.cap*k, okT=p.H-bx.top>=0.75*d.cap*k, okG=bx.bot>=2*d.cap*k;
+    add(okE&&okT&&okG?"ok":"bad",`${w.label}: ${w.panel?"panel":"lettering"} ${okE&&okT&&okG?"fits the margin rule.":"breaks the margin rule ("+[!okE&&"ends",!okT&&"top",!okG&&"ground"].filter(Boolean).join(", ")+")."}`);
+  }
+  const cl=d.ties.filter(t=>t.state==="clash").length,mv=d.ties.filter(t=>t.state==="moved").length;
+  add(cl?"bad":"ok",cl?`${cl} tie(s) can't clear the lettering/panel/ferrule zones.`:`${mv} tie(s) moved; none inside a no-tie zone.`);
+  add(d.storeNeed<=d.storeAvail?"ok":"bad",`Gate storage ${r0(d.storeNeed)} needed vs ${r0(d.storeAvail)} behind the ARDEN wall.`);
+  add("ok",`ARDEN wall back face clear: ${p.gGap} mm to the parked gate, no cast-in items.`);
   add(d.stab.ratio>=1?"tbc":"bad",`Overturning screen ${f1(d.stab.ratio)} (indicative only).`);
-  add("tbc","Footing and wall: engineer to design (free-standing, H1/P).");
+  add("tbc","Walls, footings, track footing: engineer to design.");
   if(p.arris==="r3") add("tbc","3 mm arris conflicts with SIA FW14.");
-  return out.join("");
+  return out.join("");}
+
+/* ---------- 3D (Three.js) ---------- */
+const V3={ok:false};
+const LAYERS=[["walls","Walls",true],["foot","Footings",true],["reo","Reinforcement",false],["gate","Gate & track",true],["svc","Conduits",true],["light","Lighting",true],["ties","Tie bolts",false],["ground","Ground",true]];
+const layerOn={};LAYERS.forEach(l=>layerOn[l[0]]=l[2]);
+function init3D(){
+  if(typeof THREE==="undefined"){$("v3msg").textContent="3D library did not load. The drawing sheets below still work.";return;}
+  const host=$("view3d");const R=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+  R.setPixelRatio(Math.min(2,window.devicePixelRatio||1));host.appendChild(R.domElement);$("v3msg").remove();
+  const scene=new THREE.Scene();const cam=new THREE.PerspectiveCamera(38,2,0.05,200);
+  cam.position.set(-6.5,4.2,11.5);
+  const ctl=THREE.OrbitControls?new THREE.OrbitControls(cam,R.domElement):null;
+  if(ctl){ctl.target.set(0,0.8,-0.6);ctl.enableDamping=true;ctl.maxPolarAngle=Math.PI*0.495;}
+  const amb=new THREE.HemisphereLight(0xffffff,0x8a8f88,0.75),sun=new THREE.DirectionalLight(0xffffff,0.75);sun.position.set(-8,12,-10);
+  scene.add(amb,sun);
+  Object.assign(V3,{ok:true,R,scene,cam,ctl,amb,sun,root:null,host});
+  const resize=()=>{const w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();};
+  new ResizeObserver(resize).observe(host);resize();
+  const loop=()=>{if(ctl)ctl.update();R.render(scene,cam);requestAnimationFrame(loop);};loop();
+}
+const M=(x,y,z)=>new THREE.Vector3(x/1000,z/1000,-y/1000);   // plan y (into property) maps to -z so the street view reads like the plan
+function box(g,x0,x1,y0,y1,z0,z1,mat){const m=new THREE.Mesh(new THREE.BoxGeometry(Math.max(1,x1-x0)/1000,Math.max(1,z1-z0)/1000,Math.max(1,y1-y0)/1000),mat);m.position.copy(M((x0+x1)/2,(y0+y1)/2,(z0+z1)/2));g.add(m);return m;}
+function tube(g,pts,r,mat){const v=pts.map(q=>M(q[0],q[1],q[2]));const path=new THREE.CurvePath();for(let i=0;i<v.length-1;i++) path.add(new THREE.LineCurve3(v[i],v[i+1]));
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(path,Math.max(8,v.length*8),r/1000,6,false),mat));}
+function letterTexture(fw,fh,lines,w0,h0,pxmm){
+  const cv=document.createElement("canvas");cv.width=Math.min(4096,Math.ceil(fw*pxmm));cv.height=Math.min(2048,Math.ceil(fh*pxmm));
+  const k=cv.width/fw,c=cv.getContext("2d");c.clearRect(0,0,cv.width,cv.height);
+  for(const l of lines){const fs=l.fs*k;c.font=`${l.wt} ${fs}px "${FONT}", Arial, sans-serif`;const by=(fh-(l.base-h0))*k;
+    l.chars.forEach((ch,i)=>{if(ch===" ")return;const x=(l.xs[i]-w0)*k;
+      c.fillStyle="rgba(70,66,60,0.82)";c.fillText(ch,x,by);
+      c.save();c.globalCompositeOperation="source-atop";c.fillStyle="rgba(235,232,226,0.55)";c.fillText(ch,x+Math.max(1,fs*0.015),by+Math.max(1,fs*0.015));c.restore();});}
+  const t=new THREE.CanvasTexture(cv);t.anisotropy=4;return t;}
+function build3D(d){
+  if(!V3.ok) return;const p=d.p;
+  if(V3.root){V3.scene.remove(V3.root);V3.root.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(m.map)m.map.dispose();m.dispose();});}});}
+  const root=new THREE.Group();V3.root=root;V3.scene.add(root);
+  const G={};LAYERS.forEach(l=>{G[l[0]]=new THREE.Group();G[l[0]].visible=layerOn[l[0]];root.add(G[l[0]]);});
+  const conc=new THREE.MeshStandardMaterial({color:0xc9ccc8,roughness:.9}),foot=new THREE.MeshStandardMaterial({color:0x9ea39e,transparent:true,opacity:.35,depthWrite:false});
+  const steel=new THREE.MeshStandardMaterial({color:0x3d4a57,metalness:.4,roughness:.5}),gateM=new THREE.MeshStandardMaterial({color:0x4b5866,metalness:.3,roughness:.6});
+  const ghost=new THREE.MeshStandardMaterial({color:0x4b5866,transparent:true,opacity:.28,depthWrite:false});
+  const svcM=new THREE.MeshStandardMaterial({color:0x1f5fa8}),lightM=new THREE.MeshStandardMaterial({color:0xf0b429,emissive:0xf0b429,emissiveIntensity:NIGHT?1.2:.25});
+  const reoM=new THREE.LineBasicMaterial({color:0xb02a1f}),tieM=new THREE.MeshStandardMaterial({color:0x222222});
+  const gr=new THREE.Mesh(new THREE.PlaneGeometry(40,24),new THREE.MeshStandardMaterial({color:NIGHT?0x1a201c:0xa7b49a,roughness:1}));gr.rotation.x=-Math.PI/2;gr.position.set((p.G-p.Ln)/2000,-0.002,-4);G.ground.add(gr);
+  const dw=new THREE.Mesh(new THREE.PlaneGeometry(p.G/1000,(p.setback+8000)/1000),new THREE.MeshStandardMaterial({color:NIGHT?0x2a2d2b:0xb9bab5,roughness:1}));dw.rotation.x=-Math.PI/2;dw.position.set(p.G/2000,0.001,-(8000-p.setback)/2000);G.ground.add(dw);
+  const bl=new THREE.Mesh(new THREE.PlaneGeometry((p.Ln+p.G+p.La+4000)/1000,0.03),new THREE.MeshBasicMaterial({color:0xffffff}));bl.rotation.x=-Math.PI/2;bl.position.set((p.G-p.Ln+p.La)/2000,0.003,p.setback/1000);G.ground.add(bl);
+  for(const sg of d.segs) box(G.walls,sg.x0,sg.x1,sg.y0,sg.y1,-p.embed,p.H,conc);
+  const ex=(p.fW-p.t)/2;
+  for(const sg of d.segs) box(G.foot,sg.x0-ex,sg.x1+ex,sg.y0-(sg.ax==="x"?ex:0),sg.y1+ex,-p.embed-p.fD,-p.embed,foot);
+  for(const w of d.walls){
+    let faceY=0,face={x0:w.x0,x1:w.x1,z0:0,z1:p.H};
+    if(w.panel){const P=w.panel;box(G.walls,P.x0,P.x1,-P.proj,0,P.y0,P.y1,conc);faceY=-P.proj;face={x0:P.x0,x1:P.x1,z0:P.y0,z1:P.y1};
+      box(G.light,w.led.x0,w.led.x1,-P.proj-1,-P.proj+8,w.led.z0+4,w.led.z1-4,lightM);}
+    if(w.lines.length){
+      const fw=face.x1-face.x0,fh=face.z1-face.z0;
+      const tex=letterTexture(fw,fh,w.lines,face.x0,face.z0,0.9);
+      const pl=new THREE.Mesh(new THREE.PlaneGeometry(fw/1000,fh/1000),new THREE.MeshStandardMaterial({map:tex,transparent:true,roughness:.9,polygonOffset:true,polygonOffsetFactor:-2}));
+      pl.position.copy(M((face.x0+face.x1)/2,faceY-1.5,(face.z0+face.z1)/2));
+      G.walls.add(pl);
+    }
+    for(const L of w.lights){const cy=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,.03,16),lightM);cy.position.copy(M(L.x,L.y,15));G.light.add(cy);
+      const cone=new THREE.Mesh(new THREE.ConeGeometry(.22,p.H/1000,20,1,true),new THREE.MeshBasicMaterial({color:0xffd36b,transparent:true,opacity:NIGHT?.16:.06,depthWrite:false,side:THREE.DoubleSide}));
+      cone.position.copy(M(L.x,L.y*0.6,p.H/2));cone.rotateX(Math.PI);G.light.add(cone);
+      if(NIGHT){const sl=new THREE.SpotLight(0xffd9a0,2.4,4,0.3,0.6);sl.position.copy(M(L.x,L.y,30));sl.target.position.copy(M(L.x,-5,p.H*0.8));G.light.add(sl,sl.target);}}
+    if(NIGHT&&w.panel){const n=4;for(let i=0;i<n;i++){const x=w.led.x0+(w.led.x1-w.led.x0)*(i+.5)/n;const pt=new THREE.PointLight(0xffd9a0,0.8,1.6);pt.position.copy(M(x,-w.panel.proj-60,w.led.z1+60));G.light.add(pt);}}
+  }
+  const reoPts=[];for(const w of [d.N,d.A]){const vs=d.cw1?300:200,yl=d.cw1?[58,p.t-58]:[p.t/2];
+    for(let x=w.x0+50;x<=w.x1-50;x+=vs) for(const y of yl) reoPts.push(M(x,y,-p.embed-p.fD+60),M(x,y,p.H-40));
+    for(let z=100;z<p.H-60;z+=200) for(const y of yl) reoPts.push(M(w.x0+45,y,z),M(w.x1-45,y,z));}
+  G.reo.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(reoPts),reoM));
+  const tgx=new THREE.CylinderGeometry(.006,.006,(p.t+40)/1000,6);tgx.rotateX(Math.PI/2);
+  const tgy=new THREE.CylinderGeometry(.006,.006,(p.t+40)/1000,6);tgy.rotateZ(Math.PI/2);
+  for(const t of d.ties){if(t.state==="clash")continue;const sg=d.segs.find(s=>s.id===t.seg);
+    if(sg.ax==="x"){const m=new THREE.Mesh(tgx,tieM);m.position.copy(M(t.x,p.t/2,t.y));G.ties.add(m);}
+    else {const m=new THREE.Mesh(tgy,tieM);m.position.copy(M((sg.x0+sg.x1)/2,sg.y0+t.x,t.y));G.ties.add(m);}}
+  const g=d.gate,showC=GATE!=="open",showO=GATE!=="closed";
+  if(showC) box(G.gate,g.closed.x0,g.closed.x1,g.y0,g.y1,50,g.H,gateM);
+  if(showO) box(G.gate,g.open.x0,g.open.x1,g.y0,g.y1,50,g.H,GATE==="both"?ghost:gateM);
+  box(G.gate,d.track.x0,d.track.x1,g.yc-15,g.yc+15,0,25,steel);
+  box(G.foot,d.track.x0,d.track.x1,g.yc-d.track.fw/2,g.yc+d.track.fw/2,-d.track.fd,0,foot);
+  const mo=d.motor;box(G.walls,mo.x0,mo.x1,mo.y0,mo.y1,-250,mo.h,conc);box(G.gate,mo.x0+80,mo.x1-80,mo.y0+60,mo.y1-60,mo.h,mo.h+350,steel);
+  for(const gd of d.guides) box(G.gate,gd.x-40,gd.x+40,gd.y-40,gd.y+40,0,g.H+80,steel);
+  for(const st of d.stops) box(G.gate,st.x-30,st.x+30,g.yc-60,g.yc+60,0,200,steel);
+  for(const f of d.A.ferr) box(G.gate,f.x-12,f.x+12,p.t,p.t+6,f.z-12,f.z+12,steel);
+  if(d.ped) tube(G.gate,[[d.ped.x,d.ped.y,0],[d.ped.x,d.ped.y,1000],[d.ped.x+120,d.ped.y,1180],[d.ped.x+300,d.ped.y,1150]],25,steel);
+  for(const sv of d.svc) tube(G.svc,sv.pts,16,svcM);
+  for(const pt of d.pits) box(G.svc,pt.x-150,pt.x+150,pt.y-150,pt.y+150,-300,10,new THREE.MeshStandardMaterial({color:0x2b3640}));
+  const vp=getComputedStyle(document.documentElement).getPropertyValue("--viewport").trim()||"#dfe3e0";
+  V3.scene.background=new THREE.Color(NIGHT?"#0b0f14":vp);
+  V3.amb.intensity=NIGHT?0.12:0.75;V3.sun.intensity=NIGHT?0.05:0.75;
+}
+function snapshots(all){
+  if(!V3.ok) return;
+  const keep={pos:V3.cam.position.clone(),tgt:V3.ctl?V3.ctl.target.clone():null,gate:GATE,night:NIGHT,lay:Object.assign({},layerOn)};
+  const w=V3.host.clientWidth,h=V3.host.clientHeight;
+  GATE="closed";NIGHT=false;Object.assign(layerOn,{walls:true,foot:false,reo:false,gate:true,svc:false,light:true,ties:false,ground:true});
+  V3.R.setSize(900,450,false);V3.cam.aspect=2;V3.cam.updateProjectionMatrix();
+  for(const o of ["1","2","3"]){build3D(all[o]);
+    const p=all[o].p,cx=(p.G-p.Ln+p.La)/2;V3.cam.position.copy(M(cx-3200,-p.setback-9000,3000));V3.cam.lookAt(M(cx-300,0,700));
+    V3.R.render(V3.scene,V3.cam);SNAP[o]=V3.R.domElement.toDataURL("image/jpeg",0.82);}
+  GATE=keep.gate;NIGHT=keep.night;Object.assign(layerOn,keep.lay);V3.cam.position.copy(keep.pos);if(keep.tgt){V3.ctl.target.copy(keep.tgt);V3.cam.lookAt(keep.tgt);}
+  if(w&&h){V3.R.setSize(w,h,false);V3.cam.aspect=w/h;V3.cam.updateProjectionMatrix();}
 }
 
-function render(){
-  const p=readP(), d=derive(p);
-  $("fw-01").innerHTML=sheet1(p,d);
-  $("fw-02").innerHTML=sheet2(p,d);
-  $("fw-03").innerHTML=sheet3(p,d);
-  $("fw-04").innerHTML=sheet4(p,d);
-  $("checks").innerHTML=checksHTML(p,d);
+/* ---------- render ---------- */
+let pending=null;
+function render(withSnaps){
+  const base=readP();const all={};
+  for(const o of ["1","2","3"]) all[o]=derive(Object.assign({},base,{opt:o}));
+  const d=all[OPT];
+  if(withSnaps) snapshots(all);
+  build3D(d);
+  $("fe-01").innerHTML=sheetPlan(d);$("fe-02").innerHTML=sheetElev(d);$("fe-03").innerHTML=sheetSections(d);
+  $("fe-04").innerHTML=sheetReo(d);$("fe-05").innerHTML=sheetOptions(d,all);$("fe-06").innerHTML=sheetChecks(d);
+  $("checks").innerHTML=checksHTML(d);
+  $("optdesc").textContent=OPTS[OPT].d;$("opt3light").disabled=OPT!=="3";
 }
-for(const k of IDS){ $(k).addEventListener("input",render); $(k).addEventListener("change",render); }
-render();
-if(document.fonts){ Promise.all(["Jost","Archivo","Red Hat Display"].flatMap(f=>["600","700","800"].map(w=>document.fonts.load(`${w} 100px "${f}"`).catch(()=>{})))).then(render); document.fonts.ready.then(render); }
+function schedule(snaps){clearTimeout(pending);pending=setTimeout(()=>render(snaps),snaps?250:40);}
+for(const k of IDS){$(k).addEventListener("input",()=>schedule(true));$(k).addEventListener("change",()=>schedule(true));}
+document.querySelectorAll("[data-opt]").forEach(bt=>bt.addEventListener("click",()=>{OPT=bt.dataset.opt;document.querySelectorAll("[data-opt]").forEach(x=>x.setAttribute("aria-pressed",String(x===bt)));schedule(false);}));
+document.querySelectorAll("[data-gate]").forEach(bt=>bt.addEventListener("click",()=>{GATE=bt.dataset.gate;document.querySelectorAll("[data-gate]").forEach(x=>x.setAttribute("aria-pressed",String(x===bt)));schedule(false);}));
+$("night").addEventListener("click",()=>{NIGHT=!NIGHT;$("night").setAttribute("aria-pressed",String(NIGHT));schedule(false);});
+$("layers").innerHTML=LAYERS.map(l=>`<button type="button" class="tbtn" data-layer="${l[0]}" aria-pressed="${l[2]}">${l[1]}</button>`).join("");
+document.querySelectorAll("[data-layer]").forEach(bt=>bt.addEventListener("click",()=>{const k=bt.dataset.layer;layerOn[k]=!layerOn[k];bt.setAttribute("aria-pressed",String(layerOn[k]));if(V3.root){const gi=LAYERS.findIndex(l=>l[0]===k);if(V3.root.children[gi])V3.root.children[gi].visible=layerOn[k];}}));
+try{init3D();}catch(e){const m=$("v3msg");if(m)m.textContent="3D view unavailable: "+e.message;}
+render(false);
+const fontsLoad=document.fonts?Promise.all(["300","400"].map(w=>document.fonts.load(`${w} 100px "${FONT}"`))).catch(()=>{}):Promise.resolve();
+fontsLoad.then(()=>{for(const k in MC) delete MC[k];render(true);});
 </script>
