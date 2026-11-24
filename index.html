@@ -1,106 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU" class="no-js">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diamond Welding & Fabrication</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; background: #000; }
-        body { display: flex; align-items: center; justify-content: center; font-family: Arial, sans-serif; }
-
-        .splash {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #000;
-        }
-
-        .video-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.5;
-            z-index: 1;
-        }
-
-        .content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        .logo {
-            max-width: 80vw;
-            max-height: 50vh;
-            width: auto;
-            height: auto;
-            animation: fadeIn 1.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .btn {
-            padding: 18px 50px;
-            font-size: 16px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            color: white;
-            background: #f97316;
-            border: 2px solid #f97316;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 0 40px rgba(249, 115, 22, 0.6);
-        }
-
-        .btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 60px rgba(249, 115, 22, 0.9);
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>National Capital Cleaning | Office, Commercial, Window & Retail Cleaning in Canberra</title>
+<meta name="description" content="National Capital Cleaning provides office, commercial, window and retail cleaning across Canberra and surrounds.">
+<meta name="theme-color" content="#0b2545">
+<link rel="icon" href="assets/ncc/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-    <div class="splash">
-        <video class="video-bg" autoplay muted loop playsinline>
-            <source src="assets/welding-background.mp4" type="video/mp4">
-        </video>
+<div class="topbar">
+  <div class="wrap">
+    <div><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg> Canberra &amp; surrounds</span><span class="hide-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Mon to Fri 7am to 6pm, after-hours cleans by arrangement</span></div>
+    <div><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg> <a href="tel:+61400000000">0400 000 000</a></span><span class="hide-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg> <a href="mailto:info@nationalcapitalcleaning.com.au">info@nationalcapitalcleaning.com.au</a></span></div>
+  </div>
+</div>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="National Capital Cleaning home"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#0b2545"/><path d="M10 33h28M13 33V22M19 33V22M29 33V22M35 33V22M11 22h26L24 14z" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M37 6l1.3 3.4L41.7 11l-3.4 1.3L37 15.7l-1.3-3.4L32.3 11l3.4-1.6z" fill="#10b3a3"/></svg><span class="brand-name">National Capital<small>CLEANING</small></span></a>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    <nav class="nav" aria-label="Main">
+      <a class="link active" href="index.html" aria-current="page">Home</a>
+      <a class="link" href="about.html">About us</a>
+      <a class="link" href="projects.html">Projects</a>
+      <a class="link" href="contact.html">Contact</a>
+      <a class="btn btn-primary" href="contact.html">Get a free quote</a>
+    </nav>
+  </div>
+</header>
 
-        <div class="content">
-            <img src="assets/diamond-logo.png" alt="Diamond Logo" class="logo">
-            <button class="btn" onclick="goToSite()">ENTER SITE</button>
-        </div>
+<main>
+<section class="hero">
+  <div class="hero-media">
+    <video autoplay muted loop playsinline preload="auto" poster="assets/ncc/team-vacuum.jpg">
+      <source src="assets/ncc/hero-loop.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="wrap">
+    <span class="eyebrow">Canberra's commercial cleaning team</span>
+    <h1>A spotless workplace, <em>every single day.</em></h1>
+    <p>Office, commercial, window and retail cleaning for Canberra businesses. Reliable crews, clear checklists and a finish you can see.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="contact.html">Get a free quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" href="projects.html">See our work</a>
     </div>
+    <div class="chips">
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> After-hours cleans</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg> Site-specific checklists</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6"/></svg> Low-tox products on request</span>
+    </div>
+  </div>
+</section>
 
-    <script>
-        function goToSite() {
-            window.location.href = 'landing.html';
-        }
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">What we do</span>
+      <h2>Cleaning services built for business</h2>
+      <p class="lead">Four core services, one point of contact. Mix and match them into a single schedule that suits your site.</p>
+    </div>
+    <div class="grid grid-4">
+      <article class="card reveal">
+        <div class="card-img"><img src="assets/ncc/office-vacuum.jpg" alt="Office cleaning" loading="lazy"><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></span></div>
+        <div class="card-body"><h3>Office cleaning</h3><p>Daily, weekly or after-hours cleaning of workstations, kitchens, meeting rooms and washrooms, so your team walks into a fresh office every morning.</p><a class="more" href="contact.html">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="card reveal">
+        <div class="card-img"><img src="assets/ncc/commercial-team.jpg" alt="Commercial cleaning" loading="lazy"><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 20h20V8l-6 4V8l-6 4V4H2z"/><path d="M6 16h.01M10 16h.01M14 16h.01M18 16h.01"/></svg></span></div>
+        <div class="card-body"><h3>Commercial cleaning</h3><p>Scheduled cleaning for larger sites: common areas, lobbies, stairwells, warehouses and shared facilities, run to a written cleaning plan.</p><a class="more" href="contact.html">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="card reveal">
+        <div class="card-img"><img src="assets/ncc/rope-access-windows.jpg" alt="Window cleaning" loading="lazy"><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18M3 12h18"/><path d="m15 6 3 3"/></svg></span></div>
+        <div class="card-body"><h3>Window cleaning</h3><p>Streak-free internal and external glass, from ground-floor shopfronts to multi-storey facades, on a one-off or regular schedule.</p><a class="more" href="contact.html">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="card reveal">
+        <div class="card-img"><img src="assets/ncc/exterior-wash.jpg" alt="Retail cleaning" loading="lazy"><span class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9 4.5 4h15L21 9"/><path d="M3 9h18v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M5 13v8h14v-8M10 21v-5h4v5"/></svg></span></div>
+        <div class="card-body"><h3>Retail cleaning</h3><p>Before-open or after-close cleans for shops and showrooms: floors, glass, fitting rooms, counters and entrances that make a first impression.</p><a class="more" href="contact.html">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+    </div>
+  </div>
+</section>
 
-        document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                goToSite();
-            }
-        });
-    </script>
+<section class="section alt">
+  <div class="wrap split">
+    <div class="stack reveal">
+      <img class="main" src="assets/ncc/commercial-team.jpg" alt="Cleaners vacuuming a commercial space" loading="lazy">
+      <img class="inset" src="assets/ncc/window-squeegee.jpg" alt="Cleaner squeegeeing a window" loading="lazy">
+      <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg> Consistent crews who know your site</div>
+    </div>
+    <div class="reveal">
+      <span class="eyebrow">Why National Capital Cleaning</span>
+      <h2>Clean you can count on, without the chasing</h2>
+      <p class="lead">We take the cleaning off your to-do list. You get the same trained people, a written plan and one number to call.</p>
+      <ul class="checks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg><div><strong>A plan for your premises</strong><span>We walk your site first and agree exactly what gets done, and how often.</span></div></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg><div><strong>Quality checks</strong><span>Regular inspections against your checklist so standards don't slip.</span></div></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg><div><strong>Flexible hours</strong><span>Early-morning, evening and weekend cleans that work around your trading hours.</span></div></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg><div><strong>Quick response</strong><span>Spills, events or inspections coming up? We can add a one-off clean.</span></div></li>
+      </ul>
+      <a class="btn btn-dark" href="about.html">More about us <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">How it works</span>
+      <h2>From first call to first clean</h2>
+    </div>
+    <div class="grid grid-4 steps">
+      <div class="step reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h3>Tell us about your site</h3><p>Call or send the quote form with your premises type and the services you need.</p></div>
+      <div class="step reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg></div><h3>Site walk-through</h3><p>We visit, note every area and agree a cleaning scope and schedule with you.</p></div>
+      <div class="step reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><h3>Fixed quote</h3><p>You receive a clear, itemised quote. No lock-in surprises.</p></div>
+      <div class="step reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></div><h3>We get to work</h3><p>Your regular crew starts, with check-ins to make sure everything is right.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Recent work</span>
+      <h2>Projects across the capital</h2>
+      <p class="lead">A look at the kinds of sites we keep clean, from office floors to glass towers.</p>
+    </div>
+    <div class="gallery">
+      <figure class="tile wide reveal" style="margin:0"><img src="assets/ncc/rope-access-windows.jpg" alt="High-rise facade glass" loading="lazy"><figcaption class="cap"><small>Windows</small><strong>High-rise facade glass</strong></figcaption></figure>
+      <figure class="tile  reveal" style="margin:0"><img src="assets/ncc/desk-sanitise.jpg" alt="Workstation sanitising" loading="lazy"><figcaption class="cap"><small>Office</small><strong>Workstation sanitising</strong></figcaption></figure>
+      <figure class="tile  reveal" style="margin:0"><img src="assets/ncc/crew-arriving.jpg" alt="Crew on site" loading="lazy"><figcaption class="cap"><small>Commercial</small><strong>Crew on site</strong></figcaption></figure>
+      <figure class="tile  reveal" style="margin:0"><img src="assets/ncc/kitchen-wipe.jpg" alt="Office kitchen detail" loading="lazy"><figcaption class="cap"><small>Office</small><strong>Office kitchen detail</strong></figcaption></figure>
+      <figure class="tile  reveal" style="margin:0"><img src="assets/ncc/pressure-wash.jpg" alt="Entrance and pavement wash" loading="lazy"><figcaption class="cap"><small>Retail</small><strong>Entrance and pavement wash</strong></figcaption></figure>
+    </div>
+    <div class="center" style="margin-top:44px"><a class="btn btn-dark" href="projects.html">View all projects <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </div>
+</section>
+</main>
+<section class="cta-band">
+  <img src="assets/ncc/facade-windows.jpg" alt="" loading="lazy">
+  <div class="wrap reveal">
+    <div>
+      <h2>Ready for a cleaner, healthier workplace?</h2>
+      <p>Tell us about your site and we will come back with a clear, fixed quote.</p>
+    </div>
+    <div class="actions">
+      <a class="btn btn-primary" href="contact.html">Request a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" href="tel:+61400000000"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg> 0400 000 000</a>
+    </div>
+  </div>
+</section>
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand" href="index.html"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="13" fill="#0b2545"/><path d="M10 33h28M13 33V22M19 33V22M29 33V22M35 33V22M11 22h26L24 14z" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M37 6l1.3 3.4L41.7 11l-3.4 1.3L37 15.7l-1.3-3.4L32.3 11l3.4-1.6z" fill="#10b3a3"/></svg><span class="brand-name">National Capital<small>CLEANING</small></span></a>
+      <p>Office, commercial, window and retail cleaning for businesses across Canberra and the surrounding region.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul><li><a href="index.html">Home</a></li><li><a href="about.html">About us</a></li><li><a href="projects.html">Projects</a></li><li><a href="contact.html">Contact</a></li></ul>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <ul>
+        <li><a href="index.html#services">Office cleaning</a></li>
+        <li><a href="index.html#services">Commercial cleaning</a></li>
+        <li><a href="index.html#services">Window cleaning</a></li>
+        <li><a href="index.html#services">Retail cleaning</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Get in touch</h4>
+      <ul>
+        <li><a href="tel:+61400000000">0400 000 000</a></li>
+        <li><a href="mailto:info@nationalcapitalcleaning.com.au">info@nationalcapitalcleaning.com.au</a></li>
+        <li>Canberra, ACT</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>&copy; <span data-year>2026</span> National Capital Cleaning. All rights reserved.</span>
+    <span>Office &middot; Commercial &middot; Windows &middot; Retail</span>
+  </div>
+</footer>
+<script src="js/site.js"></script>
 </body>
 </html>

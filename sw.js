@@ -1,7 +1,7 @@
 /* EMC Contract Intake & Risk Review — offline service worker.
    Caches the app shell for offline use. Never touches cross-origin requests,
    so the AI review's calls to the Anthropic API always go straight to network. */
-const CACHE = 'emc-review-v1';
+const CACHE = 'emc-review-v2';
 const CORE = [
   './', './index.html', './app.html', './manifest.webmanifest',
   './assets/hero.jpg',
